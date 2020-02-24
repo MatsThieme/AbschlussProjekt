@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Transform_js_1 = require("./Components/Transform.js");
 class GameObject {
     constructor(name) {
+        this.components = [];
         this.name = name;
         this.id = GameObject.nextID++;
         this.transform = this.addComponent(Transform_js_1.Transform);

@@ -14,7 +14,8 @@ class Collider extends Component_js_1.Component {
         this.alignV = alignV;
     }
     get position() {
-        return Vector2_js_1.Vector2.add(this.relativePosition, this.gameObject.getComponent(Transform_js_1.Transform).position);
+        let align = new Vector2_js_1.Vector2(this.alignH === Align_js_1.AlignH.Left ? -this.size.x : this.alignH === Align_js_1.AlignH.Center ? -this.size.x / 2 : 0, this.alignV === Align_js_1.AlignV.Bottom ? -this.size.y : this.alignV === Align_js_1.AlignV.Center ? -this.size.y / 2 : 0);
+        return Vector2_js_1.Vector2.add(this.relativePosition, this.gameObject.getComponent(Transform_js_1.Transform).position, align);
     }
 }
 exports.Collider = Collider;

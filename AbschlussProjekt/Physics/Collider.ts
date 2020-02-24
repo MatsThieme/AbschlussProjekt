@@ -8,9 +8,11 @@ import { Transform } from '../Components/Transform.js';
 
 export class Collider extends Component {
     public relativePosition: Vector2;
-    public colliderType: ColliderType;
+    public readonly colliderType: ColliderType;
     public alignH: AlignH;
     public alignV: AlignV;
+    public size: Vector2;
+    public radius: number;
     public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2, colliderType: ColliderType, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, type);
         this.relativePosition = relativePosition;
@@ -19,6 +21,7 @@ export class Collider extends Component {
         this.alignV = alignV;
     }
     public get position() {
-        return Vector2.add(this.relativePosition, this.gameObject.getComponent(Transform).position);
+        let align = new Vector2(this.alignH === AlignH.Left ? -this.size.x : this.alignH === AlignH.Center ? -this.size.x / 2 : 0, this.alignV === AlignV.Bottom ? -this.size.y : this.alignV === AlignV.Center ? -this.size.y / 2 : 0);
+        return Vector2.add(this.relativePosition, this.gameObject.getComponent(Transform).position, align);
     }
 }

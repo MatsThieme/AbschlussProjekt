@@ -5,8 +5,8 @@ export class GameObject {
     private static gameObjects: Map<string, GameObject> = new Map();
     private static nextID: number = 0;
     public name: string;
-    private components: Component[];
-    public id: number;
+    private components: Component[] = [];
+    public readonly id: number;
     public transform: Transform;
     public constructor(name: string) {
         this.name = name;
