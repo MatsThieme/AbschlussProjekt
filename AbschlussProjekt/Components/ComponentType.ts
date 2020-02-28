@@ -1,8 +1,9 @@
 export enum ComponentType {
-    Transform,
+    Behaviour,
     BoxCollider,
-    CircleCollider,
     CapsuleCollider,
+    CircleCollider,
     Collider,
-    Component
+    Component,
+    Transform
 }

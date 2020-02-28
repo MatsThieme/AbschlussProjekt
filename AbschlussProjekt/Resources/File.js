@@ -3,8 +3,11 @@ export class File {
         this._loaded = false;
         this._url = '';
         this.name = name;
-        if (File.cache.get(name)) {
-            Object.assign(this, File.cache.get(name));
+        const cached = File.cache.get(name);
+        if (cached) {
+            this._loaded = cached.loaded;
+            this._data = cached.data;
+            this._url = cached.dataURL;
         }
         else {
             File.cache.set(name, this);
