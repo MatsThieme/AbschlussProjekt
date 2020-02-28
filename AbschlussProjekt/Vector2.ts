@@ -1,3 +1,5 @@
+import { clamp } from './Helpers.js';
+
 export class Vector2 {
     public x: number;
     public y: number;
@@ -13,5 +15,11 @@ export class Vector2 {
     }
     public static average(...vectors: Vector2[]) {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
+    }
+    public clamp(xMin: number, xMax: number, yMin: number, yMax: number): Vector2 {
+        this.x = clamp(xMin, xMax, this.x);
+        this.y = clamp(yMin, yMax, this.y);
+
+        return this;
     }
 }

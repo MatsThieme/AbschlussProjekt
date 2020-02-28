@@ -9,3 +9,5 @@ import { Vector2 } from './Vector2.js';
 
 //    return f;
 //}
+
+export const clamp = (min: number, max: number, val: number) => val < min ? min : val > max ? max : val;
