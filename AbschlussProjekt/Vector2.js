@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Vector2 {
+export class Vector2 {
     constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
@@ -15,5 +13,3 @@ class Vector2 {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
     }
 }
-exports.Vector2 = Vector2;
-//# sourceMappingURL=Vector2.js.map

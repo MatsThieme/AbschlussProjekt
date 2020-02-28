@@ -1,41 +1,37 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Collision_js_1 = require("./Collision.js");
-const ColliderType_js_1 = require("./ColliderType.js");
-class Physics {
+import { Collision } from './Collision.js';
+import { ColliderType } from './ColliderType.js';
+export class Physics {
     static collision(collider1, collider2) {
         let collision;
-        if (collider1.colliderType === ColliderType_js_1.ColliderType.Box) {
-            if (collider2.colliderType === ColliderType_js_1.ColliderType.Box) {
+        if (collider1.colliderType === ColliderType.Box) {
+            if (collider2.colliderType === ColliderType.Box) {
             }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Circle) {
+            else if (collider2.colliderType === ColliderType.Circle) {
             }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Capsule) {
-            }
-        }
-        else if (collider1.colliderType === ColliderType_js_1.ColliderType.Circle) {
-            if (collider2.colliderType === ColliderType_js_1.ColliderType.Box) {
-            }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Circle) {
-            }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Capsule) {
+            else if (collider2.colliderType === ColliderType.Capsule) {
             }
         }
-        else if (collider1.colliderType === ColliderType_js_1.ColliderType.Capsule) {
-            if (collider2.colliderType === ColliderType_js_1.ColliderType.Box) {
+        else if (collider1.colliderType === ColliderType.Circle) {
+            if (collider2.colliderType === ColliderType.Box) {
             }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Circle) {
+            else if (collider2.colliderType === ColliderType.Circle) {
             }
-            else if (collider2.colliderType === ColliderType_js_1.ColliderType.Capsule) {
+            else if (collider2.colliderType === ColliderType.Capsule) {
             }
         }
-        return new Collision_js_1.Collision(collider1.gameObject, collider2.gameObject);
+        else if (collider1.colliderType === ColliderType.Capsule) {
+            if (collider2.colliderType === ColliderType.Box) {
+            }
+            else if (collider2.colliderType === ColliderType.Circle) {
+            }
+            else if (collider2.colliderType === ColliderType.Capsule) {
+            }
+        }
+        return new Collision(collider1.gameObject, collider2.gameObject);
     }
     static collisionBoxBox(collider1, collider2) {
-        const collision = new Collision_js_1.Collision(collider1.gameObject, collider2.gameObject);
+        const collision = new Collision(collider1.gameObject, collider2.gameObject);
         //if (collider1.)
-        return new Collision_js_1.Collision(collider1.gameObject, collider2.gameObject);
+        return new Collision(collider1.gameObject, collider2.gameObject);
     }
 }
-exports.Physics = Physics;
-//# sourceMappingURL=Physics.js.map

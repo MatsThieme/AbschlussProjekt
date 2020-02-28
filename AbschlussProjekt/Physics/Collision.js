@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Collision {
+export class Collision {
     constructor(gameObjectA, gameObjectB, contactPoints = [], colliding = false) {
         this.gameObjectA = gameObjectA;
         this.gameObjectB = gameObjectB;
@@ -8,5 +6,3 @@ class Collision {
         this.colliding = colliding;
     }
 }
-exports.Collision = Collision;
-//# sourceMappingURL=Collision.js.map

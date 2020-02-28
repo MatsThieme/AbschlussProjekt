@@ -19,6 +19,8 @@ export class Collider extends Component {
         this.colliderType = colliderType;
         this.alignH = alignH;
         this.alignV = alignV;
+        this.size = new Vector2();
+        this.radius = 0;
     }
     public get position() {
         let align = new Vector2(this.alignH === AlignH.Left ? -this.size.x : this.alignH === AlignH.Center ? -this.size.x / 2 : 0, this.alignV === AlignV.Bottom ? -this.size.y : this.alignV === AlignV.Center ? -this.size.y / 2 : 0);

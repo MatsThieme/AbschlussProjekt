@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ComponentType;
+export var ComponentType;
 (function (ComponentType) {
     ComponentType[ComponentType["Transform"] = 0] = "Transform";
     ComponentType[ComponentType["BoxCollider"] = 1] = "BoxCollider";
@@ -8,5 +6,4 @@ var ComponentType;
     ComponentType[ComponentType["CapsuleCollider"] = 3] = "CapsuleCollider";
     ComponentType[ComponentType["Collider"] = 4] = "Collider";
     ComponentType[ComponentType["Component"] = 5] = "Component";
-})(ComponentType = exports.ComponentType || (exports.ComponentType = {}));
-//# sourceMappingURL=ComponentType.js.map
+})(ComponentType || (ComponentType = {}));

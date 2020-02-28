@@ -12,6 +12,6 @@ export class CapsuleCollider extends Collider {
         this.size = size;
     }
     public colliding(): boolean {
-        return;
+        return false;
     }
 }

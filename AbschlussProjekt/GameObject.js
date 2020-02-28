@@ -1,16 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Transform_js_1 = require("./Components/Transform.js");
-class GameObject {
+import { Transform } from './Components/Transform.js';
+export class GameObject {
     constructor(name) {
         this.components = [];
         this.name = name;
         this.id = GameObject.nextID++;
-        this.transform = this.addComponent(Transform_js_1.Transform);
-        GameObject.gameObjects.set(name, this);
-    }
-    static find(name) {
-        return this.gameObjects.get(name);
+        this.transform = this.addComponent(Transform);
+        this.children = [];
     }
     addComponent(component) {
         let component_ = new component(this);
@@ -23,8 +18,9 @@ class GameObject {
     getComponent(type) {
         return this.getComponents(type)[0];
     }
+    addChild(gameObject) {
+        this.children.push(gameObject);
+        return gameObject;
+    }
 }
-exports.GameObject = GameObject;
-GameObject.gameObjects = new Map();
 GameObject.nextID = 0;
-//# sourceMappingURL=GameObject.js.map
