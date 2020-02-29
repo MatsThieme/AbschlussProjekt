@@ -4,7 +4,8 @@ import { ComponentType } from '../Components/ComponentType.js';
 import { GameObject } from '../GameObject.js';
 import { Vector2 } from '../Vector2.js';
 import { ColliderType } from './ColliderType.js';
-import { Transform } from '../Components/Transform.js';
+import { Collision } from './Collision.js';
+import { PhysicsMaterial } from './PhysicsMaterial.js';
 
 export class Collider extends Component {
     public relativePosition: Vector2;
@@ -13,7 +14,8 @@ export class Collider extends Component {
     public alignV: AlignV;
     public size: Vector2;
     public radius: number;
-    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2, colliderType: ColliderType, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public material: PhysicsMaterial;
+    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), colliderType: ColliderType = ColliderType.None, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, type);
         this.relativePosition = relativePosition;
         this.colliderType = colliderType;
@@ -21,5 +23,9 @@ export class Collider extends Component {
         this.alignV = alignV;
         this.size = new Vector2();
         this.radius = 0;
+        this.material = material;
+    }
+    public collision(other: GameObject): Collision {
+        return new Collision(this.gameObject, other);
     }
 }

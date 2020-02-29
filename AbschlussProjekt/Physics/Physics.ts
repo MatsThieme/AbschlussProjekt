@@ -1,45 +1,84 @@
+import { BoxCollider } from '../Components/BoxCollider.js';
+import { CapsuleCollider } from '../Components/CapsuleCollider.js';
+import { CircleCollider } from '../Components/CircleCollider.js';
+import { GameObject } from '../GameObject.js';
 import { Collider } from './Collider.js';
 import { Collision } from './Collision.js';
-import { ColliderType } from './ColliderType.js';
-import { BoxCollider } from '../Components/BoxCollider.js';
+import { Vector2 } from '../Vector2.js';
 
 export class Physics {
-    public static collision(collider1: Collider, collider2: Collider): Collision {
-        let collision: Collision;
+    public static collision(first: GameObject, second: GameObject): Collision {
+        let collision: Collision = new Collision(first, second);
 
-        if (collider1.colliderType === ColliderType.Box) {
-            if (collider2.colliderType === ColliderType.Box) {
 
-            } else if (collider2.colliderType === ColliderType.Circle) {
+        for (const collider of first.getComponents(Collider)) {
+            if (collider instanceof CircleCollider) {
 
-            } else if (collider2.colliderType === ColliderType.Capsule) {
+                for (const otherCollider of second.getComponents(Collider)) {
+                    if (otherCollider instanceof CircleCollider) {
+                        collision.contactPoints.push(...Physics.collisionCircleCircle(collider, otherCollider));
+                    } else if (otherCollider instanceof BoxCollider) {
+                        collision.contactPoints.push(...Physics.collisionBoxCircle(otherCollider, collider));
+                    } else if (otherCollider instanceof CapsuleCollider) {
+                        collision.contactPoints.push(...Physics.collisionCircleCapsule(collider, otherCollider));
+                    }
+                }
 
-            }
-        } else if (collider1.colliderType === ColliderType.Circle) {
-            if (collider2.colliderType === ColliderType.Box) {
+            } else if (collider instanceof BoxCollider) {
 
-            } else if (collider2.colliderType === ColliderType.Circle) {
+                for (const otherCollider of second.getComponents(Collider)) {
+                    if (otherCollider instanceof CircleCollider) {
+                        collision.contactPoints.push(...Physics.collisionBoxCircle(collider, otherCollider));
+                    } else if (otherCollider instanceof BoxCollider) {
+                        collision.contactPoints.push(...Physics.collisionBoxBox(collider, otherCollider));
+                    } else if (otherCollider instanceof CapsuleCollider) {
+                        collision.contactPoints.push(...Physics.collisionBoxCapsule(collider, otherCollider));
+                    }
+                }
 
-            } else if (collider2.colliderType === ColliderType.Capsule) {
+            } else if (collider instanceof CapsuleCollider) {
 
-            }
-        } else if (collider1.colliderType === ColliderType.Capsule) {
-            if (collider2.colliderType === ColliderType.Box) {
-
-            } else if (collider2.colliderType === ColliderType.Circle) {
-
-            } else if (collider2.colliderType === ColliderType.Capsule) {
+                for (const otherCollider of second.getComponents(Collider)) {
+                    if (otherCollider instanceof CircleCollider) {
+                        collision.contactPoints.push(...Physics.collisionCircleCapsule(otherCollider, collider));
+                    } else if (otherCollider instanceof BoxCollider) {
+                        collision.contactPoints.push(...Physics.collisionBoxCapsule(otherCollider, collider));
+                    } else if (otherCollider instanceof CapsuleCollider) {
+                        collision.contactPoints.push(...Physics.collisionCapsuleCapsule(collider, otherCollider));
+                    }
+                }
 
             }
         }
 
-        return new Collision(collider1.gameObject, collider2.gameObject);
+        return collision;
     }
-    public static collisionBoxBox(collider1: BoxCollider, collider2: BoxCollider): Collision {
-        const collision = new Collision(collider1.gameObject, collider2.gameObject);
+    public static collisionBoxBox(collider1: BoxCollider, collider2: BoxCollider): Vector2[] {
 
-        //if (collider1.)
+        return [];
+    }
+    public static collisionCircleCircle(collider1: CircleCollider, collider2: CircleCollider): Vector2[] {
 
-        return new Collision(collider1.gameObject, collider2.gameObject);
+        return [];
+    }
+    public static collisionCapsuleCapsule(collider1: CapsuleCollider, collider2: CapsuleCollider): Vector2[] {
+
+        return [];
+    }
+
+    public static collisionBoxCircle(collider1: BoxCollider, collider2: CircleCollider): Vector2[] {
+
+        return [];
+    }
+    public static collisionBoxCapsule(collider1: BoxCollider, collider2: CapsuleCollider): Vector2[] {
+
+        return [];
+    }
+    public static collisionCircleCapsule(collider1: CircleCollider, collider2: CapsuleCollider): Vector2[] {
+
+        return [];
+    }
+    public static calculateThings(collision: Collision) {
+
     }
 }

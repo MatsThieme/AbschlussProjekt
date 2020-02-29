@@ -1,3 +1,4 @@
+import { CircleCollider } from './Components/CircleCollider.js';
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
 
@@ -9,10 +10,12 @@ class Game {
 
         this.scene.cameraManager.addCamera(new Vector2(1920, 1080));
 
-        const v1 = new Vector2(3, 4);
-        const v2 = new Vector2(4, 3);
+        const v = new Vector2(1, 1);
+        const incoming = new Vector2(-1, -1);
 
-        console.log(v2.angleBetween(new Vector2(0, 0), v1));
+        const gO = this.scene.newGameObject('colliderTest');
+        const collider = gO.addComponent(CircleCollider);
+        console.log(collider.recalculateDirection(v, incoming));
     }
 }
 

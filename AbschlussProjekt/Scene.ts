@@ -12,6 +12,8 @@ export class Scene {
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
         this.time = new GameTime();
+
+        requestAnimationFrame(this.update.bind(this));
     }
     public find(name: string): GameObject {
         return <GameObject>this.gameObjects.get(name);

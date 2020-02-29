@@ -80,6 +80,9 @@
     <TypeScriptCompile Include="Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Resources\File.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
