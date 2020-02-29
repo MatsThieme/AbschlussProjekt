@@ -1,9 +1,10 @@
-export class File {
-    constructor(name) {
+var File = /** @class */ (function () {
+    function File(name) {
+        var _this = this;
         this._loaded = false;
         this._url = '';
         this.name = name;
-        const cached = File.cache.get(name);
+        var cached = File.cache.get(name);
         if (cached) {
             this._loaded = cached.loaded;
             this._data = cached.data;
@@ -12,22 +13,36 @@ export class File {
         else {
             File.cache.set(name, this);
             fetch(name)
-                .then(x => x.blob())
-                .then(x => {
-                this._data = x;
-                this._url = URL.createObjectURL(x);
-                this._loaded = true;
+                .then(function (x) { return x.blob(); })
+                .then(function (x) {
+                _this._data = x;
+                _this._url = URL.createObjectURL(x);
+                _this._loaded = true;
             });
         }
     }
-    get loaded() {
-        return this._loaded;
-    }
-    get data() {
-        return this._data;
-    }
-    get dataURL() {
-        return this._url;
-    }
-}
-File.cache = new Map();
+    Object.defineProperty(File.prototype, "loaded", {
+        get: function () {
+            return this._loaded;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(File.prototype, "data", {
+        get: function () {
+            return this._data;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(File.prototype, "dataURL", {
+        get: function () {
+            return this._url;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    File.cache = new Map();
+    return File;
+}());
+export { File };

@@ -11,18 +11,18 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
-import { ComponentType } from './ComponentType.js';
-var Transform = /** @class */ (function (_super) {
-    __extends(Transform, _super);
-    function Transform(gameObject) {
-        var _this = _super.call(this, gameObject, ComponentType.Transform) || this;
-        _this.position = new Vector2();
-        _this.rotation = new Vector2();
-        _this.scale = new Vector2();
+var Behaviour = /** @class */ (function (_super) {
+    __extends(Behaviour, _super);
+    function Behaviour(gameObject) {
+        var _this = _super.call(this, gameObject) || this;
+        _this.start();
         return _this;
     }
-    return Transform;
+    Behaviour.prototype.start = function () {
+    };
+    Behaviour.prototype.update = function () {
+    };
+    return Behaviour;
 }(Component));
-export { Transform };
+export { Behaviour };

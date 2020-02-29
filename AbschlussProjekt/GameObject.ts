@@ -14,12 +14,12 @@ export class GameObject {
         this.transform = this.addComponent(Transform);
         this.children = [];
     }
-    public addComponent<T extends Component>(component: new (gameObject: GameObject) => T): T {
-        let component_ = new component(this);
+    public addComponent<T extends Component>(type: new (gameObject: GameObject) => T): T {
+        const component = new type(this);
 
-        this.components.push(component_);
+        this.components.push(component);
 
-        return component_;
+        return component;
     }
     public getComponents<T extends Component>(type: new (gameObject: GameObject) => T): T[] {
         return <T[]>this.components.filter((c: Component) => c instanceof type);
@@ -31,5 +31,9 @@ export class GameObject {
         this.children.push(gameObject);
 
         return gameObject;
+    }
+    public update() {
+        this.children.forEach(c => c.update());
+        this.components.forEach(c => c.update());
     }
 }

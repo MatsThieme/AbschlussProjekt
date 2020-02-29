@@ -1,16 +1,25 @@
 import { CameraManager } from './CameraManager.js';
 import { GameObject } from './GameObject.js';
-export class Scene {
-    constructor() {
+import { GameTime } from './GameTime.js';
+var Scene = /** @class */ (function () {
+    function Scene() {
         this.domElement = document.createElement('canvas');
         this.gameObjects = new Map();
-        this.cameraManager = new CameraManager();
+        this.cameraManager = new CameraManager(this.domElement);
+        this.time = new GameTime();
     }
-    find(name) {
+    Scene.prototype.find = function (name) {
         return this.gameObjects.get(name);
-    }
-    newGameObject(name) {
-        this.gameObjects.set(name, new GameObject(name));
-        return this.find(name);
-    }
-}
+    };
+    Scene.prototype.newGameObject = function (name) {
+        var gameObject = new GameObject(name);
+        this.gameObjects.set(name, gameObject);
+        return gameObject;
+    };
+    Scene.prototype.update = function () {
+        this.time.update();
+        requestAnimationFrame(this.update.bind(this));
+    };
+    return Scene;
+}());
+export { Scene };
