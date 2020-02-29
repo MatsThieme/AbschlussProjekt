@@ -27,7 +27,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-dist/
+*.js
+
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
