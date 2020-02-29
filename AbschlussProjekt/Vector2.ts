@@ -1,4 +1,3 @@
-import { clamp } from './Helpers.js';
 import { Angle } from './Angle.js';
 
 export class Vector2 {
@@ -19,7 +18,7 @@ export class Vector2 {
         return this;
     }
     public static sub(v: Vector2, ...vectors: Vector2[]) {
-        return vectors.reduce((a: Vector2, b: Vector2) => { a.x -= b.x; a.y -= b.y; return a; }, v);
+        return vectors.reduce((a: Vector2, b: Vector2) => { a.x -= b.x; a.y -= b.y; return a; }, v.clone);
     }
     public sub(...vectors: Vector2[]): Vector2 {
         const v = Vector2.sub(this, ...vectors);
@@ -28,17 +27,14 @@ export class Vector2 {
 
         return this;
     }
-    public static divide(vector: Vector2, factor: number) {
+    public static divide(vector: Vector2, factor: number): Vector2 {
         return new Vector2(vector.x / factor, vector.y / factor);
+    }
+    public static multiply(v: Vector2, ...vectors: Vector2[]): number {
+        return vectors.reduce((a: Vector2, b: Vector2) => { a.x *= b.x; a.y *= b.y; return a; }, v.clone).sum;
     }
     public static average(...vectors: Vector2[]) {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
-    }
-    public clamp(xMin: number, xMax: number, yMin: number, yMax: number): Vector2 {
-        this.x = clamp(xMin, xMax, this.x);
-        this.y = clamp(yMin, yMax, this.y);
-
-        return this;
     }
     public rotateAround(rotatePoint: Vector2, angle: Angle): Vector2 {
         const s = Math.sin(angle.radian);
@@ -56,9 +52,15 @@ export class Vector2 {
         const r1 = this.clone.sub(rotatePoint);
         const r2 = other.clone.sub(rotatePoint);
 
-        return new Angle(Math.atan2(r2.y - r1.y, r2.x - r1.x));
+        return new Angle(Math.acos(Vector2.multiply(r1, r2) / (r1.magnitude * r2.magnitude)));
     }
     public get clone(): Vector2 {
         return new Vector2(this.x, this.y);
+    }
+    public get sum() {
+        return this.x + this.y;
+    }
+    public get magnitude() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
 }

@@ -1,15 +1,19 @@
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
 
-const scene = new Scene();
+class Game {
+    public scene: Scene;
+    public constructor() {
+        this.scene = new Scene();
+        document.body.appendChild(this.scene.domElement);
 
-const go = scene.newGameObject('test');
+        this.scene.cameraManager.addCamera(new Vector2(1920, 1080));
 
-document.body.appendChild(scene.domElement);
+        const v1 = new Vector2(3, 4);
+        const v2 = new Vector2(4, 3);
 
-scene.cameraManager.addCamera(new Vector2(1920, 1080));
+        console.log(v2.angleBetween(new Vector2(0, 0), v1));
+    }
+}
 
-const v1 = new Vector2(0.5, 1);
-const v2 = new Vector2(2, 2);
-
-console.log(v1.angleBetween(new Vector2(0, 0), v2));
+new Game();
