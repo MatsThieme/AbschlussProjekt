@@ -8,10 +8,4 @@ export class Component {
         this.gameObject = gameObject;
         this.type = type;
     }
-    public start() {
-
-    }
-    public update() {
-
-    }
 }

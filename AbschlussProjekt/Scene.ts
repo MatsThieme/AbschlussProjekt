@@ -1,7 +1,10 @@
 import { CameraManager } from './CameraManager.js';
 import { Camera } from './Components/Camera.js';
+import { RigidBody } from './Components/RigidBody.js';
 import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
+import { Collision } from './Physics/Collision.js';
+import { Physics } from './Physics/Physics.js';
 import { Vector2 } from './Vector2.js';
 
 export class Scene {
@@ -38,7 +41,21 @@ export class Scene {
     private update() {
         this.time.update();
 
+        const collisions: Collision[] = [];
 
+        for (const gO1 of this.gameObjects.values()) {
+            for (const gO2 of this.gameObjects.values()) {
+                if (gO1.id !== gO2.id) collisions.push(...Physics.collision(gO1, gO2));
+            }
+        }
+
+        const rigidbodies = [...this.gameObjects.values()].map(gO => gO.getComponent(RigidBody)).filter(rb => rb);
+
+        rigidbodies.forEach(rb => rb.update(this.time, collisions));
+
+        for (const gameObject of this.gameObjects.values()) {
+            gameObject.update(this.time);
+        }
 
         requestAnimationFrame(this.update.bind(this));
     }

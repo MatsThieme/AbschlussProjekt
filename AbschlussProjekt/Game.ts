@@ -1,8 +1,7 @@
-import { CircleCollider } from './Components/CircleCollider.js';
+import { BoxCollider } from './Components/BoxCollider.js';
 import { Physics } from './Physics/Physics.js';
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
-import { BoxCollider } from './Components/BoxCollider.js';
 
 class Game {
     public scene: Scene;

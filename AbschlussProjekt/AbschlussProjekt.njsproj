@@ -13,7 +13,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>973750e5-cffc-4610-8834-f0a5e0b246a4</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Main.ts</StartupFile>
+    <StartupFile>Game.ts</StartupFile>
     <StartWebBrowser>True</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -32,7 +32,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Main.ts" />
+    <None Include="Game.ts" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>

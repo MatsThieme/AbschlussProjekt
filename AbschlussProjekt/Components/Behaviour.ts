@@ -1,5 +1,6 @@
-import { Component } from './Component.js';
 import { GameObject } from '../GameObject.js';
+import { GameTime } from '../GameTime.js';
+import { Component } from './Component.js';
 
 export class Behaviour extends Component {
     public constructor(gameObject: GameObject) {
@@ -10,7 +11,7 @@ export class Behaviour extends Component {
     public start() {
 
     }
-    public update() {
+    public update(gameTime: GameTime) {
 
     }
 }

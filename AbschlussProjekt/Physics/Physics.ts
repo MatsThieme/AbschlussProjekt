@@ -9,7 +9,6 @@ import { Collider } from './Collider.js';
 import { Collision } from './Collision.js';
 
 export class Physics {
-    [key: string]: any;
     public static gravity: Vector2 = new Vector2(0, 9.807);
     public static timeScale: number = 1;
     public static collision(first: GameObject, second: GameObject): Collision[] {

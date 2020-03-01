@@ -1,5 +1,9 @@
 import { Component } from './Components/Component.js';
 import { Transform } from './Components/Transform.js';
+import { GameTime } from './GameTime.js';
+import { Behaviour } from './Components/Behaviour.js';
+import { RigidBody } from './Components/RigidBody.js';
+import { Vector2 } from './Vector2.js';
 
 export class GameObject {
     private static nextID: number = 0;
@@ -32,8 +36,13 @@ export class GameObject {
 
         return gameObject;
     }
-    public update() {
-        this.children.forEach(c => c.update());
-        this.components.forEach(c => c.update());
+    public update(gameTime: GameTime) {
+        this.children.forEach(c => c.update(gameTime));
+
+        // vorher collider und rigidbody updaten
+
+        this.transform.position.add(this.getComponent(RigidBody)?.velocity.clone.scale(gameTime.deltaTime) || new Vector2());
+
+        this.getComponents(Behaviour).forEach(c => c.update(gameTime));
     }
 }
