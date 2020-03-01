@@ -25,7 +25,7 @@ export class Collider extends Component {
         this.radius = 0;
         this.material = material;
     }
-    public collision(other: GameObject): Collision {
-        return new Collision(this.gameObject, other);
+    public get position(): Vector2 {
+        return new Vector2();
     }
 }

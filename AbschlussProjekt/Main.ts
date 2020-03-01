@@ -1,6 +1,7 @@
 import { CircleCollider } from './Components/CircleCollider.js';
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
+import { AsyncWorker } from './Worker/Worker.js';
 
 class Game {
     public scene: Scene;
@@ -10,13 +11,15 @@ class Game {
 
         this.scene.cameraManager.addCamera(new Vector2(1920, 1080));
 
-        const v = new Vector2(1, 1);
-        const incoming = new Vector2(-1, -1);
+        const contact = new Vector2(0, 1);
+        const incoming = new Vector2(0, -1);
 
         const gO = this.scene.newGameObject('colliderTest');
         const collider = gO.addComponent(CircleCollider);
-        console.log(collider.recalculateDirection(v, incoming));
+        console.log(collider.recalculateDirection(contact, incoming).toString());
     }
 }
 
 new Game();
+
+AsyncWorker.work('Physics/PhysicsWorker.js', 'testW').then(console.log).catch(console.log); 

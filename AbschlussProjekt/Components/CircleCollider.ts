@@ -2,11 +2,9 @@ import { AlignH, AlignV } from '../Align.js';
 import { GameObject } from '../GameObject.js';
 import { Collider } from '../Physics/Collider.js';
 import { ColliderType } from '../Physics/ColliderType.js';
-import { Collision } from '../Physics/Collision.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { ComponentType } from './ComponentType.js';
-import { Physics } from '../Physics/Physics.js';
 
 export class CircleCollider extends Collider {
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), radius: number = 1, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
@@ -23,7 +21,7 @@ export class CircleCollider extends Collider {
         const angle = localContactPoint.angleBetween(new Vector2(), new Vector2(1, 0));
         console.log('angle:', angle.degree);
         const x = velocity.rotateAround(new Vector2(), angle);
-        console.log('v:', x.x.toFixed(3), x.y.toFixed(3));
+        console.log('v:', Math.round(x.x * 1000) / 1000, Math.round(x.y * 1000) / 1000);
         x.x *= -1;
 
         angle.radian *= -1;

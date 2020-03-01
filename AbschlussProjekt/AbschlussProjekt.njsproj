@@ -36,6 +36,9 @@
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Physics\PhysicsWorker.ts">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -116,10 +119,17 @@
     <TypeScriptCompile Include="Vector2.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="WorkerTestScript.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Worker\Worker.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />
     <Folder Include="Behaviours\" />
+    <Folder Include="Worker\" />
     <Folder Include="Resources\" />
     <Folder Include="Physics\" />
   </ItemGroup>
