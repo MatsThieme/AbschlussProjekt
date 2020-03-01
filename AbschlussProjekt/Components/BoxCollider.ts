@@ -2,7 +2,6 @@ import { AlignH, AlignV } from '../Align.js';
 import { GameObject } from '../GameObject.js';
 import { Collider } from '../Physics/Collider.js';
 import { ColliderType } from '../Physics/ColliderType.js';
-import { Collision } from '../Physics/Collision.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { ComponentType } from './ComponentType.js';

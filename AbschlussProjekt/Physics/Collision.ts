@@ -4,12 +4,12 @@ import { Vector2 } from '../Vector2.js';
 export class Collision {
     public readonly gameObjectA: GameObject;
     public readonly gameObjectB: GameObject;
-    public readonly contactPoints: Vector2[];
-    public readonly colliding: boolean;
-    public constructor(gameObjectA: GameObject, gameObjectB: GameObject, contactPoints: Vector2[] = [], colliding: boolean = false) {
+    public readonly normal: Vector2 | undefined;
+    public readonly penetration: number;
+    public constructor(gameObjectA: GameObject, gameObjectB: GameObject, normal?: Vector2, penetration: number = 0) {
         this.gameObjectA = gameObjectA;
         this.gameObjectB = gameObjectB;
-        this.contactPoints = contactPoints;
-        this.colliding = colliding;
+        this.normal = normal;
+        this.penetration = penetration;
     }
 }

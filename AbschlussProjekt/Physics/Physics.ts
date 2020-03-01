@@ -24,11 +24,11 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-                        collision.contactPoints.push(...Physics.collisionCircleCircle(collider, otherCollider));
+
                     } else if (otherCollider instanceof BoxCollider) {
-                        collision.contactPoints.push(...Physics.collisionBoxCircle(otherCollider, collider));
+
                     } else if (otherCollider instanceof CapsuleCollider) {
-                        collision.contactPoints.push(...Physics.collisionCircleCapsule(collider, otherCollider));
+
                     }
                 }
 
@@ -38,11 +38,11 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-                        collision.contactPoints.push(...Physics.collisionBoxCircle(collider, otherCollider));
+
                     } else if (otherCollider instanceof BoxCollider) {
-                        collision.contactPoints.push(...Physics.collisionBoxBox(collider, otherCollider));
+
                     } else if (otherCollider instanceof CapsuleCollider) {
-                        collision.contactPoints.push(...Physics.collisionBoxCapsule(collider, otherCollider));
+
                     }
                 }
 
@@ -52,47 +52,65 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-                        collision.contactPoints.push(...Physics.collisionCircleCapsule(otherCollider, collider));
+
                     } else if (otherCollider instanceof BoxCollider) {
-                        collision.contactPoints.push(...Physics.collisionBoxCapsule(otherCollider, collider));
+
                     } else if (otherCollider instanceof CapsuleCollider) {
-                        collision.contactPoints.push(...Physics.collisionCapsuleCapsule(collider, otherCollider));
+
                     }
                 }
 
             }
         }
 
-        return collision.contactPoints.length > 0 ? new Collision(first, second, collision.contactPoints, true) : collision;
+        return collision;
     }
-    public static collisionBoxBox(collider1: BoxCollider, collider2: BoxCollider): Vector2[] {
+    public static intersectsCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): boolean {
+        return circleCollider2.gameObject.transform.position.sub(circleCollider1.gameObject.transform.position).magnitudeSquared < (circleCollider1.radius + circleCollider2.radius) ** 2;
+    }
+    public static CircleVsCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Collision {
+        if (!Physics.intersectsCircle(circleCollider1, circleCollider2)) return new Collision(circleCollider1.gameObject, circleCollider2.gameObject);
 
-        return [];
-    }
-    public static collisionCircleCircle(collider1: CircleCollider, collider2: CircleCollider): Vector2[] {
+        const gO1 = circleCollider1.gameObject;
+        const gO2 = circleCollider2.gameObject;
 
-        return [];
-    }
-    public static collisionCapsuleCapsule(collider1: CapsuleCollider, collider2: CapsuleCollider): Vector2[] {
+        let penetration: number;
+        let normal: Vector2;
 
-        return [];
-    }
-    public static collisionBoxCircle(collider1: BoxCollider, collider2: CircleCollider): Vector2[] {
+        const AtoB = gO2.transform.position.sub(gO1.transform.position);
 
-        return [];
-    }
-    public static collisionBoxCapsule(collider1: BoxCollider, collider2: CapsuleCollider): Vector2[] {
+        if (AtoB.magnitude != 0) {
+            penetration = circleCollider1.radius + circleCollider2.radius - AtoB.magnitude;
+            normal = AtoB.normalized; // test with gos swapped
+        } else {
+            penetration = Math.max(circleCollider1.radius, circleCollider2.radius);
+            normal = new Vector2(0, 1);
+        }
 
-        return [];
+        return new Collision(circleCollider1.gameObject, circleCollider2.gameObject, normal, penetration);
     }
-    public static collisionCircleCapsule(collider1: CircleCollider, collider2: CapsuleCollider): Vector2[] {
+    public static AABBVsAABB(boxCollider1: BoxCollider, boxCollider2: BoxCollider): Collision {
+        if (!AABB.intersects(boxCollider1, boxCollider2)) return new Collision(boxCollider1.gameObject, boxCollider2.gameObject);
 
-        return [];
-    }
-    public static calculateThings(collision: Collision) {
+        const gO1 = boxCollider1.gameObject;
+        const gO2 = boxCollider1.gameObject;
 
-    }
-    public static testW(): string {
-        return 'hello world!';
+        let penetration: number;
+        let normal: Vector2;
+
+        const AtoB = gO2.transform.position.sub(gO1.transform.position);
+
+        let x_overlap = boxCollider1.AABB.size.x / 2 + boxCollider2.AABB.size.x / 2 - Math.abs(AtoB.x);
+        let y_overlap = boxCollider2.AABB.size.y / 2 + boxCollider2.AABB.size.y / 2 - Math.abs(AtoB.y);
+
+        if (x_overlap > y_overlap) {
+            normal = new Vector2(0, AtoB.x < 0 ? -1 : 1);
+            penetration = x_overlap;
+        } else {
+            normal = new Vector2(0, AtoB.y < 0 ? -1 : 1);
+            penetration = y_overlap;
+        }
+
+        return new Collision(boxCollider1.gameObject, boxCollider2.gameObject, normal, penetration);
     }
 }

@@ -12,8 +12,8 @@ export class Collider extends Component {
     public readonly colliderType: ColliderType;
     public alignH: AlignH;
     public alignV: AlignV;
-    public size: Vector2;
-    public radius: number;
+    private _size: Vector2;
+    private _radius: number;
     public material: PhysicsMaterial;
     public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), colliderType: ColliderType = ColliderType.None, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, type);
@@ -21,14 +21,28 @@ export class Collider extends Component {
         this.colliderType = colliderType;
         this.alignH = alignH;
         this.alignV = alignV;
-        this.size = new Vector2();
-        this.radius = 0;
+        this._size = new Vector2();
+        this._radius = 0;
         this.material = material;
     }
     public get position(): Vector2 {
         return new Vector2();
     }
     public get AABB(): AABB {
-        return new AABB(new Vector2(), new Vector2());
+        return new AABB(this.size, Vector2.add(this.relativePosition, this.gameObject.transform.position));
+    }
+    public set radius(val: number) {
+        this._radius = val;
+        this.size = new Vector2(val * 2, val * 2);
+    }
+    public get radius(): number {
+        return this._radius;
+    }
+    public set size(val: Vector2) {
+        this._size = val;
+        this._radius = val.x / 2;
+    }
+    public get size(): Vector2 {
+        return this._size;
     }
 }

@@ -3,6 +3,7 @@ import { Angle } from './Angle.js';
 export class Vector2 {
     public x: number;
     public y: number;
+    private _magnitude: number = 0;
     public constructor(x: number = 0, y: number = 0) {
         this.x = x;
         this.y = y;
@@ -14,6 +15,7 @@ export class Vector2 {
         const v = Vector2.add(...vectors, this);
         this.x = v.x;
         this.y = v.y;
+        this.recalculateMagnitude();
 
         return this;
     }
@@ -24,6 +26,7 @@ export class Vector2 {
         const v = Vector2.sub(this, ...vectors);
         this.x = v.x;
         this.y = v.y;
+        this.recalculateMagnitude();
 
         return this;
     }
@@ -60,13 +63,30 @@ export class Vector2 {
     public get sum() {
         return this.x + this.y;
     }
+    public get magnitudeSquared() {
+        return this.x ** 2 + this.y ** 2;
+    }
     public get magnitude() {
-        return Math.sqrt(this.x ** 2 + this.y ** 2);
+        if (this._magnitude === 0) this._magnitude = Math.sqrt(this.magnitudeSquared);
+        return this._magnitude;
     }
     public scale(scalar: number): Vector2 {
         this.x *= scalar;
         this.y *= scalar;
         return this;
+    }
+    public get normalized(): Vector2 {
+        return this.clone.normalize();
+    }
+    public normalize(): Vector2 {
+        this.x /= this.magnitude;
+        this.y /= this.magnitude;
+        this.recalculateMagnitude();
+
+        return this;
+    }
+    public recalculateMagnitude(): void {
+        this._magnitude = Math.sqrt(this.magnitudeSquared);
     }
     public toString(): string {
         return `x: ${Math.round(this.x * 10000) / 10000}, y: ${Math.round(this.y * 10000) / 10000}`;
