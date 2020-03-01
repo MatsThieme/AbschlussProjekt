@@ -1,6 +1,8 @@
 import { CameraManager } from './CameraManager.js';
+import { Camera } from './Components/Camera.js';
 import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
+import { Vector2 } from './Vector2.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -21,6 +23,16 @@ export class Scene {
     public newGameObject(name: string): GameObject {
         const gameObject = new GameObject(name);
         this.gameObjects.set(name, gameObject);
+        return gameObject;
+    }
+    public newCamera(name: string, resolution: Vector2 = new Vector2(1920, 1080)): GameObject {
+        const gameObject = new GameObject(name);
+        this.gameObjects.set(name, gameObject);
+
+        const camera = gameObject.addComponent(Camera);
+        camera.resolution = new Vector2(1920, 1080);
+        this.cameraManager.cameras.push(camera);
+
         return gameObject;
     }
     private update() {

@@ -63,6 +63,11 @@ export class Vector2 {
     public get magnitude() {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
+    public scale(scalar: number): Vector2 {
+        this.x *= scalar;
+        this.y *= scalar;
+        return this;
+    }
     public toString(): string {
         return `x: ${Math.round(this.x * 10000) / 10000}, y: ${Math.round(this.y * 10000) / 10000}`;
     }

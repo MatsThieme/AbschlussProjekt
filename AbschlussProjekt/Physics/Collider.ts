@@ -3,8 +3,8 @@ import { Component } from '../Components/Component.js';
 import { ComponentType } from '../Components/ComponentType.js';
 import { GameObject } from '../GameObject.js';
 import { Vector2 } from '../Vector2.js';
+import { AABB } from './AABB.js';
 import { ColliderType } from './ColliderType.js';
-import { Collision } from './Collision.js';
 import { PhysicsMaterial } from './PhysicsMaterial.js';
 
 export class Collider extends Component {
@@ -27,5 +27,8 @@ export class Collider extends Component {
     }
     public get position(): Vector2 {
         return new Vector2();
+    }
+    public get AABB(): AABB {
+        return new AABB(new Vector2(), new Vector2());
     }
 }

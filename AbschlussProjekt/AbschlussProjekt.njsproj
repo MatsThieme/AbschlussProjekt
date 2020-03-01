@@ -56,7 +56,7 @@
     <TypeScriptCompile Include="Components\Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Camera.ts">
+    <TypeScriptCompile Include="Components\Camera.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="CameraManager.ts">
@@ -74,6 +74,9 @@
     <TypeScriptCompile Include="Components\ComponentType.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Components\RigidBody.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\Transform.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -83,7 +86,13 @@
     <TypeScriptCompile Include="Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Physics\AABB.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Physics\Solver.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Resources\File.ts">

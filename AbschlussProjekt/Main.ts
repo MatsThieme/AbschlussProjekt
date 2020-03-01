@@ -9,7 +9,7 @@ class Game {
         this.scene = new Scene();
         document.body.appendChild(this.scene.domElement);
 
-        this.scene.cameraManager.addCamera(new Vector2(1920, 1080));
+        this.scene.newCamera('cam', new Vector2(1920, 1080));
 
         const contact = new Vector2(0, 1);
         const incoming = new Vector2(0, -1);
@@ -22,4 +22,4 @@ class Game {
 
 new Game();
 
-AsyncWorker.work('Physics/PhysicsWorker.js', 'testW').then(console.log).catch(console.log); 
+AsyncWorker.work('Physics/PhysicsWorker.js', { name: 'testW' }).then(console.log).catch(console.log); 
