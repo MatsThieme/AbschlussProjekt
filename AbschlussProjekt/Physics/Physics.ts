@@ -2,20 +2,19 @@ import { BoxCollider } from '../Components/BoxCollider.js';
 import { CapsuleCollider } from '../Components/CapsuleCollider.js';
 import { CircleCollider } from '../Components/CircleCollider.js';
 import { GameObject } from '../GameObject.js';
-import { Collider } from './Collider.js';
-import { Collision } from './Collision.js';
+import { clamp } from '../Helpers.js';
 import { Vector2 } from '../Vector2.js';
 import { AABB } from './AABB.js';
+import { Collider } from './Collider.js';
+import { Collision } from './Collision.js';
 
 export class Physics {
     [key: string]: any;
     public static gravity: Vector2 = new Vector2(0, 9.807);
     public static timeScale: number = 1;
-    public static collision(first: GameObject, second: GameObject): Collision {
-        let collision: Collision = new Collision(first, second);
-
-        if (first.id === second.id) return collision;
-
+    public static collision(first: GameObject, second: GameObject): Collision[] {
+        if (first.id === second.id) return [];
+        const ret = [];
 
         for (const collider of first.getComponents(Collider)) {
             if (collider instanceof CircleCollider) {
@@ -24,11 +23,14 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-
+                        const c = Physics.collisionCircle(collider, otherCollider);
+                        if (c.normal) ret.push(c);
                     } else if (otherCollider instanceof BoxCollider) {
-
+                        const c = Physics.collisionBoxCircle(otherCollider, collider);
+                        if (c.normal) ret.push(c);
                     } else if (otherCollider instanceof CapsuleCollider) {
-
+                        const c = Physics.collisionCapsuleCircle(otherCollider, collider);
+                        ret.push(...c);
                     }
                 }
 
@@ -38,11 +40,14 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-
+                        const c = Physics.collisionBoxCircle(collider, otherCollider);
+                        if (c.normal) ret.push(c);
                     } else if (otherCollider instanceof BoxCollider) {
-
+                        const c = Physics.collisionBox(collider, otherCollider);
+                        if (c.normal) ret.push(c);
                     } else if (otherCollider instanceof CapsuleCollider) {
-
+                        const c = Physics.collisionCapsuleBox(otherCollider, collider);
+                        ret.push(...c);
                     }
                 }
 
@@ -52,27 +57,30 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider)) continue;
 
                     if (otherCollider instanceof CircleCollider) {
-
+                        const c = Physics.collisionCapsuleCircle(collider, otherCollider);
+                        ret.push(...c);
                     } else if (otherCollider instanceof BoxCollider) {
-
+                        const c = Physics.collisionCapsuleBox(collider, otherCollider);
+                        ret.push(...c);
                     } else if (otherCollider instanceof CapsuleCollider) {
-
+                        const c = Physics.collisionCapsule(collider, otherCollider);
+                        ret.push(...c);
                     }
                 }
 
             }
         }
 
-        return collision;
+        return [];
     }
     public static intersectsCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): boolean {
         return circleCollider2.gameObject.transform.position.sub(circleCollider1.gameObject.transform.position).magnitudeSquared < (circleCollider1.radius + circleCollider2.radius) ** 2;
     }
-    public static CircleVsCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Collision {
-        if (!Physics.intersectsCircle(circleCollider1, circleCollider2)) return new Collision(circleCollider1.gameObject, circleCollider2.gameObject);
-
+    public static collisionCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Collision {
         const gO1 = circleCollider1.gameObject;
         const gO2 = circleCollider2.gameObject;
+
+        if (!Physics.intersectsCircle(circleCollider1, circleCollider2)) return new Collision(gO1, gO2);
 
         let penetration: number;
         let normal: Vector2;
@@ -87,13 +95,13 @@ export class Physics {
             normal = new Vector2(0, 1);
         }
 
-        return new Collision(circleCollider1.gameObject, circleCollider2.gameObject, normal, penetration);
+        return new Collision(gO1, gO2, normal, penetration);
     }
-    public static AABBVsAABB(boxCollider1: BoxCollider, boxCollider2: BoxCollider): Collision {
-        if (!AABB.intersects(boxCollider1, boxCollider2)) return new Collision(boxCollider1.gameObject, boxCollider2.gameObject);
-
+    public static collisionBox(boxCollider1: BoxCollider, boxCollider2: BoxCollider): Collision {
         const gO1 = boxCollider1.gameObject;
-        const gO2 = boxCollider1.gameObject;
+        const gO2 = boxCollider2.gameObject;
+
+        if (!AABB.intersects(boxCollider1, boxCollider2)) return new Collision(gO1, gO2);
 
         let penetration: number;
         let normal: Vector2;
@@ -111,6 +119,81 @@ export class Physics {
             penetration = y_overlap;
         }
 
-        return new Collision(boxCollider1.gameObject, boxCollider2.gameObject, normal, penetration);
+        return new Collision(gO1, gO2, normal, penetration);
+    }
+    public static collisionBoxCircle(boxCollider: BoxCollider, circleCollider: CircleCollider): Collision {
+        const gO1 = boxCollider.gameObject;
+        const gO2 = circleCollider.gameObject;
+
+        let penetration: number = 0;
+        let normal: Vector2 = new Vector2();
+
+        const AtoB = gO2.transform.position.sub(gO1.transform.position);
+
+        let closest = AtoB;
+
+        const x_extent = boxCollider.AABB.size.y / 2;
+        const y_extent = boxCollider.AABB.size.y / 2;
+
+        closest.x = clamp(-x_extent, x_extent, closest.x);
+        closest.y = clamp(-y_extent, y_extent, closest.y);
+
+        let inside = false;
+
+        if (closest == AtoB) {
+            inside = true;
+
+            if (Math.abs(AtoB.x) > Math.abs(AtoB.y)) {
+                if (closest.x > 0) closest.x = x_extent;
+                else closest.x = -x_extent;
+            } else {
+                if (closest.y > 0) closest.y = y_extent;
+                else closest.y = -y_extent;
+            }
+        }
+
+        normal = AtoB.sub(closest);
+
+        let d = normal.magnitude;
+        const r = circleCollider.radius;
+
+        if (d > r && !inside) return new Collision(gO1, gO2);
+
+        if (inside) {
+            normal = AtoB.scale(-1);
+            penetration = r - d;
+        } else {
+            normal = AtoB;
+            penetration = r - d;
+        }
+
+        return new Collision(gO1, gO2, normal, penetration);
+    }
+    public static collisionCapsule(capsuleCollider1: CapsuleCollider, capsuleCollider2: CapsuleCollider): Collision[] {
+        return [...Physics.collisionCapsuleBox(capsuleCollider1, capsuleCollider2.boxCollider), ...Physics.collisionCapsuleCircle(capsuleCollider1, capsuleCollider2.circleColliderTop), ...Physics.collisionCapsuleCircle(capsuleCollider1, capsuleCollider2.circleColliderBottom)];
+    }
+    public static collisionCapsuleBox(capsuleCollider: CapsuleCollider, boxCollider: BoxCollider): Collision[] {
+        const ret: Collision[] = [];
+
+        const boxtop = Physics.collisionBoxCircle(boxCollider, capsuleCollider.circleColliderTop);
+        if (boxtop.normal) ret.push(boxtop);
+        const boxbox = Physics.collisionBox(boxCollider, capsuleCollider.boxCollider);
+        if (boxbox.normal) ret.push(boxbox);
+        const boxbot = Physics.collisionBoxCircle(boxCollider, capsuleCollider.circleColliderBottom);
+        if (boxbot.normal) ret.push(boxbot);
+
+        return ret;
+    }
+    public static collisionCapsuleCircle(capsuleCollider: CapsuleCollider, circleCollider: CircleCollider): Collision[] {
+        const ret: Collision[] = [];
+
+        const circletop = Physics.collisionCircle(circleCollider, capsuleCollider.circleColliderTop);
+        if (circletop.normal) ret.push(circletop);
+        const circlebox = Physics.collisionBoxCircle(capsuleCollider.boxCollider, circleCollider);
+        if (circlebox.normal) ret.push(circlebox);
+        const circlebot = Physics.collisionCircle(circleCollider, capsuleCollider.circleColliderBottom);
+        if (circlebot.normal) ret.push(circlebot);
+
+        return ret;
     }
 }

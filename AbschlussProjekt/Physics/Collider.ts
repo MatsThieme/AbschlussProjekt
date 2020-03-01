@@ -12,8 +12,8 @@ export class Collider extends Component {
     public readonly colliderType: ColliderType;
     public alignH: AlignH;
     public alignV: AlignV;
-    private _size: Vector2;
-    private _radius: number;
+    protected _size: Vector2;
+    protected _radius: number;
     public material: PhysicsMaterial;
     public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), colliderType: ColliderType = ColliderType.None, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, type);
