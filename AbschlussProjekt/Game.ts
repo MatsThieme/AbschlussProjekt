@@ -2,6 +2,7 @@ import { BoxCollider } from './Components/BoxCollider.js';
 import { Physics } from './Physics/Physics.js';
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
+import { AsyncWorker } from './Worker/AsyncWorker.js';
 
 class Game {
     public scene: Scene;
@@ -22,6 +23,9 @@ class Game {
         const box2 = gO2.addComponent(BoxCollider);
         const box3 = gO3.addComponent(BoxCollider);
 
+        //for (let i = 0; i < 100; i++) gO1.addComponent(CapsuleCollider);
+        //for (let i = 0; i < 100; i++) gO1.addComponent(BoxCollider);
+        //for (let i = 0; i < 100; i++) gO1.addComponent(CircleCollider);
 
         gO1.transform.position = new Vector2(1, 1);
         gO2.transform.position = new Vector2(1.4, 2.5);
@@ -32,9 +36,38 @@ class Game {
         box3.size = new Vector2(1, 1);
 
 
-        console.log(Physics.collisionBox(box1, box2));
-        console.log(Physics.collisionBox(box2, box3));
-        console.log(Physics.collisionBox(box3, box1));
+        Physics.asyncCollision(gO1, gO2).then(console.log).catch(console.log);
+
+        const x = 1000;
+
+        console.time('collision');
+        for (let i = 0; i < x; i++) {
+            Physics.collision(gO1, gO2);
+        }
+        console.timeEnd('collision');
+
+        (async () => {
+            console.time('warmup');
+            await AsyncWorker.createWorker('Physics/PhysicsWorker.js', navigator.hardwareConcurrency || 12);
+            console.timeEnd('warmup');
+
+            const start = performance.now();
+
+            for (let i = 0; i < x; i++) {
+                let y = Physics.asyncCollision(gO1, gO2);
+                if (i === x - 1) {
+                    await y;
+                    console.log('asyncCollision: ' + (performance.now() - start));
+                }
+            }
+
+            setTimeout(() => {
+
+                //console.time('sgfr');
+                //Physics.asyncCollision(gO1, gO2).then(() => console.timeEnd('sgfr'));
+            }, 1000);
+
+        })();
 
 
         //const c1 = gO1.addComponent(CircleCollider);

@@ -1,14 +1,13 @@
 import { AlignH, AlignV } from '../Align.js';
 import { GameObject } from '../GameObject.js';
 import { Collider } from '../Physics/Collider.js';
-import { ColliderType } from '../Physics/ColliderType.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { ComponentType } from './ComponentType.js';
 
 export class CircleCollider extends Collider {
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), radius: number = 1, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
-        super(gameObject, ComponentType.CircleCollider, relativePosition, material, ColliderType.Circle, alignH, alignV);
+        super(gameObject, ComponentType.CircleCollider, relativePosition, material, alignH, alignV);
         this.radius = radius;
         this.size = new Vector2(radius * 2, radius * 2);
     }

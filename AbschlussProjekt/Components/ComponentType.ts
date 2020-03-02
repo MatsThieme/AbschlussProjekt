@@ -1,4 +1,5 @@
 export enum ComponentType {
+    AnimatedSprite,
     Behaviour,
     BoxCollider,
     Camera,

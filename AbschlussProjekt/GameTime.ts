@@ -13,6 +13,6 @@ export class GameTime {
         this._lastTime = this.now;
     }
     public get now(): number {
-        return Date.now();
+        return performance.now();
     }
 }

@@ -14,4 +14,7 @@ export class Behaviour extends Component {
     public update(gameTime: GameTime) {
 
     }
+    public onCollision() {
+
+    }
 }

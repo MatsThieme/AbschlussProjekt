@@ -1,6 +1,5 @@
 import { CameraManager } from './CameraManager.js';
 import { Camera } from './Components/Camera.js';
-import { RigidBody } from './Components/RigidBody.js';
 import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
 import { Collision } from './Physics/Collision.js';
@@ -33,28 +32,28 @@ export class Scene {
         this.gameObjects.set(name, gameObject);
 
         const camera = gameObject.addComponent(Camera);
-        camera.resolution = new Vector2(1920, 1080);
+        camera.resolution = resolution;
         this.cameraManager.cameras.push(camera);
 
         return gameObject;
     }
-    private update() {
+    private async update() {
         this.time.update();
 
         const collisions: Collision[] = [];
 
         for (const gO1 of this.gameObjects.values()) {
             for (const gO2 of this.gameObjects.values()) {
-                if (gO1.id !== gO2.id) collisions.push(...Physics.collision(gO1, gO2));
+                if (gO1.id !== gO2.id) collisions.push(...await Physics.asyncCollision(gO1, gO2));
             }
         }
 
-        const rigidbodies = [...this.gameObjects.values()].map(gO => gO.getComponent(RigidBody)).filter(rb => rb);
+        const rigidbodies = [...this.gameObjects.values()].map(gO => gO.rigidbody);
 
         rigidbodies.forEach(rb => rb.update(this.time, collisions));
 
         for (const gameObject of this.gameObjects.values()) {
-            gameObject.update(this.time);
+           await gameObject.update(this.time);
         }
 
         requestAnimationFrame(this.update.bind(this));

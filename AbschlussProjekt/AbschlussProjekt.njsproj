@@ -53,6 +53,9 @@
     <TypeScriptCompile Include="Behaviours\TestBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Components\AnimatedSprite.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -80,6 +83,9 @@
     <TypeScriptCompile Include="Components\Transform.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Drawable.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="GameTime.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -104,9 +110,6 @@
     <TypeScriptCompile Include="Physics\Collider.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\ColliderType.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\Component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -122,16 +125,16 @@
     <TypeScriptCompile Include="Scene.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SpriteAnimation.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="TileMap.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Vector2.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="WorkerTestScript.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Worker\Worker.ts">
+    <TypeScriptCompile Include="Worker\AsyncWorker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

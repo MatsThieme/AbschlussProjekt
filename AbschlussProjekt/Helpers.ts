@@ -1,13 +1,7 @@
-import { Vector2 } from './Vector2.js';
-
-//export function reduce(f: Vector2): Vector2 {
-//    for (let i = f.x; i > 0; i--) {
-//        if (f.x % i === 0 && f.y % i === 0) {
-//            return new Vector2((f.x / i), (f.y / i));
-//        }
-//    }
-
-//    return f;
-//}
-
 export const clamp = (min: number, max: number, val: number) => val < min ? min : val > max ? max : val;
+export const asyncTimeout = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+export const measureTimePromise = async (func: () => Promise<any>): Promise<number> => {
+    const start = performance.now();
+    await func();
+    return performance.now() - start;
+}

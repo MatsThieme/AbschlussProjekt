@@ -1,14 +1,13 @@
 import { AlignH, AlignV } from '../Align.js';
 import { GameObject } from '../GameObject.js';
 import { Collider } from '../Physics/Collider.js';
-import { ColliderType } from '../Physics/ColliderType.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { ComponentType } from './ComponentType.js';
 
 export class BoxCollider extends Collider {
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
-        super(gameObject, ComponentType.BoxCollider, relativePosition, material, ColliderType.Box, alignH, alignV);
+        super(gameObject, ComponentType.BoxCollider, relativePosition, material, alignH, alignV);
         this.size = size;
         this.radius = size.x / 2;
     }

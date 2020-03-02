@@ -4,21 +4,18 @@ import { ComponentType } from '../Components/ComponentType.js';
 import { GameObject } from '../GameObject.js';
 import { Vector2 } from '../Vector2.js';
 import { AABB } from './AABB.js';
-import { ColliderType } from './ColliderType.js';
 import { PhysicsMaterial } from './PhysicsMaterial.js';
 
 export class Collider extends Component {
     public relativePosition: Vector2;
-    public readonly colliderType: ColliderType;
     public alignH: AlignH;
     public alignV: AlignV;
     protected _size: Vector2;
     protected _radius: number;
     public material: PhysicsMaterial;
-    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), colliderType: ColliderType = ColliderType.None, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, type);
         this.relativePosition = relativePosition;
-        this.colliderType = colliderType;
         this.alignH = alignH;
         this.alignV = alignV;
         this._size = new Vector2();
