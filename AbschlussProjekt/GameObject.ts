@@ -6,6 +6,7 @@ import { Transform } from './Components/Transform.js';
 import { GameTime } from './GameTime.js';
 import { Physics } from './Physics/Physics.js';
 import { Vector2 } from './Vector2.js';
+import { AnimatedSprite } from './Components/AnimatedSprite.js';
 
 export class GameObject {
     private static nextID: number = 0;
@@ -51,8 +52,9 @@ export class GameObject {
 
         // vorher collider und rigidbody updaten
 
-        this.transform.position.add(this.rigidbody.mass > 0 ? this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale) : new Vector2());
+        if (this.rigidbody.mass > 0) this.transform.position.add(this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
 
         this.getComponents(Behaviour).forEach(c => c.update(gameTime));
+        this.getComponents(AnimatedSprite).forEach(c => c.update(gameTime));
     }
 }

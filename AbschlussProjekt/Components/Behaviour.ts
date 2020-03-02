@@ -1,5 +1,6 @@
 import { GameObject } from '../GameObject.js';
 import { GameTime } from '../GameTime.js';
+import { Collision } from '../Physics/Collision.js';
 import { Component } from './Component.js';
 
 export class Behaviour extends Component {
@@ -14,7 +15,7 @@ export class Behaviour extends Component {
     public update(gameTime: GameTime) {
 
     }
-    public onCollision() {
+    public onCollision(collision: Collision) {
 
     }
 }

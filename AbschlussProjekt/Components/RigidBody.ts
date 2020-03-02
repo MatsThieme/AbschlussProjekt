@@ -45,14 +45,21 @@ export class RigidBody extends Component {
         for (const collision of currentCollisions) {
             if (collision.gameObjectA.id === this.gameObject.id) {
                 const solved = Solver.solve(collision);
-                if (solved) this.velocityChange.add(solved.A.velocity);
+                if (!solved) continue;
+                //solved.B.velocity.y *= -1;
+                this.impulse(solved.A.velocity);
+                this.velocity = new Vector2();
             } else if (collision.gameObjectB.id === this.gameObject.id) {
                 const solved = Solver.solve(collision);
-                if (solved) this.velocityChange.add(solved.B.velocity);
+                if (!solved) continue;
+                //solved.A.velocity.y *= -1;
+                this.impulse(solved.B.velocity);
+                this.velocity = new Vector2();
             }
         }
 
-        this.velocity.add(this.velocityChange, Physics.gravity.clone.scale(gameTime.deltaTime));
+
+        this.velocity.add(this.velocityChange, Physics.gravity.clone.scale(gameTime.deltaTime * this.mass));
         this.velocityChange = new Vector2();
     }
 }

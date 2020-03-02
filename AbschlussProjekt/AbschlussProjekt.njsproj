@@ -86,6 +86,9 @@
     <TypeScriptCompile Include="Drawable.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Frame.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="GameTime.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -101,7 +104,7 @@
     <TypeScriptCompile Include="Physics\Solver.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Resources\File.ts">
+    <TypeScriptCompile Include="Resources\FileDownload.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Resources\Sprite.ts">
@@ -141,6 +144,7 @@
   <ItemGroup>
     <Folder Include="Components\" />
     <Folder Include="Behaviours\" />
+    <Folder Include="Assets\" />
     <Folder Include="Worker\" />
     <Folder Include="Resources\" />
     <Folder Include="Physics\" />

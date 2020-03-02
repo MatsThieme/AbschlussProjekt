@@ -4,7 +4,6 @@ import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
-import { Vector2 } from './Vector2.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -27,12 +26,11 @@ export class Scene {
         this.gameObjects.set(name, gameObject);
         return gameObject;
     }
-    public newCamera(name: string, resolution: Vector2 = new Vector2(1920, 1080)): GameObject {
+    public newCamera(name: string): GameObject {
         const gameObject = new GameObject(name);
         this.gameObjects.set(name, gameObject);
 
         const camera = gameObject.addComponent(Camera);
-        camera.resolution = resolution;
         this.cameraManager.cameras.push(camera);
 
         return gameObject;
@@ -55,6 +53,8 @@ export class Scene {
         for (const gameObject of this.gameObjects.values()) {
            await gameObject.update(this.time);
         }
+
+        this.cameraManager.update([...this.gameObjects.values()]);
 
         requestAnimationFrame(this.update.bind(this));
     }

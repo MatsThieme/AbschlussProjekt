@@ -1,26 +1,28 @@
-export class File {
-    private static cache: Map<string, File> = new Map();
+export class FileDownload {
+    private static cache: Map<string, FileDownload> = new Map();
     private _loaded: boolean = false;
     private _data: Blob | undefined;
-    private _url: string = '';
+    private _dataUrl: string = '';
     public name: string;
+    public onload: () => any = () => { };
     public constructor(name: string) {
         this.name = name;
 
-        const cached = File.cache.get(name);
+        const cached = FileDownload.cache.get(name);
         if (cached) {
             this._loaded = cached.loaded;
             this._data = cached.data;
-            this._url = cached.dataURL;
+            this._dataUrl = cached.dataURL;
         } else {
-            File.cache.set(name, this);
+            FileDownload.cache.set(name, this);
 
-            fetch(name)
+            fetch('/Assets/' + name)
                 .then(x => x.blob())
                 .then(x => {
                     this._data = x;
-                    this._url = URL.createObjectURL(x);
+                    this._dataUrl = URL.createObjectURL(x);
                     this._loaded = true;
+                    this.onload();
                 });
         }
     }
@@ -31,6 +33,6 @@ export class File {
         return this._data;
     }
     public get dataURL(): string {
-        return this._url;
+        return this._dataUrl;
     }
 }

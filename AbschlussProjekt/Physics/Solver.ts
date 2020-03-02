@@ -26,6 +26,7 @@ export class Solver {
         let impulse = collision.normal.scale(j);
 
         return {
+            collision,
             A: { velocity: impulse.scale(-rb1.invMass), angularVelocity: new Vector2() },
             B: { velocity: impulse.scale(rb2.invMass), angularVelocity: new Vector2() }
         };
@@ -33,6 +34,7 @@ export class Solver {
 }
 
 declare interface Solved {
+    readonly collision: Collision;
     readonly A: { velocity: Vector2, angularVelocity: Vector2 };
     readonly B: { velocity: Vector2, angularVelocity: Vector2 };
 }
