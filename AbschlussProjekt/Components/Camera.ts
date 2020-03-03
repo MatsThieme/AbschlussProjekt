@@ -27,27 +27,29 @@ export class Camera extends Component {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const frame of frames) {
-            if (this.rectInCamera(new AABB(frame.size, frame.worldCordinates))) {
+            if (this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {
                 const framePos = this.worldToScreenPoint(frame.worldCordinates);
-                this.context.drawImage(frame.sprite.image, framePos.x, framePos.y);
+                const frameSize = this.worldToScreen(frame.size);
+                this.context.drawImage(frame.sprite.image, framePos.x, framePos.y, frameSize.x, frameSize.y);
             }
         }
     }
-    public rectInCamera(rect: AABB): boolean {
+    public AABBInCamera(rect: AABB): boolean {
         return rect.intersects(this.AABB);
-
-        //return rect.position.x < this.gameObject.transform.position.x + this.size.x / 2 && //rechts
-        //    this.gameObject.transform.position.x - this.size.x / 2 < rect.position.x + rect.size.x && // links
-        //    rect.position.y + rect.size.y > this.gameObject.transform.position.y + this.size.y / 2 && // oben
-        //    rect.position.y < this.gameObject.transform.position.y + this.size.y / 2; // unten
     }
     public worldToScreenPoint(position: Vector2): Vector2 {
         const localPosition = position.clone.sub(this.gameObject.transform.position).add(this.size.clone.scale(0.5));
 
-        return new Vector2(localPosition.x / this.size.x * this.resolution.x, localPosition.y / this.size.y * this.resolution.y);
+        return this.worldToScreen(localPosition);
     }
     public screenToWorldPoint(position: Vector2): Vector2 {
-        return new Vector2(position.x / this.resolution.x * this.size.x, position.y / this.resolution.y * this.size.y).add(this.gameObject.transform.position).sub(this.size.clone.scale(0.5));
+        return this.screenToWorld(position).add(this.gameObject.transform.position).sub(this.size.clone.scale(0.5));
+    }
+    public worldToScreen(vector: Vector2) {
+        return new Vector2(vector.x / this.size.x * this.resolution.x, vector.y / this.size.y * this.resolution.y);
+    }
+    public screenToWorld(vector: Vector2) {
+        return new Vector2(vector.x / this.resolution.x * this.size.x, vector.y / this.resolution.y * this.size.y);
     }
     private get AABB(): AABB {
         return new AABB(this.size, new Vector2(this.gameObject.transform.position.x - this.size.x / 2, this.gameObject.transform.position.y - this.size.y / 2));

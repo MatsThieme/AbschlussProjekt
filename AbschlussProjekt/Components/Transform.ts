@@ -11,6 +11,6 @@ export class Transform extends Component {
         super(gameObject, ComponentType.Transform);
         this.position = new Vector2();
         this.rotation = new Vector2();
-        this.scale = new Vector2();
+        this.scale = new Vector2(1, 1);
     }
 }

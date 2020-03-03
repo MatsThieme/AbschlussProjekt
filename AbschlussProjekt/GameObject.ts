@@ -1,12 +1,12 @@
+import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { Behaviour } from './Components/Behaviour.js';
+import { Camera } from './Components/Camera.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
 import { RigidBody } from './Components/RigidBody.js';
 import { Transform } from './Components/Transform.js';
 import { GameTime } from './GameTime.js';
 import { Physics } from './Physics/Physics.js';
-import { Vector2 } from './Vector2.js';
-import { AnimatedSprite } from './Components/AnimatedSprite.js';
 
 export class GameObject {
     private static nextID: number = 0;
@@ -16,6 +16,7 @@ export class GameObject {
     public readonly transform: Transform;
     public children: GameObject[];
     public rigidbody: RigidBody;
+    public active: boolean = true;
     public constructor(name: string) {
         this.name = name;
         this.id = GameObject.nextID++;
@@ -26,7 +27,11 @@ export class GameObject {
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T): T {
         const component = new type(this);
 
-        this.components.push(component);
+        if (!(component instanceof Camera) && !(component instanceof Transform) && !(component instanceof RigidBody) ||
+            (component instanceof RigidBody && this.getComponents(RigidBody).length === 0) ||
+            (component instanceof Transform && this.getComponents(Transform).length === 0) ||
+            (component instanceof Camera && this.getComponents(Camera).length === 0))
+            this.components.push(component);
 
         return component;
     }
@@ -48,9 +53,9 @@ export class GameObject {
         return gameObject;
     }
     public update(gameTime: GameTime) {
-        this.children.forEach(c => c.update(gameTime));
+        if (!this.active) return;
 
-        // vorher collider und rigidbody updaten
+        this.children.forEach(c => c.update(gameTime));
 
         if (this.rigidbody.mass > 0) this.transform.position.add(this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
 

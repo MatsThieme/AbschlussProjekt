@@ -1,5 +1,5 @@
 import { Vector2 } from '../Vector2.js';
-import { Collider } from './Collider.js';
+import { Collider } from '../Components/Collider.js';
 
 export class AABB {
     public size: Vector2;

@@ -42,16 +42,16 @@ export class Scene {
 
         for (const gO1 of this.gameObjects.values()) {
             for (const gO2 of this.gameObjects.values()) {
-                if (gO1.id !== gO2.id) collisions.push(...await Physics.asyncCollision(gO1, gO2));
+                if (gO1.id !== gO2.id && gO1.active && gO2.active) collisions.push(...await Physics.asyncCollision(gO1, gO2));
             }
         }
 
-        const rigidbodies = [...this.gameObjects.values()].map(gO => gO.rigidbody);
+        const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 
         rigidbodies.forEach(rb => rb.update(this.time, collisions));
 
         for (const gameObject of this.gameObjects.values()) {
-           await gameObject.update(this.time);
+            await gameObject.update(this.time);
         }
 
         this.cameraManager.update([...this.gameObjects.values()]);

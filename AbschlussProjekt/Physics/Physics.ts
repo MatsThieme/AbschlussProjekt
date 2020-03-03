@@ -7,7 +7,7 @@ import { clamp } from '../Helpers.js';
 import { Vector2 } from '../Vector2.js';
 import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { AABB } from './AABB.js';
-import { Collider } from './Collider.js';
+import { Collider } from '../Components/Collider.js';
 import { Collision } from './Collision.js';
 
 export class Physics {

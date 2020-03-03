@@ -8,5 +8,6 @@ export enum ComponentType {
     Collider,
     Component,
     RigidBody,
+    Texture,
     Transform
 }

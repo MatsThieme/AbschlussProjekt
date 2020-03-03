@@ -1,5 +1,7 @@
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { BoxCollider } from './Components/BoxCollider.js';
+import { Camera } from './Components/Camera.js';
+import { Texture } from './Components/Texture.js';
 import { Physics } from './Physics/Physics.js';
 import { FileDownload } from './Resources/FileDownload.js';
 import { Sprite } from './Resources/Sprite.js';
@@ -16,21 +18,24 @@ class Game {
         this.scene.domElement.width = 1920;
         this.scene.domElement.height = 1080;
 
-        this.scene.newCamera('cam');
+        const camera = this.scene.newCamera('cam');
+        camera.getComponent(Camera);
+
 
         const gO1 = this.scene.newGameObject('colliderTest1');
         const box1 = gO1.addComponent(BoxCollider);
-        gO1.rigidbody.mass = 0.001;
-        gO1.transform.position.y = -2
+        gO1.rigidbody.mass = 1;
+        gO1.transform.position.y = -2;
 
         const ground = this.scene.newGameObject('ground');
+        ground.transform.scale.x = 10;
         const groundCollider = ground.addComponent(BoxCollider);
-        groundCollider.size = new Vector2(100, 0.05);
-        ground.transform.position.y = 0.1;
+
+        const groundTexture = ground.addComponent(Texture);
+        groundTexture.sprite = new Sprite(new FileDownload('spriteTest1.png'));
 
         const animatedSprite = gO1.addComponent(AnimatedSprite);
         animatedSprite.spriteAnimations = [new SpriteAnimation([new Sprite(new FileDownload('spriteTest1.png')), new Sprite(new FileDownload('spriteTest2.png'))], 500)];
-        animatedSprite.size = new Vector2(1, 1);
     }
 }
 
