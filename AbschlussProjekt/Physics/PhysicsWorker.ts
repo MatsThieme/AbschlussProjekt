@@ -11,7 +11,7 @@ addEventListener('message', (e: MessageEvent) => {
     if (!e.isTrusted || e.data.name === 'close') return close();
 
     if (e.data && e.data.name === 'collision' && e.data.parameters?.length === 2) {
-        const parameters: GameObject[] = e.data.parameters?.map(gO => Object.setPrototypeOf(gO, new GameObject(''))) || [];
+        const parameters: GameObject[] = e.data.parameters?.map(gO => Object.setPrototypeOf(gO, new GameObject('', <any>0))) || [];
         parameters.forEach(gO => {
 
             for (let collider of gO.getComponents(ComponentType.Collider)) {

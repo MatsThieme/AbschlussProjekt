@@ -1,5 +1,7 @@
 export enum ComponentType {
     AnimatedSprite,
+    AudioListener,
+    AudioSource,
     Behaviour,
     BoxCollider,
     Camera,

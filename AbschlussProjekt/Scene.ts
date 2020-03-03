@@ -22,12 +22,12 @@ export class Scene {
         return <GameObject>this.gameObjects.get(name);
     }
     public newGameObject(name: string): GameObject {
-        const gameObject = new GameObject(name);
+        const gameObject = new GameObject(name, this);
         this.gameObjects.set(name, gameObject);
         return gameObject;
     }
     public newCamera(name: string): GameObject {
-        const gameObject = new GameObject(name);
+        const gameObject = new GameObject(name, this);
         this.gameObjects.set(name, gameObject);
 
         const camera = gameObject.addComponent(Camera);

@@ -14,9 +14,10 @@ export class CapsuleCollider extends Collider {
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.CapsuleCollider, relativePosition, material, alignH, alignV);
 
-        this.boxCollider = new BoxCollider(this.gameObject);
-        this.circleColliderTop = new CircleCollider(this.gameObject);
-        this.circleColliderBottom = new CircleCollider(this.gameObject);
+        this.boxCollider = new BoxCollider(this.gameObject, this.size.clone.scale(0.5).add(this.relativePosition), this.material, new Vector2(this.size.x, Math.max(this.size.y - this.size.x, 0.000001)));
+
+        this.circleColliderTop = new CircleCollider(this.gameObject, this.relativePosition.clone.add(new Vector2(this.radius, this.radius)), this.material, this.size.x / 2, this.alignH, this.alignV);
+        this.circleColliderBottom = new CircleCollider(this.gameObject, this.relativePosition.clone.add(new Vector2(this.radius, this.size.y - this.radius)), this.material, this.size.x / 2, this.alignH, this.alignV);
 
         this.size = size;
     }
@@ -36,9 +37,8 @@ export class CapsuleCollider extends Collider {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
     }
     private updateCollider(): void {
-        this.boxCollider = new BoxCollider(this.gameObject, this.size.clone.scale(0.5).add(this.relativePosition), this.material, new Vector2(this.size.x, Math.max(this.size.y - this.size.x, 0.000001)));
-
-        this.circleColliderTop = new CircleCollider(this.gameObject, this.relativePosition.clone.add(new Vector2(this.radius, this.radius)), this.material, this.size.x / 2, this.alignH, this.alignV);
-        this.circleColliderBottom = new CircleCollider(this.gameObject, this.relativePosition.clone.add(new Vector2(this.radius, this.size.y - this.radius)), this.material, this.size.x / 2, this.alignH, this.alignV);
+        this.boxCollider.relativePosition = this.size.clone.scale(0.5).add(this.relativePosition);
+        this.circleColliderTop.relativePosition = this.relativePosition.clone.add(new Vector2(this.radius, this.radius))
+        this.circleColliderBottom.relativePosition = this.relativePosition.clone.add(new Vector2(this.radius, this.size.y - this.radius))
     }
 }

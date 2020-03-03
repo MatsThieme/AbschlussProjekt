@@ -1,15 +1,18 @@
+import { Collider } from '../Components/Collider.js';
 import { GameObject } from '../GameObject.js';
 import { Vector2 } from '../Vector2.js';
 
 export class Collision {
-    public readonly gameObjectA: GameObject;
-    public readonly gameObjectB: GameObject;
-    public readonly normal: Vector2 | undefined;
-    public readonly penetration: number;
-    public constructor(gameObjectA: GameObject, gameObjectB: GameObject, normal?: Vector2, penetration: number = 0) {
-        this.gameObjectA = gameObjectA;
-        this.gameObjectB = gameObjectB;
-        this.normal = normal;
-        this.penetration = penetration;
+    public readonly colliderA: Collider;
+    public readonly colliderB: Collider;
+    public readonly resolveDirection: Vector2 | undefined;
+    public readonly penetrationDepth: number;
+    public readonly contactPoints: Vector2[];
+    public constructor(colliderA: Collider, colliderB: Collider, resolveDirection?: Vector2, penetrationDepth: number = 0, contactPoints: Vector2[] = []) {
+        this.colliderA = colliderA;
+        this.colliderB = colliderB;
+        this.resolveDirection = resolveDirection;
+        this.penetrationDepth = penetrationDepth;
+        this.contactPoints = contactPoints;
     }
 }

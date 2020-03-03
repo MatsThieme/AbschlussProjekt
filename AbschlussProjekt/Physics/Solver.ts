@@ -6,15 +6,15 @@ import { Collision } from './Collision.js';
 
 export class Solver {
     public static solve(collision: Collision): Solved | undefined {
-        if (!collision.normal) return;
-        const rb1 = collision.gameObjectA.rigidbody;
-        const rb2 = collision.gameObjectB.rigidbody;
+        if (!collision.resolveDirection) return;
+        const rb1 = collision.colliderA.gameObject.rigidbody;
+        const rb2 = collision.colliderB.gameObject.rigidbody;
 
         if (rb1.mass === 0 && rb2.mass === 0) return;
 
         const rv = rb1.velocity.sub(rb2.velocity);
 
-        const velAlongNormal = Vector2.multiply(rv, collision.normal);
+        const velAlongNormal = Vector2.multiply(rv, collision.resolveDirection);
 
         if (velAlongNormal > 0) return;
 
@@ -23,7 +23,7 @@ export class Solver {
         let j = -(1 + e) * velAlongNormal;
         j /= rb1.invMass + rb2.invMass;
 
-        let impulse = collision.normal.scale(j);
+        let impulse = collision.resolveDirection.scale(j);
 
         return {
             collision,

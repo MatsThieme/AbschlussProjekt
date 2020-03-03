@@ -31,10 +31,10 @@ export class Physics {
 
                     if (otherCollider.type === ComponentType.CircleCollider) {
                         const c = Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        if (c.resolveDirection) ret.push(c);
                     } else if (otherCollider.type === ComponentType.BoxCollider) {
                         const c = Physics.collisionBoxCircle(<BoxCollider>otherCollider, <CircleCollider>collider);
-                        if (c.normal) ret.push(c);
+                        if (c.resolveDirection) ret.push(c);
                     } else if (otherCollider.type === ComponentType.CapsuleCollider) {
                         const c = Physics.collisionCapsuleCircle(<CapsuleCollider>otherCollider, <CircleCollider>collider);
                         ret.push(...c);
@@ -48,10 +48,10 @@ export class Physics {
 
                     if (otherCollider.type === ComponentType.CircleCollider) {
                         const c = Physics.collisionBoxCircle(<BoxCollider>collider, <CircleCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        if (c.resolveDirection) ret.push(c);
                     } else if (otherCollider.type === ComponentType.BoxCollider) {
                         const c = Physics.collisionBox(<BoxCollider>collider, <BoxCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        if (c.resolveDirection) ret.push(c);
                     } else if (otherCollider.type === ComponentType.CapsuleCollider) {
                         const c = Physics.collisionCapsuleBox(<CapsuleCollider>otherCollider, <BoxCollider>collider);
                         ret.push(...c);
@@ -87,7 +87,7 @@ export class Physics {
         const gO1 = circleCollider1.gameObject;
         const gO2 = circleCollider2.gameObject;
 
-        if (!Physics.intersectsCircle(circleCollider1, circleCollider2)) return new Collision(gO1, gO2);
+        if (!Physics.intersectsCircle(circleCollider1, circleCollider2)) return new Collision(circleCollider1, circleCollider2);
 
         let penetration: number;
         let normal: Vector2;
@@ -102,7 +102,7 @@ export class Physics {
             normal = new Vector2(0, 1);
         }
 
-        return new Collision(gO1, gO2, normal, penetration);
+        return new Collision(circleCollider1, circleCollider2, normal, penetration);
     }
     public static collisionBox(boxCollider1: BoxCollider, boxCollider2: BoxCollider): Collision {
         const gO1 = boxCollider1.gameObject;
@@ -124,7 +124,7 @@ export class Physics {
             penetration = y_overlap;
         }
 
-        return new Collision(gO1, gO2, normal, penetration);
+        return new Collision(boxCollider1, boxCollider2, normal, penetration);
     }
     public static collisionBoxCircle(boxCollider: BoxCollider, circleCollider: CircleCollider): Collision {
         const gO1 = boxCollider.gameObject;
@@ -162,7 +162,7 @@ export class Physics {
         let d = normal.magnitude;
         const r = circleCollider.radius;
 
-        if (d > r && !inside) return new Collision(gO1, gO2);
+        if (d > r && !inside) return new Collision(boxCollider, circleCollider);
 
         if (inside) {
             normal = AtoB.scale(-1);
@@ -172,7 +172,7 @@ export class Physics {
             penetration = r - d;
         }
 
-        return new Collision(gO1, gO2, normal, penetration);
+        return new Collision(boxCollider, circleCollider, normal, penetration);
     }
     public static collisionCapsule(capsuleCollider1: CapsuleCollider, capsuleCollider2: CapsuleCollider): Collision[] {
         return [...Physics.collisionCapsuleBox(capsuleCollider1, capsuleCollider2.boxCollider), ...Physics.collisionCapsuleCircle(capsuleCollider1, capsuleCollider2.circleColliderTop), ...Physics.collisionCapsuleCircle(capsuleCollider1, capsuleCollider2.circleColliderBottom)];
@@ -181,11 +181,11 @@ export class Physics {
         const ret: Collision[] = [];
 
         const boxtop = Physics.collisionBoxCircle(boxCollider, capsuleCollider.circleColliderTop);
-        if (boxtop.normal) ret.push(boxtop);
+        if (boxtop.resolveDirection) ret.push(boxtop);
         const boxbox = Physics.collisionBox(boxCollider, capsuleCollider.boxCollider);
-        if (boxbox.normal) ret.push(boxbox);
+        if (boxbox.resolveDirection) ret.push(boxbox);
         const boxbot = Physics.collisionBoxCircle(boxCollider, capsuleCollider.circleColliderBottom);
-        if (boxbot.normal) ret.push(boxbot);
+        if (boxbot.resolveDirection) ret.push(boxbot);
 
         return ret;
     }
@@ -193,11 +193,11 @@ export class Physics {
         const ret: Collision[] = [];
 
         const circletop = Physics.collisionCircle(circleCollider, capsuleCollider.circleColliderTop);
-        if (circletop.normal) ret.push(circletop);
+        if (circletop.resolveDirection) ret.push(circletop);
         const circlebox = Physics.collisionBoxCircle(capsuleCollider.boxCollider, circleCollider);
-        if (circlebox.normal) ret.push(circlebox);
+        if (circlebox.resolveDirection) ret.push(circlebox);
         const circlebot = Physics.collisionCircle(circleCollider, capsuleCollider.circleColliderBottom);
-        if (circlebot.normal) ret.push(circlebot);
+        if (circlebot.resolveDirection) ret.push(circlebot);
 
         return ret;
     }

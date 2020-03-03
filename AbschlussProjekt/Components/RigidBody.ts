@@ -21,7 +21,7 @@ export class RigidBody extends Component {
         this._mass = mass;
         this._invMass = mass === 0 ? 0 : 1 / mass;
         this.material = material;
-        this.velocity = new Vector2(0,0.01);
+        this.velocity = new Vector2(0, 0);
         this.angularVelocity = new Vector2();
         this.velocityChange = new Vector2();
         this.angularVelocityChange = new Vector2();
@@ -43,13 +43,13 @@ export class RigidBody extends Component {
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
         for (const collision of currentCollisions) {
-            if (collision.gameObjectA.id === this.gameObject.id) {
+            if (collision.colliderA.gameObject.id === this.gameObject.id) {
                 const solved = Solver.solve(collision);
                 if (!solved) continue;
                 solved.A.velocity.y *= -1;
                 this.impulse(solved.A.velocity);
                 this.velocity = new Vector2();
-            } else if (collision.gameObjectB.id === this.gameObject.id) {
+            } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
                 const solved = Solver.solve(collision);
                 if (!solved) continue;
                 solved.B.velocity.y *= -1;
@@ -59,7 +59,7 @@ export class RigidBody extends Component {
         }
 
 
-        this.velocity.add(this.velocityChange/*, Physics.gravity.clone.scale(gameTime.deltaTime * this.mass)*/);
+        this.velocity.add(this.velocityChange);
         this.velocityChange = new Vector2();
     }
 }

@@ -91,4 +91,7 @@ export class Vector2 {
     public toString(): string {
         return `x: ${Math.round(this.x * 10000) / 10000}, y: ${Math.round(this.y * 10000) / 10000}`;
     }
+    public distance(other: Vector2): number {
+        return Math.sqrt((this.x - other.x) ** 2 + (this.y - other.y) ** 2);
+    }
 }
