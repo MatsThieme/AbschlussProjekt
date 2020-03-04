@@ -1,4 +1,3 @@
 # AbschlussProjekt
 
-resources:
-https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331
+Abschluss Projekt GME-18
