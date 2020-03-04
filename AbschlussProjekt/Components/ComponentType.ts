@@ -9,6 +9,7 @@ export enum ComponentType {
     CircleCollider,
     Collider,
     Component,
+    ParticleSystem,
     RigidBody,
     Texture,
     Transform

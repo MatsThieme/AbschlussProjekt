@@ -86,6 +86,9 @@
     <TypeScriptCompile Include="Components\ComponentType.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Components\ParticleSystem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\RigidBody.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -107,19 +110,16 @@
     <TypeScriptCompile Include="Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Particle.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Physics\AABB.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\Solver.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Resources\FileDownload.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Resources\Sprite.ts">
+    <TypeScriptCompile Include="Sprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Components\Collider.ts">
@@ -161,7 +161,6 @@
     <Folder Include="Behaviours\" />
     <Folder Include="Assets\" />
     <Folder Include="Worker\" />
-    <Folder Include="Resources\" />
     <Folder Include="Physics\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

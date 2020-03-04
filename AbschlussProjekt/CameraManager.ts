@@ -17,14 +17,16 @@ export class CameraManager {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
     }
     public update(gameObjects: GameObject[]) {
-        const frames: (Frame | undefined)[] = [];
+        let frames: (Frame | undefined)[] = [];
 
         for (const gameObject of gameObjects) {
             frames.push(...gameObject.getComponents(AnimatedSprite).map(aS => aS.currentFrame));
             frames.push(...gameObject.getComponents(Texture).map(t => t.currentFrame));
         }
 
-        this.cameras.forEach(camera => camera.update(<Frame[]>frames.filter(f => f)));
+        frames = frames.filter(f => f).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);
+
+        this.cameras.forEach(camera => camera.update(<Frame[]>frames));
 
 
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);

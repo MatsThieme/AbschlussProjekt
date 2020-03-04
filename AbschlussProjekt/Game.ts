@@ -1,15 +1,13 @@
-import { AnimatedSprite } from './Components/AnimatedSprite.js';
-import { AudioListener } from './Components/AudioListener.js';
-import { AudioSource } from './Components/AudioSource.js';
-import { BoxCollider } from './Components/BoxCollider.js';
+import { TestBehaviour } from './Behaviours/TestBehaviour.js';
 import { Camera } from './Components/Camera.js';
 import { Texture } from './Components/Texture.js';
 import { Physics } from './Physics/Physics.js';
-import { FileDownload } from './Resources/FileDownload.js';
-import { Sprite } from './Resources/Sprite.js';
 import { Scene } from './Scene.js';
-import { SpriteAnimation } from './SpriteAnimation.js';
+import { Sprite } from './Sprite.js';
+import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
+import { ParticleSystem } from './Components/ParticleSystem.js';
+import { Angle } from './Angle.js';
 
 class Game {
     public scene: Scene;
@@ -19,43 +17,60 @@ class Game {
         this.scene.domElement.width = 1920;
         this.scene.domElement.height = 1080;
 
-        const camera = this.scene.newCamera('cam');
-        camera.getComponent(Camera);
+        const camera = this.scene.newCamera('cam').getComponent(Camera);
 
         // gO1
-        const gO1 = this.scene.newGameObject('colliderTest1');
-        const box1 = gO1.addComponent(BoxCollider);
-        gO1.rigidbody.mass = 1;
-        gO1.transform.position.y = -2;
+        const gO1 = this.scene.newGameObject('test');
+        gO1.transform.position.y = 4.5;
 
-        const animatedSprite = gO1.addComponent(AnimatedSprite);
-        animatedSprite.spriteAnimations = [new SpriteAnimation([new Sprite(new FileDownload('spriteTest1.png')), new Sprite(new FileDownload('spriteTest2.png'))], 500)];
+        const texture = gO1.addComponent(Texture);
+        texture.sprite = new Sprite('spriteTest1.png');
 
-        gO1.addComponent(AudioListener);
+        gO1.addComponent(TestBehaviour);
 
 
-        // ground
-        const ground = this.scene.newGameObject('ground');
-        ground.transform.scale.x = 10;
-        const groundCollider = ground.addComponent(BoxCollider);
+        const gO2 = this.scene.newGameObject('child test');
+        gO2.transform.position = new Vector2(1, 1);
 
-        const groundTexture = ground.addComponent(Texture);
-        groundTexture.sprite = new Sprite(new FileDownload('spriteTest1.png'));
+        gO1.addChild(gO2);
+
+        const texturegO2 = gO2.addComponent(Texture);
+        texturegO2.sprite = new Sprite('spriteTest1.png');
+
+
+        const gO3 = this.scene.newGameObject('child test');
+        gO3.transform.position = new Vector2(1, 1);
+
+        gO2.addChild(gO3);
+
+        const texturegO3 = gO3.addComponent(Texture);
+        texturegO3.sprite = new Sprite('spriteTest1.png');
+
+
+        const gO4 = this.scene.newGameObject('child test');
+        gO4.transform.position = new Vector2(1, 1);
+
+        gO3.addChild(gO4);
+
+        const texturegO4 = gO4.addComponent(Texture);
+        texturegO4.sprite = new Sprite('spriteTest1.png');
 
 
 
-        // audio source test
-        const gO2 = this.scene.newGameObject('audio source');
-        const source1 = gO2.addComponent(AudioSource);
-        source1.clip = 'audiotest.mp3';
-        source1.loop = true;
-        source1.play();
-        source1.volume = 1;
+
+
+        const gO5 = this.scene.newGameObject('particles');
+        const particleSystem = gO5.addComponent(ParticleSystem);
+        particleSystem.particleLifeTime = 500;
+        particleSystem.emission = 100;
+        particleSystem.speed = 1;
+        particleSystem.sprites = [new Sprite('spriteTest1.png')];
+        particleSystem.angle = new Angle(undefined, 360);
+
     }
 }
 
 new Game();
-
 
 
 

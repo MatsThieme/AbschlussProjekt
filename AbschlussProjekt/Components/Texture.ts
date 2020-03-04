@@ -3,7 +3,7 @@ import { Alignable } from '../Alignable.js';
 import { Drawable } from '../Drawable.js';
 import { Frame } from '../Frame.js';
 import { GameObject } from '../GameObject.js';
-import { Sprite } from '../Resources/Sprite.js';
+import { Sprite } from '../Sprite.js';
 import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
@@ -22,7 +22,7 @@ export class Texture extends Component implements Drawable, Alignable {
         this.alignV = alignV;
     }
     public get currentFrame(): Frame | undefined {
-        return this.sprite ? new Frame(this.position, this.scaledSize, this.sprite) : undefined;
+        return this.sprite ? new Frame(this.position, this.scaledSize, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority) : undefined;
     }
     public get scaledSize(): Vector2 {
         return new Vector2(this.size.x * this.gameObject.transform.scale.x, this.size.y * this.gameObject.transform.scale.y);

@@ -36,6 +36,9 @@ export class Vector2 {
     public static multiply(v: Vector2, ...vectors: Vector2[]): number {
         return vectors.reduce((a: Vector2, b: Vector2) => { a.x *= b.x; a.y *= b.y; return a; }, v.clone).sum;
     }
+    public multiply(other: Vector2): Vector2 {
+        return new Vector2(this.x * other.x, this.y * other.y);
+    }
     public static average(...vectors: Vector2[]) {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
     }

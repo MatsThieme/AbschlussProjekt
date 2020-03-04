@@ -1,3 +1,5 @@
+import { Vector2 } from './Vector2.js';
+
 export class Angle {
     private _radian: number;
     private _degree: number;
@@ -30,5 +32,11 @@ export class Angle {
         deg %= 360;
         if (deg < 0) deg += 360;
         return deg;
+    }
+    public get clone(): Angle {
+        return new Angle(this.radian);
+    }
+    public toVector2(): Vector2 {
+        return new Vector2(Math.cos(this.radian), Math.sin(this.radian));
     }
 }

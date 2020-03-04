@@ -1,19 +1,20 @@
 import { BoxCollider } from '../Components/BoxCollider.js';
 import { CapsuleCollider } from '../Components/CapsuleCollider.js';
 import { CircleCollider } from '../Components/CircleCollider.js';
+import { Collider } from '../Components/Collider.js';
 import { ComponentType } from '../Components/ComponentType.js';
 import { GameObject } from '../GameObject.js';
 import { clamp } from '../Helpers.js';
 import { Vector2 } from '../Vector2.js';
-import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { AABB } from './AABB.js';
-import { Collider } from '../Components/Collider.js';
 import { Collision } from './Collision.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, 9.807 / 1000);
+    public static gravity: Vector2 = new Vector2(0, -9.807 / 1000);
     public static timeScale: number = 1;
     public static async  asyncCollision(first: GameObject, second: GameObject): Promise<Collision[]> {
+        //first.scene = <any>undefined;
+        //second.scene = <any>undefined;
         //return await AsyncWorker.work('Physics/PhysicsWorker.js', { name: 'collision', parameters: [first, second] });
         return Physics.collision(first, second);
     }

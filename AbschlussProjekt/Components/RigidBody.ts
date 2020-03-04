@@ -1,9 +1,7 @@
 import { GameObject } from '../GameObject.js';
 import { GameTime } from '../GameTime.js';
 import { Collision } from '../Physics/Collision.js';
-import { Physics } from '../Physics/Physics.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
-import { Solver } from '../Physics/Solver.js';
 import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
@@ -44,20 +42,17 @@ export class RigidBody extends Component {
         if (this.mass === 0) return;
         for (const collision of currentCollisions) {
             if (collision.colliderA.gameObject.id === this.gameObject.id) {
-                const solved = Solver.solve(collision);
-                if (!solved) continue;
-                solved.A.velocity.y *= -1;
-                this.impulse(solved.A.velocity);
+                if (!collision.solved) continue;
+                collision.solved.A.velocity.y *= -1;
+                this.impulse(collision.solved.A.velocity);
                 this.velocity = new Vector2();
             } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
-                const solved = Solver.solve(collision);
-                if (!solved) continue;
-                solved.B.velocity.y *= -1;
-                this.impulse(solved.B.velocity);
+                if (!collision.solved) continue;
+                collision.solved.B.velocity.y *= -1;
+                this.impulse(collision.solved.B.velocity);
                 this.velocity = new Vector2();
             }
         }
-
 
         this.velocity.add(this.velocityChange);
         this.velocityChange = new Vector2();

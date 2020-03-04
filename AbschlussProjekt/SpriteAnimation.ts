@@ -1,5 +1,5 @@
 import { GameTime } from './GameTime.js';
-import { Sprite } from './Resources/Sprite.js';
+import { Sprite } from './Sprite.js';
 
 export class SpriteAnimation {
     public sprites: Sprite[];
@@ -10,7 +10,7 @@ export class SpriteAnimation {
         this.swapTime = swapTime;
         this.timer = 0;
     }
-    public get getFrame(): Sprite {
+    public get currentFrame(): Sprite {
         return this.sprites[this.currentIndex];
     }
     public update(gameTime: GameTime) {

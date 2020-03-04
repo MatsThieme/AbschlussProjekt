@@ -1,9 +1,9 @@
 import { GameObject } from '../GameObject.js';
+import { clamp, triggerOnUserInputEvent } from '../Helpers.js';
+import { Settings } from '../Settings.js';
+import { AudioSource } from './AudioSource.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
-import { AudioSource } from './AudioSource.js';
-import { triggerOnUserInputEvent, clamp } from '../Helpers.js';
-import { Settings } from '../Settings.js';
 
 export class AudioListener extends Component {
     public distance: number;

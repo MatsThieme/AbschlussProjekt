@@ -22,13 +22,13 @@ export class Scene {
         return <GameObject>this.gameObjects.get(name);
     }
     public newGameObject(name: string): GameObject {
+        name = this.correctName(name);
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(name, gameObject);
         return gameObject;
     }
     public newCamera(name: string): GameObject {
-        const gameObject = new GameObject(name, this);
-        this.gameObjects.set(name, gameObject);
+        const gameObject = this.newGameObject(name);
 
         const camera = gameObject.addComponent(Camera);
         this.cameraManager.cameras.push(camera);
@@ -51,11 +51,20 @@ export class Scene {
         rigidbodies.forEach(rb => rb.update(this.time, collisions));
 
         for (const gameObject of this.gameObjects.values()) {
-            await gameObject.update(this.time);
+            await gameObject.update(this.time, collisions);
         }
 
         this.cameraManager.update([...this.gameObjects.values()]);
 
         requestAnimationFrame(this.update.bind(this));
+    }
+    private correctName(name: string): string {
+        if (/.* \(\d\)/.test(name)) {
+            name = (<RegExpMatchArray>name.match(/(.*) \(\d+\)/))[1];
+        }
+
+        const sameNames = [...this.gameObjects.keys()].filter(gO => new RegExp(name + '(?: \(\d+\))?').test(gO));
+
+        return name + ' (' + sameNames.length + ')';
     }
 }

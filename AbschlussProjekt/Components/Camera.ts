@@ -26,11 +26,25 @@ export class Camera extends Component {
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        this.context.rotate(this.gameObject.transform.rotation.radian);
+
         for (const frame of frames) {
             if (this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {
-                const framePos = this.worldToScreenPoint(frame.worldCordinates);
                 const frameSize = this.worldToScreen(frame.size);
+                const framePos = this.worldToScreenPoint(frame.worldCordinates).sub(new Vector2(0, frameSize.y));
+                const translate = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
+
+                this.context.save();
+
+                this.context.translate(translate.x, translate.y);
+
+                this.context.rotate(frame.rotation.radian);
+
+                this.context.translate(-translate.x, -translate.y);
+
                 this.context.drawImage(frame.sprite.image, framePos.x, framePos.y, frameSize.x, frameSize.y);
+
+                this.context.restore();
             }
         }
     }
@@ -38,12 +52,13 @@ export class Camera extends Component {
         return rect.intersects(this.AABB);
     }
     public worldToScreenPoint(position: Vector2): Vector2 {
-        const localPosition = position.clone.sub(this.gameObject.transform.position).add(this.size.clone.scale(0.5));
+        const localPosition = new Vector2(position.x, -position.y).sub(this.gameObject.transform.position).add(this.size.clone.scale(0.5));
 
         return this.worldToScreen(localPosition);
     }
     public screenToWorldPoint(position: Vector2): Vector2 {
-        return this.screenToWorld(position).add(this.gameObject.transform.position).sub(this.size.clone.scale(0.5));
+        const x = this.screenToWorld(position).add(this.gameObject.transform.position).sub(this.size.clone.scale(0.5));
+        return new Vector2(x.x, -x.y);
     }
     public worldToScreen(vector: Vector2) {
         return new Vector2(vector.x / this.size.x * this.resolution.x, vector.y / this.size.y * this.resolution.y);
