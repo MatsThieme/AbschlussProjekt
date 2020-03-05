@@ -12,5 +12,6 @@ export enum ComponentType {
     ParticleSystem,
     RigidBody,
     Texture,
+    TileMap,
     Transform
 }

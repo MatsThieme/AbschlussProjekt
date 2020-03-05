@@ -35,11 +35,12 @@ export class GameObject {
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T): T {
         const component = new type(this);
 
-        if (component.type !== ComponentType.Camera && component.type !== ComponentType.Transform && component.type !== ComponentType.RigidBody && component.type !== ComponentType.AudioListener ||
+        if (component.type !== ComponentType.Camera && component.type !== ComponentType.Transform && component.type !== ComponentType.RigidBody && component.type !== ComponentType.AudioListener && component.type !== ComponentType.TileMap ||
             (component.type === ComponentType.RigidBody && this.getComponents(ComponentType.RigidBody).length === 0) ||
             (component.type === ComponentType.Transform && this.getComponents(ComponentType.Transform).length === 0) ||
             (component.type === ComponentType.Camera && this.getComponents(ComponentType.Camera).length === 0) ||
-            (component.type === ComponentType.AudioListener && this.getComponents(ComponentType.AudioListener).length === 0))
+            (component.type === ComponentType.AudioListener && this.getComponents(ComponentType.AudioListener).length === 0) ||
+            (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
             this.components.push(component);
 
         return component;
