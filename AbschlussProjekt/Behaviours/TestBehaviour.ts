@@ -1,7 +1,8 @@
+import { Angle } from '../Angle.js';
 import { Behaviour } from '../Components/Behaviour.js';
 import { GameTime } from '../GameTime.js';
+import { Collision } from '../Physics/Collision.js';
 import { Vector2 } from '../Vector2.js';
-import { Angle } from '../Angle.js';
 
 export class TestBehaviour extends Behaviour {
     private speed: number = 0.1;
@@ -27,7 +28,7 @@ export class TestBehaviour extends Behaviour {
         //this.gameObject.transform.relativePosition.y += this.input.getAxis(InputType.MoveVertical).value * gameTime.deltaTime / 1000;
     }
 
-    public onCollision() {
+    public onCollision(collisions: Collision[]) {
 
     }
 }
