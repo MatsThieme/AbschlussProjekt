@@ -19,7 +19,6 @@ class Game {
 
         const camera = this.scene.newCamera('cam').getComponent(Camera);
 
-        // gO1
         const gO1 = this.scene.newGameObject('test');
         gO1.transform.position.y = 4.5;
 
@@ -61,12 +60,16 @@ class Game {
 
         const gO5 = this.scene.newGameObject('particles');
         const particleSystem = gO5.addComponent(ParticleSystem);
-        particleSystem.particleLifeTime = 500;
+        particleSystem.lifeTime = 1000;
         particleSystem.emission = 100;
-        particleSystem.speed = 1;
+        particleSystem.fadeInDuration = 200;
+        particleSystem.fadeOutDuration = 200;
+        particleSystem.speed = 0.001;
+        particleSystem.rotationSpeed = 0.1;
         particleSystem.sprites = [new Sprite('spriteTest1.png')];
-        particleSystem.angle = new Angle(undefined, 360);
-
+        particleSystem.angle = new Angle(undefined, 359);
+        particleSystem.size = new Vector2(0.1, 0.1);
+        console.log(particleSystem.angle);
     }
 }
 

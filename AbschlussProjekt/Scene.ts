@@ -2,6 +2,7 @@ import { CameraManager } from './CameraManager.js';
 import { Camera } from './Components/Camera.js';
 import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
+import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
 
@@ -9,12 +10,14 @@ export class Scene {
     public readonly domElement: HTMLCanvasElement;
     public gameObjects: Map<string, GameObject>;
     public cameraManager: CameraManager;
-    public time: GameTime;
+    public gameTime: GameTime;
+    public input: Input;
     public constructor() {
         this.domElement = document.createElement('canvas');
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
-        this.time = new GameTime();
+        this.gameTime = new GameTime();
+        this.input = new Input(this.gameTime);
 
         requestAnimationFrame(this.update.bind(this));
     }
@@ -36,7 +39,7 @@ export class Scene {
         return gameObject;
     }
     private async update() {
-        this.time.update();
+        this.gameTime.update();
 
         const collisions: Collision[] = [];
 
@@ -48,10 +51,10 @@ export class Scene {
 
         const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 
-        rigidbodies.forEach(rb => rb.update(this.time, collisions));
+        rigidbodies.forEach(rb => rb.update(this.gameTime, collisions));
 
         for (const gameObject of this.gameObjects.values()) {
-            await gameObject.update(this.time, collisions);
+            await gameObject.update(this.gameTime, collisions);
         }
 
         this.cameraManager.update([...this.gameObjects.values()]);

@@ -1,16 +1,18 @@
 import { GameObject } from '../GameObject.js';
 import { GameTime } from '../GameTime.js';
+import { Input } from '../Input/Input.js';
 import { Collision } from '../Physics/Collision.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
 export class Behaviour extends Component {
+    protected input: Input;
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.Behaviour);
-
+        this.input = gameObject.scene.input;
         this.start();
     }
-    public start() {
+    protected start() {
 
     }
     public update(gameTime: GameTime) {

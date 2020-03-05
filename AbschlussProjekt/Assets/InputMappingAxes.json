@@ -1,0 +1,16 @@
+{
+  "keyboard": {
+    "4": "ToAxis(KeyD, KeyA)",
+    "5": "ToAxis(KeyS, KeyW)"
+  },
+  "mouse": {
+    "6": 0,
+    "7": 1
+  },
+  "gamepad": {
+    "4": 0,
+    "5": 1,
+    "6": 3,
+    "7": 2
+  }
+}

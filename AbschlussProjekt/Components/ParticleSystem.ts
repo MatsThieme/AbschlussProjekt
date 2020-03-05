@@ -22,12 +22,13 @@ export class ParticleSystem extends Component implements Drawable, Alignable {
     public alignV: AlignV;
     public emission: number;
     public speed: number;
+    public rotationSpeed: number;
     private particles: Particle[];
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
     private timer: number;
-    public particleLifeTime: number;
-    public constructor(gameObject: GameObject, distance: number = 1, angle: Angle = new Angle(), sprites: (Sprite | SpriteAnimation)[] = [], emission: number = 100, speed: number = 0, particleLifeTime: number = 500, relativePosition: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public lifeTime: number;
+    public fadeInDuration: number;
+    public fadeOutDuration: number;
+    public constructor(gameObject: GameObject, distance: number = 1, angle: Angle = new Angle(), sprites: (Sprite | SpriteAnimation)[] = [], emission: number = 100, speed: number = 0, rotationSpeed: number = 1, particleLifeTime: number = 500, fadeInDuration: number = 0, fadeOutDuration: number = 0, relativePosition: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.ParticleSystem);
         this.distance = distance;
         this.angle = angle;
@@ -38,30 +39,29 @@ export class ParticleSystem extends Component implements Drawable, Alignable {
         this.alignV = alignV;
         this.emission = emission;
         this.speed = speed;
-        this.particleLifeTime = particleLifeTime;
+        this.rotationSpeed = rotationSpeed;
+        this.lifeTime = particleLifeTime;
 
         this.particles = [];
         this.timer = 0;
 
-        this.canvas = document.createElement('canvas');
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.fadeInDuration = fadeInDuration;
+        this.fadeOutDuration = fadeOutDuration;
     }
-    public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.scaledSize, new Sprite(this.canvas), this.gameObject.transform.rotation, this.gameObject.drawPriority);
+    public get currentFrame(): Frame[] {
+        return this.particles.map(p => p.currentFrame);
     }
     public update(gameTime: GameTime) {
         this.timer += gameTime.deltaTime;
 
         if (this.timer >= this.emission) {
-            this.particles.push(new Particle(this.sprites[~~(Math.random() * this.sprites.length)], new Angle(Math.random() * this.angle.radian + this.gameObject.transform.rotation.radian).toVector2().scale(this.speed)));
+            this.particles.push(new Particle(this, this.sprites[~~(Math.random() * this.sprites.length)], new Angle(Math.random() * this.angle.radian + this.gameObject.transform.rotation.radian).toVector2().scale(this.speed)));
             this.timer %= this.emission;
         }
 
         for (let i = this.particles.length - 1; i >= 0; i--) {
-            const pos = Vector2.add(this.position, this.relativePosition, this.particles[i].relativePosition);
-            this.context.drawImage(this.particles[i].sprite instanceof Sprite ? (<Sprite>this.particles[i].sprite).image : (<SpriteAnimation>this.particles[i].sprite).currentFrame.image, pos.x, pos.y);
             this.particles[i].update(gameTime);
-            //if (this.particles[i].startTime + this.particleLifeTime < gameTime.now) this.particles.splice(i, 1);
+            if (this.particles[i].startTime + this.lifeTime < gameTime.now) this.particles.splice(i, 1);
         }
     }
     public get scaledSize(): Vector2 {

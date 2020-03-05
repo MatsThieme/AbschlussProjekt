@@ -3,6 +3,7 @@ import { Camera } from './Components/Camera.js';
 import { Texture } from './Components/Texture.js';
 import { Frame } from './Frame.js';
 import { GameObject } from './GameObject.js';
+import { ParticleSystem } from './Components/ParticleSystem.js';
 
 export class CameraManager {
     private context: CanvasRenderingContext2D;
@@ -22,6 +23,10 @@ export class CameraManager {
         for (const gameObject of gameObjects) {
             frames.push(...gameObject.getComponents(AnimatedSprite).map(aS => aS.currentFrame));
             frames.push(...gameObject.getComponents(Texture).map(t => t.currentFrame));
+            frames.push(...gameObject.getComponents(ParticleSystem).reduce((t: Frame[], c) => {
+                t.push(...(<Frame[]>c.currentFrame));
+                return t;
+            }, []));
         }
 
         frames = frames.filter(f => f).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);

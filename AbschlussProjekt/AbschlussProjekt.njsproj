@@ -33,6 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Game.ts" />
+    <Content Include="Assets\InputMappingAxes.json" />
+    <Content Include="Assets\InputMappingButtons.json">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
@@ -110,6 +114,16 @@
     <TypeScriptCompile Include="Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Input\Input.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Input\InputAxis.ts" />
+    <TypeScriptCompile Include="Input\InputButton.ts" />
+    <TypeScriptCompile Include="Input\InputGamepad.ts" />
+    <TypeScriptCompile Include="Input\InputKeyboard.ts" />
+    <TypeScriptCompile Include="Input\InputMapping.ts" />
+    <TypeScriptCompile Include="Input\InputMouse.ts" />
+    <TypeScriptCompile Include="Input\InputType.ts" />
     <TypeScriptCompile Include="Particle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -160,6 +174,7 @@
     <Folder Include="Components\" />
     <Folder Include="Behaviours\" />
     <Folder Include="Assets\" />
+    <Folder Include="Input\" />
     <Folder Include="Worker\" />
     <Folder Include="Physics\" />
   </ItemGroup>

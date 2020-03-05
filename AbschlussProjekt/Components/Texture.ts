@@ -22,7 +22,7 @@ export class Texture extends Component implements Drawable, Alignable {
         this.alignV = alignV;
     }
     public get currentFrame(): Frame | undefined {
-        return this.sprite ? new Frame(this.position, this.scaledSize, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority) : undefined;
+        return this.sprite ? new Frame(this.position, this.scaledSize, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1) : undefined;
     }
     public get scaledSize(): Vector2 {
         return new Vector2(this.size.x * this.gameObject.transform.scale.x, this.size.y * this.gameObject.transform.scale.y);

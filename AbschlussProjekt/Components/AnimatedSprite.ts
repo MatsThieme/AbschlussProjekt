@@ -27,7 +27,7 @@ export class AnimatedSprite extends Component implements Drawable, Alignable {
         this.alignV = alignV;
     }
     public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.scaledSize, this.spriteAnimations[this._activeAnimation].currentFrame, this.gameObject.transform.rotation, this.gameObject.drawPriority);
+        return new Frame(this.position, this.scaledSize, this.spriteAnimations[this._activeAnimation].currentFrame, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1);
     }
     public update(gameTime: GameTime) {
         if (this.spriteAnimations.length === 0) console.error('spriteAnimations empty, gameObject name:', this.gameObject.name);
