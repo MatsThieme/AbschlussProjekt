@@ -31,15 +31,14 @@ export class Collision {
 
         const e = Math.min(rb1.material.bounciness, rb2.material.bounciness);
 
-        let j = -(1 + e) * velAlongNormal;
-        j /= rb1.invMass + rb2.invMass;
+        let j = -(1 + e) * velAlongNormal / (rb1.invMass + 1 / rb2.invMass);
 
         let impulse = collision.normal.clone.scale(j);
 
         return {
             collision,
-            A: { velocity: impulse.clone.scale(-rb1.invMass), angularVelocity: 0 },
-            B: { velocity: impulse.clone.scale(rb2.invMass), angularVelocity: 0 }
+            A: impulse.clone.scale(-1),
+            B: impulse.clone
         };
     }
     public static reduce(...collisions: Collision[]): Collision | undefined {
@@ -52,6 +51,6 @@ export class Collision {
 
 declare interface Solved {
     readonly collision: Collision;
-    readonly A: { velocity: Vector2, angularVelocity: number };
-    readonly B: { velocity: Vector2, angularVelocity: number };
+    readonly A: Vector2;
+    readonly B: Vector2;
 }

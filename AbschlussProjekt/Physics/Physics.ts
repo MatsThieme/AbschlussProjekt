@@ -12,7 +12,7 @@ import { Collision } from './Collision.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 1000);
-    public static timeScale: number = 1;
+    public static timeScale: number = 0.1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
@@ -84,6 +84,17 @@ export class Physics {
                         if (c.normal) ret.push(c);
                     } else if (otherCollider.type === ComponentType.CapsuleCollider) {
                         const c = Physics.collisionCapsule(<CapsuleCollider>collider, <CapsuleCollider>otherCollider);
+                        if (c.normal) ret.push(c);
+                    }
+                }
+
+            } else if (collider.type === ComponentType.PolygonCollider) {
+
+                for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
+                    if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
+
+                    if (collider.type === ComponentType.PolygonCollider) {
+                        const c = Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider);
                         if (c.normal) ret.push(c);
                     }
                 }

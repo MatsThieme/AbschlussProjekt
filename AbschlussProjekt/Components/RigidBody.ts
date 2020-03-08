@@ -28,7 +28,7 @@ export class RigidBody extends Component {
         this.torque = 0;
         this.force = new Vector2();
         this.inertia = 0;
-        this.invInertia = 0;
+        this.invInertia = 0.1;
     }
     public get mass(): number {
         return this._mass;
@@ -47,29 +47,36 @@ export class RigidBody extends Component {
     public get autoMass(): number {
         return this.gameObject.getComponents(Collider).reduce((t, c) => t += c.autoMass, 0);
     }
-    public impulse(impulse: Vector2): void {
-        this.velocity.add(impulse);
+    public applyImpulse(impulse: Vector2, at: Vector2): void {
+        this.force.add(impulse.clone.scale(this.invMass));
+        this.torque += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
+
         const solvedCollisions = [];
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
                 if (collision.colliderA.gameObject.id === this.gameObject.id) {
-                    solvedCollisions.push(collision.solved.A.velocity);
+                    solvedCollisions.push(collision.solved.A);
                 } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
-                    solvedCollisions.push(collision.solved.B.velocity);
+                    solvedCollisions.push(collision.solved.B);
                 }
             }
         }
 
+        //console.log(solvedCollisions);
 
-        this.force.add(Physics.gravity, Vector2.average(...solvedCollisions));
-        this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime));
-        this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime;
-        this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime));
-        this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime;
+        if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), this.centerOfMass);
+
+        this.force.add(Physics.gravity);
+        this.velocity.add(this.force.clone.scale(this.invMass));
+        this.angularVelocity += this.torque * this.invInertia;
+        this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
+        this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
         this.force = new Vector2();
+        console.log(this.velocity);
+
     }
 }

@@ -23,16 +23,24 @@ class Game {
 
 
         const gO1 = this.scene.newGameObject('polygon');
+        gO1.transform.relativePosition = new Vector2(0, 0);
         const polygonCollider1 = gO1.addComponent(PolygonCollider);
         polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
         gO1.rigidbody.mass = 1;
+        const texture = gO1.addComponent(Texture);
+        texture.sprite = new Sprite('spriteTest1.png');
+        texture.size = polygonCollider1.size;
 
         const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2(1, 0);
+        gO2.transform.relativePosition = new Vector2(1.5, 1);
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
-        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
+        polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
+        gO2.rigidbody.mass = 1;
+        const texture1 = gO2.addComponent(Texture);
+        texture1.sprite = new Sprite('spriteTest1.png');
+        texture1.size = polygonCollider2.size;
 
-        console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2));
+        console.log(Physics.collision(gO1, gO2));
     }
 }
 

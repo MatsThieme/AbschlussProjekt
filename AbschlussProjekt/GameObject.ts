@@ -49,7 +49,7 @@ export class GameObject {
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {
-                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.BoxCollider || c.type === ComponentType.CircleCollider || c.type === ComponentType.CapsuleCollider);
+                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.BoxCollider || c.type === ComponentType.CircleCollider || c.type === ComponentType.CapsuleCollider || c.type === ComponentType.PolygonCollider);
             }
 
             return c instanceof <any>type;
@@ -74,7 +74,7 @@ export class GameObject {
         const behaviours = this.getComponents(Behaviour);
         behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen
         behaviours.forEach(c => c.update(gameTime));
-        
+
         (<ParticleSystem[]>this.getComponents(ComponentType.ParticleSystem)).forEach(p => p.update(gameTime));
         (<AnimatedSprite[]>this.getComponents(ComponentType.AnimatedSprite)).forEach(c => c.update(gameTime));
         (<AudioListener>this.getComponent(ComponentType.AudioListener))?.update();
