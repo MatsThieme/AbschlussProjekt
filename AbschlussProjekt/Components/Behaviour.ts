@@ -12,9 +12,12 @@ export class Behaviour extends Component {
         super(gameObject, ComponentType.Behaviour);
         this.input = gameObject.scene.input;
         this.name = this.constructor.name;
-        this.start();
+        this.awake();
+    } 
+    protected awake() {
+
     }
-    protected start() {
+    public start() {
 
     }
     public update(gameTime: GameTime) {

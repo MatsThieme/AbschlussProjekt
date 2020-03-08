@@ -28,7 +28,7 @@ class Game {
         gO1.rigidbody.mass = 1;
 
         const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2(0.01, 0);
+        gO2.transform.relativePosition = new Vector2(1, 0);
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
         //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
 

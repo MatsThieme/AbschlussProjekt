@@ -5,16 +5,23 @@ import { Collision } from '../Physics/Collision.js';
 import { Vector2 } from '../Vector2.js';
 
 export class TestBehaviour extends Behaviour {
-    private speed: number = 0.00001;
-    private angle: Angle = new Angle(0, 0);
-    private radius: number = 2;
-    private time: number = 0;
+    speed!: number;
+    angle!: Angle;
+    radius!: number;
+    time!: number;
 
-    protected start(): void {
+    awake() {
+        this.speed = 0.00001;
+        this.angle = new Angle(0, 0);
+        this.radius = 2;
+        this.time = 0;
+    }
+
+    start(): void {
 
     }
 
-    public update(gameTime: GameTime): void {
+    update(gameTime: GameTime): void {
         this.angle.degree += gameTime.deltaTime * this.speed;
         this.gameObject.transform.relativePosition = new Vector2(Math.cos(this.angle.radian) * this.radius, Math.sin(this.angle.radian) * this.radius);
         this.gameObject.transform.relativeRotation = new Angle(undefined, this.gameObject.transform.rotation.degree + gameTime.deltaTime / 10);
@@ -27,7 +34,7 @@ export class TestBehaviour extends Behaviour {
         //this.gameObject.transform.relativePosition.y += this.input.getAxis(InputType.MoveVertical).value * gameTime.deltaTime / 1000;
     }
 
-    public onCollision(collisions: Collision[]) {
+    onCollision(collisions: Collision[]) {
 
     }
 }

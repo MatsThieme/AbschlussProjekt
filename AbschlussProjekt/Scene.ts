@@ -6,6 +6,8 @@ import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
 import { Vector2 } from './Vector2.js';
+import { ComponentType } from './Components/ComponentType.js';
+import { Behaviour } from './Components/Behaviour.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -19,6 +21,8 @@ export class Scene {
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
+
+        [...this.gameObjects.values()].forEach(gO => (<Behaviour[]>gO.getComponents(ComponentType.Behaviour)).forEach(b => b.start()));
 
         requestAnimationFrame(this.update.bind(this));
     }
