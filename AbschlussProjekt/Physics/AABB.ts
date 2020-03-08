@@ -2,8 +2,8 @@ import { Vector2 } from '../Vector2.js';
 import { Collider } from '../Components/Collider.js';
 
 export class AABB {
-    public size: Vector2;
-    public position: Vector2;
+    public readonly size: Vector2;
+    public readonly position: Vector2;
     public constructor(size: Vector2, position: Vector2) {
         this.size = size;
         this.position = position;

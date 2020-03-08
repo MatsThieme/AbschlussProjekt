@@ -8,7 +8,6 @@ export class InputGamepad {
     public constructor(gameTime: GameTime) {
         this.gameTime = gameTime;
         this.buttons = new Array(16).fill(undefined).map(() => new InputButton(this.gameTime));
-        console.log(this.buttons);
     }
     private get gamepads(): Gamepad[] {
         return [...<Gamepad[]>navigator.getGamepads()].filter(g => g?.mapping === 'standard');

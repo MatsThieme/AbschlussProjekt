@@ -1,28 +1,34 @@
 import { GameObject } from '../GameObject.js';
 import { GameTime } from '../GameTime.js';
 import { Collision } from '../Physics/Collision.js';
+import { Physics } from '../Physics/Physics.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
+import { Collider } from './Collider.js';
 
 export class RigidBody extends Component {
     private _mass: number;
     private _invMass: number;
+    private inertia: number;
+    private invInertia: number;
     public material: PhysicsMaterial;
     public velocity: Vector2;
-    public angularVelocity: Vector2;
-    private velocityChange: Vector2;
-    private angularVelocityChange: Vector2;
+    public angularVelocity: number;
+    public torque: number;
+    public force: Vector2;
     public constructor(gameObject: GameObject, mass: number = 0, material: PhysicsMaterial = new PhysicsMaterial()) {
         super(gameObject, ComponentType.RigidBody);
         this._mass = mass;
         this._invMass = mass === 0 ? 0 : 1 / mass;
         this.material = material;
-        this.velocity = new Vector2(0, 0);
-        this.angularVelocity = new Vector2();
-        this.velocityChange = new Vector2();
-        this.angularVelocityChange = new Vector2();
+        this.velocity = new Vector2();
+        this.angularVelocity = 0;
+        this.torque = 0;
+        this.force = new Vector2();
+        this.inertia = 0;
+        this.invInertia = 0;
     }
     public get mass(): number {
         return this._mass;
@@ -33,28 +39,37 @@ export class RigidBody extends Component {
     public set mass(val: number) {
         this._mass = val;
         this._invMass = val === 0 ? 0 : 1 / val;
-        this.velocityChange = new Vector2();
+        this.velocity = new Vector2();
+    }
+    public get centerOfMass(): Vector2 {
+        return Vector2.average(...this.gameObject.getComponents(Collider).map(c => c.position));
+    }
+    public get autoMass(): number {
+        return this.gameObject.getComponents(Collider).reduce((t, c) => t += c.autoMass, 0);
     }
     public impulse(impulse: Vector2): void {
-        this.velocityChange.add(impulse);
+        this.velocity.add(impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
+        const solvedCollisions = [];
+
         for (const collision of currentCollisions) {
-            if (collision.colliderA.gameObject.id === this.gameObject.id) {
-                if (!collision.solved) continue;
-                collision.solved.A.velocity.y *= -1;
-                this.impulse(collision.solved.A.velocity);
-                this.velocity = new Vector2();
-            } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
-                if (!collision.solved) continue;
-                collision.solved.B.velocity.y *= -1;
-                this.impulse(collision.solved.B.velocity);
-                this.velocity = new Vector2();
+            if (collision.solved) {
+                if (collision.colliderA.gameObject.id === this.gameObject.id) {
+                    solvedCollisions.push(collision.solved.A.velocity);
+                } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
+                    solvedCollisions.push(collision.solved.B.velocity);
+                }
             }
         }
 
-        this.velocity.add(this.velocityChange);
-        this.velocityChange = new Vector2();
+
+        this.force.add(Physics.gravity, Vector2.average(...solvedCollisions));
+        this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime));
+        this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime;
+        this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime));
+        this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime;
+        this.force = new Vector2();
     }
 }

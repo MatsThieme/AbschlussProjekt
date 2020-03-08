@@ -1,13 +1,15 @@
+import { Angle } from './Angle.js';
 import { TestBehaviour } from './Behaviours/TestBehaviour.js';
 import { Camera } from './Components/Camera.js';
+import { ParticleSystem } from './Components/ParticleSystem.js';
 import { Texture } from './Components/Texture.js';
 import { Physics } from './Physics/Physics.js';
+import { Prefab } from './Prefab.js';
 import { Scene } from './Scene.js';
 import { Sprite } from './Sprite.js';
 import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
-import { ParticleSystem } from './Components/ParticleSystem.js';
-import { Angle } from './Angle.js';
+import { PolygonCollider } from './Components/PolygonCollider.js';
 
 class Game {
     public scene: Scene;
@@ -19,57 +21,18 @@ class Game {
 
         const camera = this.scene.newCamera('cam').getComponent(Camera);
 
-        const gO1 = this.scene.newGameObject('test');
-        gO1.transform.position.y = 4.5;
 
-        const texture = gO1.addComponent(Texture);
-        texture.sprite = new Sprite('spriteTest1.png');
+        const gO1 = this.scene.newGameObject('polygon');
+        const polygonCollider1 = gO1.addComponent(PolygonCollider);
+        polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
+        gO1.rigidbody.mass = 1;
 
-        gO1.addComponent(TestBehaviour);
+        const gO2 = this.scene.newGameObject('polygon');
+        gO2.transform.relativePosition = new Vector2(0.01, 0);
+        const polygonCollider2 = gO2.addComponent(PolygonCollider);
+        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
 
-
-        const gO2 = this.scene.newGameObject('child test');
-        gO2.transform.position = new Vector2(1, 1);
-
-        gO1.addChild(gO2);
-
-        const texturegO2 = gO2.addComponent(Texture);
-        texturegO2.sprite = new Sprite('spriteTest1.png');
-
-
-        const gO3 = this.scene.newGameObject('child test');
-        gO3.transform.position = new Vector2(1, 1);
-
-        gO2.addChild(gO3);
-
-        const texturegO3 = gO3.addComponent(Texture);
-        texturegO3.sprite = new Sprite('spriteTest1.png');
-
-
-        const gO4 = this.scene.newGameObject('child test');
-        gO4.transform.position = new Vector2(1, 1);
-
-        gO3.addChild(gO4);
-
-        const texturegO4 = gO4.addComponent(Texture);
-        texturegO4.sprite = new Sprite('spriteTest1.png');
-
-
-
-
-
-        const gO5 = this.scene.newGameObject('particles');
-        const particleSystem = gO5.addComponent(ParticleSystem);
-        particleSystem.lifeTime = 1000;
-        particleSystem.emission = 100;
-        particleSystem.fadeInDuration = 200;
-        particleSystem.fadeOutDuration = 200;
-        particleSystem.speed = 0.001;
-        particleSystem.rotationSpeed = 0.1;
-        particleSystem.sprites = [new Sprite('spriteTest1.png')];
-        particleSystem.angle = new Angle(undefined, 359);
-        particleSystem.size = new Vector2(0.1, 0.1);
-        console.log(particleSystem.angle);
+        console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2));
     }
 }
 
@@ -79,9 +42,6 @@ new Game();
 
 
 
-AsyncWorker
-
-Physics
 
 
 
@@ -90,16 +50,69 @@ Physics
 
 
 
+        //Prefab.load('PrefabTest.prefab', this.scene).then(prefab => this.scene.addPrefab(prefab));
 
 
 
 
+// children
+
+
+        //const gO1 = this.scene.newGameObject('test');
+        //gO1.transform.position.y = 4.5;
+
+        //const texture = gO1.addComponent(Texture);
+        //texture.sprite = new Sprite('spriteTest1.png');
+
+        //gO1.addComponent(TestBehaviour);
+
+
+        //const gO2 = this.scene.newGameObject('child test');
+        //gO2.transform.position = new Vector2(1, 1);
+
+        //gO1.addChild(gO2);
+        //gO2.addComponent(TestBehaviour);
+
+        //const texturegO2 = gO2.addComponent(Texture);
+        //texturegO2.sprite = new Sprite('spriteTest1.png');
+
+
+        //const gO3 = this.scene.newGameObject('child test');
+        //gO3.transform.position = new Vector2(1, 1);
+
+        //gO2.addChild(gO3);
+        //gO3.addComponent(TestBehaviour);
+
+        //const texturegO3 = gO3.addComponent(Texture);
+        //texturegO3.sprite = new Sprite('spriteTest1.png');
+
+
+        //const gO4 = this.scene.newGameObject('child test');
+        //gO4.transform.position = new Vector2(1, 1);
+
+        //gO3.addChild(gO4);
+        //gO4.addComponent(TestBehaviour);
+
+        //const texturegO4 = gO4.addComponent(Texture);
+        //texturegO4.sprite = new Sprite('spriteTest1.png');
 
 
 
+// particles
 
+        //const gO5 = this.scene.newGameObject('particles');
+        //const particleSystem = gO5.addComponent(ParticleSystem);
+        //particleSystem.lifeTime = 1000;
+        //particleSystem.emission = 100;
+        //particleSystem.fadeInDuration = 200;
+        //particleSystem.fadeOutDuration = 200;
+        //particleSystem.speed = 0.001;
+        //particleSystem.rotationSpeed = 0.1;
+        //particleSystem.sprites = [new Sprite('spriteTest1.png')];
+        //particleSystem.angle = new Angle(undefined, 359);
+        //particleSystem.size = new Vector2(0.1, 0.1);
 
-
+        //gO5.transform.relativeRotation.degree = 90;
 
 
 

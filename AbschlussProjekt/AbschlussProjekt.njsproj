@@ -37,6 +37,7 @@
     <Content Include="Assets\InputMappingButtons.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Assets\PrefabTest.prefab" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
@@ -93,6 +94,9 @@
     <TypeScriptCompile Include="Components\ParticleSystem.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Components\PolygonCollider.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\RigidBody.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -127,6 +131,9 @@
     <TypeScriptCompile Include="Input\InputMapping.ts" />
     <TypeScriptCompile Include="Input\InputMouse.ts" />
     <TypeScriptCompile Include="Input\InputType.ts" />
+    <TypeScriptCompile Include="Line.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Particle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -134,6 +141,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Sprite.ts">

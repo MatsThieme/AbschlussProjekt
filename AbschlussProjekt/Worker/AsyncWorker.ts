@@ -28,7 +28,9 @@ export class AsyncWorker {
     }
     public static createWorker(url: string, count: number): Promise<void> {
         return new Promise((resolve, reject) => {
-            const w: Worker[] = new Array(count);
+            AsyncWorker.workers.get(url)?.forEach(w => w.postMessage('close')); // close old workers
+
+            const w: Worker[] = [];
 
             let complete = 0;
             for (let i = 0; i < count; i++) {

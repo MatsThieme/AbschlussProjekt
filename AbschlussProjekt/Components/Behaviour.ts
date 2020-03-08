@@ -7,9 +7,11 @@ import { ComponentType } from './ComponentType.js';
 
 export class Behaviour extends Component {
     protected input: Input;
+    public readonly name: string;
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.Behaviour);
         this.input = gameObject.scene.input;
+        this.name = this.constructor.name;
         this.start();
     }
     protected start() {

@@ -5,6 +5,7 @@ import { GameTime } from './GameTime.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
+import { Vector2 } from './Vector2.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -38,9 +39,15 @@ export class Scene {
 
         return gameObject;
     }
+    public addPrefab(gameObject: GameObject): GameObject {
+        gameObject.name = this.correctName(name);
+        this.gameObjects.set(gameObject.name, gameObject);
+        return gameObject;
+    }
     private async update() {
         this.gameTime.update();
 
+        // get and solve all collisions
         const collisions: Collision[] = [];
 
         for (const gO1 of this.gameObjects.values()) {
@@ -51,7 +58,7 @@ export class Scene {
 
         const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 
-        rigidbodies.forEach(rb => rb.update(this.gameTime, collisions));
+        rigidbodies.forEach(rb => rb.update(this.gameTime, collisions)); // apply forces and move body
 
         for (const gameObject of this.gameObjects.values()) {
             await gameObject.update(this.gameTime, collisions);

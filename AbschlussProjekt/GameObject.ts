@@ -3,20 +3,21 @@ import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
+import { ParticleSystem } from './Components/ParticleSystem.js';
 import { RigidBody } from './Components/RigidBody.js';
 import { Transform } from './Components/Transform.js';
 import { GameTime } from './GameTime.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
 import { Scene } from './Scene.js';
-import { ParticleSystem } from './Components/ParticleSystem.js';
+import { Vector2 } from './Vector2.js';
 
 export class GameObject {
     private static nextID: number = 0;
     public name: string;
     private components: Component[] = [];
     public readonly id: number;
-    public readonly transform: Transform;
+    public transform: Transform;
     public children: GameObject[];
     public rigidbody: RigidBody;
     public active: boolean = true;
@@ -67,11 +68,13 @@ export class GameObject {
 
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
-        if (this.rigidbody.mass > 0) this.transform.position.add(this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale), Physics.gravity.clone.scale(gameTime.deltaTime * this.getComponent(RigidBody).mass));
+        if (this.rigidbody.mass > 0) this.transform.position.add(this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
+        this.rigidbody.velocity = new Vector2();
 
         const behaviours = this.getComponents(Behaviour);
-        behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id)));
+        behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen
         behaviours.forEach(c => c.update(gameTime));
+        
         (<ParticleSystem[]>this.getComponents(ComponentType.ParticleSystem)).forEach(p => p.update(gameTime));
         (<AnimatedSprite[]>this.getComponents(ComponentType.AnimatedSprite)).forEach(c => c.update(gameTime));
         (<AudioListener>this.getComponent(ComponentType.AudioListener))?.update();

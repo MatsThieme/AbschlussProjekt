@@ -11,14 +11,14 @@ export class AudioListener extends Component {
     private sources: AudioSource[];
     private gains: GainNode[];
     private panners: StereoPannerNode[];
-    public constructor(gameObject: GameObject) {
+    public constructor(gameObject: GameObject, distance: number = 20) {
         super(gameObject, ComponentType.AudioSource);
         this.context = new AudioContext();
         triggerOnUserInputEvent(() => this.context.resume());
         this.sources = [];
         this.gains = [];
         this.panners = [];
-        this.distance = 20;
+        this.distance = distance;
     }
     public addSource(audioSource: AudioSource): void {
         this.sources.push(audioSource);

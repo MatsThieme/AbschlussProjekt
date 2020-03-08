@@ -5,9 +5,8 @@ import { Collision } from '../Physics/Collision.js';
 import { Vector2 } from '../Vector2.js';
 
 export class TestBehaviour extends Behaviour {
-    private speed: number = 0.1;
+    private speed: number = 0.00001;
     private angle: Angle = new Angle(0, 0);
-    private point: Vector2 = new Vector2(0, 0);
     private radius: number = 2;
     private time: number = 0;
 
@@ -18,7 +17,7 @@ export class TestBehaviour extends Behaviour {
     public update(gameTime: GameTime): void {
         this.angle.degree += gameTime.deltaTime * this.speed;
         this.gameObject.transform.relativePosition = new Vector2(Math.cos(this.angle.radian) * this.radius, Math.sin(this.angle.radian) * this.radius);
-        this.gameObject.transform.rotation = new Angle(undefined, this.gameObject.transform.rotation.degree + gameTime.deltaTime / 10);
+        this.gameObject.transform.relativeRotation = new Angle(undefined, this.gameObject.transform.rotation.degree + gameTime.deltaTime / 10);
 
         this.time += gameTime.deltaTime * 0.001;
         this.gameObject.transform.relativeScale.x = Math.sin(this.time);
