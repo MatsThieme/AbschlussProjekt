@@ -10,7 +10,7 @@ export class PolygonCollider extends Collider {
     public normals: Vector2[];
     public size: Vector2;
     public radius: number;
-    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(1, 1), new Vector2(0, 1), new Vector2()], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(-1, -1), new Vector2(0, 1), new Vector2(1, -1)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV);
 
         this._vertices = this.orderVertices(vertices);

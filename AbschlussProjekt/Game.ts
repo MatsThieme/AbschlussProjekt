@@ -32,13 +32,16 @@ class Game {
         texture.size = polygonCollider1.size;
 
         const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2(1.5, 1);
+        gO2.transform.relativePosition = new Vector2(1.5, 15);
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
-        polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
+        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
         gO2.rigidbody.mass = 1;
         const texture1 = gO2.addComponent(Texture);
         texture1.sprite = new Sprite('spriteTest1.png');
         texture1.size = polygonCollider2.size;
+
+        gO1.transform.relativeScale = new Vector2(0.1, 0.1);
+        gO2.transform.relativeScale = new Vector2(0.1, 0.1);
 
         console.log(Physics.collision(gO1, gO2));
     }
@@ -50,7 +53,9 @@ new Game();
 
 
 
+//to do
 
+//rotate, scale polygons
 
 
 

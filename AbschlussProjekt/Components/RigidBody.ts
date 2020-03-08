@@ -11,8 +11,8 @@ import { Collider } from './Collider.js';
 export class RigidBody extends Component {
     private _mass: number;
     private _invMass: number;
-    private inertia: number;
-    private invInertia: number;
+    private _inertia: number;
+    private _invInertia: number;
     public material: PhysicsMaterial;
     public velocity: Vector2;
     public angularVelocity: number;
@@ -27,14 +27,21 @@ export class RigidBody extends Component {
         this.angularVelocity = 0;
         this.torque = 0;
         this.force = new Vector2();
-        this.inertia = 0;
-        this.invInertia = 0.1;
+        this._inertia = 0;
+        this._invInertia = 0;
     }
     public get mass(): number {
         return this._mass;
     }
     public get invMass(): number {
         return this._invMass;
+    }
+    public get inertia(): number {
+        return this._inertia;
+    }
+    public get invInertia(): number {
+        if (this._invInertia === 0) this._invInertia = this.inertia !== 0 ? 1 / this.inertia : 0;
+        return this._invInertia;
     }
     public set mass(val: number) {
         this._mass = val;
@@ -66,17 +73,13 @@ export class RigidBody extends Component {
             }
         }
 
-        //console.log(solvedCollisions);
-
         if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), this.centerOfMass);
 
         this.force.add(Physics.gravity);
-        this.velocity.add(this.force.clone.scale(this.invMass));
-        this.angularVelocity += this.torque * this.invInertia;
+        this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
+        this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime * Physics.timeScale;
         this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
         this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
         this.force = new Vector2();
-        console.log(this.velocity);
-
     }
 }

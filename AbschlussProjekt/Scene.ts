@@ -53,10 +53,15 @@ export class Scene {
 
         // get and solve all collisions
         const collisions: Collision[] = [];
+        const idPairs: string[] = [];
 
         for (const gO1 of this.gameObjects.values()) {
             for (const gO2 of this.gameObjects.values()) {
-                if (gO1.id !== gO2.id && gO1.active && gO2.active) collisions.push(...await Physics.asyncCollision(gO1, gO2));
+                const idPair = JSON.stringify([gO1.id, gO2.id].sort((a, b) => a - b));
+                if (gO1.id !== gO2.id && gO1.active && gO2.active && idPairs.indexOf(idPair) === -1) {
+                    collisions.push(...await Physics.asyncCollision(gO1, gO2));
+                    idPairs.push(idPair);
+                }
             }
         }
 

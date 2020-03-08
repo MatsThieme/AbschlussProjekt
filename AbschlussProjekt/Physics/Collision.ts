@@ -23,23 +23,28 @@ export class Collision {
 
         if (rb1.mass === 0 && rb2.mass === 0) return;
 
-        const rv = rb1.velocity.sub(rb2.velocity);
+        //const rv = rb1.velocity.sub(rb2.velocity);
 
-        const velAlongNormal = Vector2.dot(rv, collision.normal);
+        //const velAlongNormal = Vector2.dot(rv, collision.normal);
 
-        if (velAlongNormal > 0) return;
+        //if (velAlongNormal > 0) return;
 
-        const e = Math.min(rb1.material.bounciness, rb2.material.bounciness);
+        //const e = Math.min(rb1.material.bounciness, rb2.material.bounciness);
 
-        let j = -(1 + e) * velAlongNormal / (rb1.invMass + 1 / rb2.invMass);
+        //let j = -(1 + e) * velAlongNormal / (rb1.invMass + 1 / rb2.invMass);
 
-        let impulse = collision.normal.clone.scale(j);
+        //let impulse = collision.normal.clone.scale(j);
 
         return {
             collision,
-            A: impulse.clone.scale(-1),
-            B: impulse.clone
+            A: collision.normal.clone.normalize().scale(<number>collision.penetrationDepth),
+            B: collision.normal.clone.normalize().scale(-<number>collision.penetrationDepth)
         };
+    //    return {
+    //        collision,
+    //        A: impulse.clone.scale(-1),
+    //        B: impulse.clone
+    //    };
     }
     public static reduce(...collisions: Collision[]): Collision | undefined {
         if (collisions.length === 0) return undefined;

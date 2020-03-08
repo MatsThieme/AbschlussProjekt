@@ -54,8 +54,8 @@ export class Prefab {
                 default: ;
             }
 
-            gO.transform = gO.getComponent(ComponentType.Transform);
-            gO.rigidbody = gO.getComponent(ComponentType.RigidBody);
+            //gO.transform = gO.getComponent(ComponentType.Transform);
+            //gO.rigidbody = gO.getComponent(ComponentType.RigidBody);
 
             console.log(component);
         }

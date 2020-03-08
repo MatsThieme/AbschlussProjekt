@@ -17,9 +17,7 @@ export class GameObject {
     public name: string;
     private components: Component[] = [];
     public readonly id: number;
-    public transform: Transform;
     public children: GameObject[];
-    public rigidbody: RigidBody;
     public active: boolean = true;
     public scene: Scene;
     public parent: GameObject | undefined;
@@ -27,11 +25,17 @@ export class GameObject {
     public constructor(name: string, scene: Scene) {
         this.name = name;
         this.id = GameObject.nextID++;
-        this.transform = this.addComponent(Transform);
-        this.rigidbody = this.addComponent(RigidBody);
+        this.addComponent(Transform);
+        this.addComponent(RigidBody);
         this.children = [];
         this.scene = scene;
         this.drawPriority = 0;
+    }
+    public get transform(): Transform {
+        return this.getComponent(Transform);
+    }
+    public get rigidbody(): RigidBody {
+        return this.getComponent(RigidBody);
     }
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T): T {
         const component = new type(this);
@@ -68,8 +72,6 @@ export class GameObject {
 
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
-        if (this.rigidbody.mass > 0) this.transform.position.add(this.rigidbody.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
-        this.rigidbody.velocity = new Vector2();
 
         const behaviours = this.getComponents(Behaviour);
         behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen

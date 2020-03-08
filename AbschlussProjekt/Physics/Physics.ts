@@ -12,7 +12,7 @@ import { Collision } from './Collision.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 1000);
-    public static timeScale: number = 0.1;
+    public static timeScale: number = 0.001;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
