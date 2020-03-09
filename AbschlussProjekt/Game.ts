@@ -10,57 +10,74 @@ import { Sprite } from './Sprite.js';
 import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
 import { PolygonCollider } from './Components/PolygonCollider.js';
+import { PolygonRenderer } from './Components/PolygonRenderer.js';
+import { AlignH, AlignV } from './Align.js';
 
 class Game {
     public scene: Scene;
     public constructor() {
         this.scene = new Scene();
+
+        // canvas
         document.body.appendChild(this.scene.domElement);
         this.scene.domElement.width = 1920;
         this.scene.domElement.height = 1080;
+        this.scene.domElement.style.position = 'absolute';
+        this.scene.domElement.style.left = '0px';
+        this.scene.domElement.style.top = '0px';
+        document.body.style.overflow = 'hidden';
 
+
+        // creating camera
         const camera = this.scene.newCamera('cam').getComponent(Camera);
+
+
 
 
         const gO1 = this.scene.newGameObject('polygon');
         gO1.transform.relativePosition = new Vector2(0, 0);
         const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
-        gO1.rigidbody.mass = 1;
-        const texture = gO1.addComponent(Texture);
-        texture.sprite = new Sprite('spriteTest1.png');
-        texture.size = polygonCollider1.size;
+        //polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
+        const polygonRenderer1 = gO1.addComponent(PolygonRenderer);
 
         const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2(1.5, 15);
+        gO2.transform.relativePosition = new Vector2(0.9, 0.9);
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
-        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(3, 3), new Vector2(0, 3), new Vector2(3, 0)];
-        gO2.rigidbody.mass = 1;
-        const texture1 = gO2.addComponent(Texture);
-        texture1.sprite = new Sprite('spriteTest1.png');
-        texture1.size = polygonCollider2.size;
+        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5, 1.1), new Vector2(0, 1), new Vector2(1, 0)];
+        const polygonRenderer2 = gO2.addComponent(PolygonRenderer);
 
-        gO1.transform.relativeScale = new Vector2(0.1, 0.1);
-        gO2.transform.relativeScale = new Vector2(0.1, 0.1);
+        //const texture = gO1.addComponent(Texture);
+        //texture.sprite = new Sprite('spriteTest1.png');
 
-        console.log(Physics.collision(gO1, gO2));
+
+        setInterval(() => gO2.transform.relativeRotation.degree += 0.1, 10);
+
+        setInterval(() => console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2)), 500);
+
+        // display axis
+
+        const xAxis = this.scene.newGameObject('xAxis');
+        const xAxisTexture = xAxis.addComponent(Texture);
+        xAxisTexture.sprite = new Sprite('spriteTest1.png');
+        xAxis.transform.relativeScale = new Vector2(10000, 0.01);
+        xAxis.drawPriority = -1;
+
+        const yAxis = this.scene.newGameObject('yAxis');
+        const yAxisTexture = yAxis.addComponent(Texture);
+        yAxisTexture.sprite = new Sprite('spriteTest1.png');
+        yAxis.transform.relativeScale = new Vector2(0.01, 10000);
+        yAxis.drawPriority = -1;
     }
 }
 
 new Game();
 
-
-
-
-
-//to do
-
-//rotate, scale polygons
-
-
-
-
-
+// to do: 
+// alle skalierungen rotationen positionierungen überprüfen
+// collision response
+// prefabs laden
+// physics worker testen, optimieren
 
 
         //Prefab.load('PrefabTest.prefab', this.scene).then(prefab => this.scene.addPrefab(prefab));

@@ -1,11 +1,11 @@
 export enum AlignH {
-    Left,
     Right,
+    Left,
     Center
 }
 
 export enum AlignV {
-    Top,
     Bottom,
+    Top,
     Center
 }

@@ -12,7 +12,7 @@ export class CircleCollider extends Collider {
         this.size = new Vector2(radius * 2, radius * 2);
     }
     public get position(): Vector2 {
-        let align = new Vector2(this.alignH === AlignH.Left ? -this.radius : this.alignH === AlignH.Center ? 0 : this.radius, this.alignV === AlignV.Bottom ? -this.radius : this.alignV === AlignV.Center ? 0 : this.radius);
+        let align = new Vector2(this.alignH === AlignH.Right ? -this.radius : this.alignH === AlignH.Center ? 0 : this.radius, this.alignV === AlignV.Top ? -this.radius : this.alignV === AlignV.Center ? 0 : this.radius);
         return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
     }
 }

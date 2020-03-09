@@ -3,6 +3,8 @@ import { clamp } from './Helpers.js';
 import { Sprite } from './Sprite.js';
 import { Vector2 } from './Vector2.js';
 
+
+//align
 export class Frame {
     public readonly worldCordinates: Vector2;
     public readonly sprite: Sprite;

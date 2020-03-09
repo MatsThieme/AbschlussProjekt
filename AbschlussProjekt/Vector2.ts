@@ -1,11 +1,6 @@
 import { Angle } from './Angle.js';
 
 export class Vector2 {
-    public static readonly up: Vector2 = new Vector2(0, 1);
-    public static readonly down: Vector2 = new Vector2(0, -1);
-    public static readonly right: Vector2 = new Vector2(1, 0);
-    public static readonly left: Vector2 = new Vector2(-1, 0);
-    public static readonly zero: Vector2 = new Vector2(0, 0);
     public x: number;
     public y: number;
     private _magnitude: number = 0;
@@ -55,22 +50,24 @@ export class Vector2 {
     }
 
     public rotateAroundTo(rotatePoint: Vector2, angle: Angle): Vector2 {
-        const s = Math.sin(angle.radian);
-        const c = Math.cos(angle.radian);
+        const s = Math.sin(-angle.radian);
+        const c = Math.cos(-angle.radian);
 
         this.x -= rotatePoint.x;
         this.y -= rotatePoint.y;
 
-        this.x = this.x * c - this.y * s + rotatePoint.x;
-        this.y = this.x * s + this.y * c + rotatePoint.y;
+        const x = this.x * c - this.y * s + rotatePoint.x;
+        const y = this.x * s + this.y * c + rotatePoint.y;
 
+        this.x = x;
+        this.y = y;
         return this;
     }
     public angleBetween(rotatePoint: Vector2, other: Vector2): Angle {
         const r1 = this.clone.sub(rotatePoint);
         const r2 = other.clone.sub(rotatePoint);
 
-        return new Angle(Math.acos(Vector2.dot(r1, r2) / (r1.magnitude * r2.magnitude)));
+        return new Angle(Math.atan2(-Vector2.cross(r1, r2), Vector2.dot(r1, r2)));
     }
     public get clone(): Vector2 {
         return new Vector2(this.x, this.y);
@@ -114,5 +111,20 @@ export class Vector2 {
     }
     public get perpendicularCounterClockwise(): Vector2 {
         return new Vector2(-this.y, this.x);
+    }
+    public static get up(): Vector2 {
+        return new Vector2(0, 1);
+    }
+    public static get down(): Vector2 {
+        return new Vector2(0, -1);
+    }
+    public static get right(): Vector2 {
+        return new Vector2(1, 0);
+    }
+    public static get left(): Vector2 {
+        return new Vector2(-1, 0);
+    }
+    public static get zero(): Vector2 {
+        return new Vector2(0, 0);
     }
 }

@@ -9,7 +9,7 @@ export class AudioSource extends Component {
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.AudioSource);
         this.audio = new Audio();
-        [...this.gameObject.scene.gameObjects.values()].map(gO => gO.getComponent(AudioListener)).filter(l => l)[0]?.addSource(this);
+        this.gameObject.scene.getAllGameObjects().map(gO => gO.getComponent(AudioListener)).filter(l => l)[0]?.addSource(this);
     }
     public get clip(): string {
         return this.audio.src;

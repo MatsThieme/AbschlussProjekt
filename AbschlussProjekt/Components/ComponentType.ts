@@ -10,6 +10,7 @@ export enum ComponentType {
     Collider,
     Component,
     ParticleSystem,
+    PolygonRenderer,
     PolygonCollider,
     RigidBody,
     Texture,

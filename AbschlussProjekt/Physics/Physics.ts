@@ -236,6 +236,7 @@ export class Physics {
             const overlap = Math.min(aP.y, bP.y) - Math.max(aP.x, bP.x);
 
             if (overlap <= 0) {
+                console.log(overlap);
                 return new Collision(A, B); // not colliding
             } else {
                 if (overlap < leastPenetration) {

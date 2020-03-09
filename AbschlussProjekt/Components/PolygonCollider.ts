@@ -10,36 +10,46 @@ export class PolygonCollider extends Collider {
     public normals: Vector2[];
     public size: Vector2;
     public radius: number;
-    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(-1, -1), new Vector2(0, 1), new Vector2(1, -1)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(-0.5, 0), new Vector2(0, Math.sqrt(1 - 0.5 ** 2)), new Vector2(0.5, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV);
 
+        this.size = this.computeSize(vertices);
+
+        this.radius = Math.max(this.size.x, this.size.y) / 2;
         this._vertices = this.orderVertices(vertices);
-        this.normals = this.calculateNormals();
-        this.size = this.computeSize();
-        this.radius = Math.max(this.size.x, this.size.y) / 2;
+        this.normals = this.calculateNormals(this._vertices);
     }
-    public set vertices(val: Vector2[]) {
-        this._vertices = this.orderVertices(val);
-        this.normals = this.calculateNormals();
-        this.size = this.computeSize();
+    public set vertices(vertices: Vector2[]) {
+        this.size = this.computeSize(vertices);
         this.radius = Math.max(this.size.x, this.size.y) / 2;
+        this._vertices = this.orderVertices(vertices);
+        this.normals = this.calculateNormals(this._vertices);
     }
     public get vertices(): Vector2[] {
-        return this._vertices.map(v => v.clone.add(this.position).rotateAroundTo(this.position, this.gameObject.transform.relativeRotation));
+        return this._vertices.map(v => v.clone.rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
-    private moveVerticesToOrigin(vertices: Vector2[]): Vector2[] {
-        const difference = Vector2.average(...vertices);
+    public moveVerticesToOrigin(vertices: Vector2[], origin: Vector2 = new Vector2()): Vector2[] {
+        const topLeft = new Vector2(Infinity, -Infinity);
 
         for (const vertex of vertices) {
-            vertex.sub(difference);
+            if (vertex.x < topLeft.x) topLeft.x = vertex.x;
+            if (vertex.y > topLeft.y) topLeft.y = vertex.y;
+        }
+
+        const center = topLeft.add(new Vector2(this.size.x / 2, -this.size.y / 2));
+
+
+
+        for (const vertex of vertices) {
+            vertex.sub(center).add(origin);
         }
 
         return vertices;
     }
-    private computeSize(): Vector2 {
+    private computeSize(vertices: Vector2[]): Vector2 {
         let maxX = -Infinity, minX = Infinity, maxY = -Infinity, minY = Infinity;
 
-        for (const vertex of this._vertices) {
+        for (const vertex of vertices) {
             if (vertex.x < minX) minX = vertex.x;
             else if (vertex.x > maxX) maxX = vertex.x;
             if (vertex.y < minY) minY = vertex.y;
@@ -52,11 +62,11 @@ export class PolygonCollider extends Collider {
         this.moveVerticesToOrigin(vertices);
         return vertices.sort((a, b) => Vector2.up.angleBetween(new Vector2(), a).degree - Vector2.up.angleBetween(new Vector2(), b).degree);
     }
-    private calculateNormals(): Vector2[] {
+    private calculateNormals(vertices: Vector2[]): Vector2[] {
         const normals = [];
 
-        for (let i = 1; i <= this._vertices.length; i++) {
-            normals.push(Vector2.sub(this._vertices[i % this._vertices.length], this._vertices[i - 1]).perpendicularClockwise.normalize());
+        for (let i = 1; i <= vertices.length; i++) {
+            normals.push(Vector2.sub(vertices[i % vertices.length], vertices[i - 1]).perpendicularCounterClockwise.normalize());
         }
 
         return normals;

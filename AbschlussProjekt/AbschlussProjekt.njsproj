@@ -97,6 +97,9 @@
     <TypeScriptCompile Include="Components\PolygonCollider.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Components\PolygonRenderer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Components\RigidBody.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

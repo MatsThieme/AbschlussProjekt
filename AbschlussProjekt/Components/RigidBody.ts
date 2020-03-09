@@ -49,37 +49,37 @@ export class RigidBody extends Component {
         this.velocity = new Vector2();
     }
     public get centerOfMass(): Vector2 {
-        return Vector2.average(...this.gameObject.getComponents(Collider).map(c => c.position));
+        return Vector2.average(...this.gameObject.getComponents<Collider>(ComponentType.Collider).map(c => c.position));
     }
     public get autoMass(): number {
-        return this.gameObject.getComponents(Collider).reduce((t, c) => t += c.autoMass, 0);
+        return this.gameObject.getComponents<Collider>(ComponentType.Collider).reduce((t, c) => t += c.autoMass, 0);
     }
     public applyImpulse(impulse: Vector2, at: Vector2): void {
         this.force.add(impulse.clone.scale(this.invMass));
         this.torque += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
-        if (this.mass === 0) return;
+        //if (this.mass === 0) return;
 
-        const solvedCollisions = [];
+        //const solvedCollisions = [];
 
-        for (const collision of currentCollisions) {
-            if (collision.solved) {
-                if (collision.colliderA.gameObject.id === this.gameObject.id) {
-                    solvedCollisions.push(collision.solved.A);
-                } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
-                    solvedCollisions.push(collision.solved.B);
-                }
-            }
-        }
+        //for (const collision of currentCollisions) {
+        //    if (collision.solved) {
+        //        if (collision.colliderA.gameObject.id === this.gameObject.id) {
+        //            solvedCollisions.push(collision.solved.A);
+        //        } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
+        //            solvedCollisions.push(collision.solved.B);
+        //        }
+        //    }
+        //}
 
-        if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), this.centerOfMass);
+        //if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), this.centerOfMass);
 
-        this.force.add(Physics.gravity);
-        this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
-        this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime * Physics.timeScale;
-        this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
-        this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
-        this.force = new Vector2();
+        //this.force.add(Physics.gravity);
+        //this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
+        //this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime * Physics.timeScale;
+        //this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
+        //this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
+        //this.force = new Vector2();
     }
 }

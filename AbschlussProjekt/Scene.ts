@@ -1,17 +1,16 @@
 import { CameraManager } from './CameraManager.js';
+import { Behaviour } from './Components/Behaviour.js';
 import { Camera } from './Components/Camera.js';
+import { ComponentType } from './Components/ComponentType.js';
 import { GameObject } from './GameObject.js';
 import { GameTime } from './GameTime.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
-import { Vector2 } from './Vector2.js';
-import { ComponentType } from './Components/ComponentType.js';
-import { Behaviour } from './Components/Behaviour.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
-    public gameObjects: Map<string, GameObject>;
+    private gameObjects: Map<string, GameObject>;
     public cameraManager: CameraManager;
     public gameTime: GameTime;
     public input: Input;
@@ -22,15 +21,22 @@ export class Scene {
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
 
-        [...this.gameObjects.values()].forEach(gO => (<Behaviour[]>gO.getComponents(ComponentType.Behaviour)).forEach(b => b.start()));
+        [...this.gameObjects.values()].forEach(gO => gO.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.start()));
 
         requestAnimationFrame(this.update.bind(this));
     }
-    public find(name: string): GameObject {
-        return <GameObject>this.gameObjects.get(name);
+    /**
+     * 
+     * @param name gameObject name
+     * 
+     * @returns GameObject of name [´name´] if found in gameObjects.
+     * 
+     */
+    public find(name: string): GameObject | undefined {
+        return this.gameObjects.get(name);
     }
     public newGameObject(name: string): GameObject {
-        name = this.correctName(name);
+        name = this.uniqueGameObjectName(name);
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(name, gameObject);
         return gameObject;
@@ -44,7 +50,7 @@ export class Scene {
         return gameObject;
     }
     public addPrefab(gameObject: GameObject): GameObject {
-        gameObject.name = this.correctName(name);
+        gameObject.name = this.uniqueGameObjectName(name);
         this.gameObjects.set(gameObject.name, gameObject);
         return gameObject;
     }
@@ -65,6 +71,7 @@ export class Scene {
             }
         }
 
+
         const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 
         rigidbodies.forEach(rb => rb.update(this.gameTime, collisions)); // apply forces and move body
@@ -77,7 +84,16 @@ export class Scene {
 
         requestAnimationFrame(this.update.bind(this));
     }
-    private correctName(name: string): string {
+    /**
+     * 
+     * Looks for GameObjects with same name and appends a number in parentheses to ensure that there are no duplicate names. Example: gameObject -> gameObject (0)
+     *
+     * @param name gameObject name
+     *  
+     * @returns unique name
+     * 
+     */
+    public uniqueGameObjectName(name: string): string {
         if (/.* \(\d\)/.test(name)) {
             name = (<RegExpMatchArray>name.match(/(.*) \(\d+\)/))[1];
         }
@@ -85,5 +101,11 @@ export class Scene {
         const sameNames = [...this.gameObjects.keys()].filter(gO => new RegExp(name + '(?: \(\d+\))?').test(gO));
 
         return name + ' (' + sameNames.length + ')';
+    }
+    /**
+     * Returns all GameObjects in this Scene.
+     */
+    public getAllGameObjects(): GameObject[] {
+        return [...this.gameObjects.values()];
     }
 }

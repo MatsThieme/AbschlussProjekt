@@ -43,7 +43,7 @@ export class Camera extends Component {
                 this.context.translate(-translate.x, -translate.y);
 
                 this.context.globalAlpha = frame.alpha;
-                //console.log(frame.alpha);
+
                 this.context.drawImage(frame.sprite.image, framePos.x, framePos.y, frameSize.x, frameSize.y);
 
                 this.context.restore();

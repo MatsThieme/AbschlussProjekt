@@ -31,7 +31,7 @@ export class Collider extends Component implements Alignable {
         this.id = Collider.nextID++;
     }
     public get position(): Vector2 {
-        let align = new Vector2(this.alignH === AlignH.Left ? -this.size.x / 2 : this.alignH === AlignH.Center ? 0 : this.size.x / 2, this.alignV === AlignV.Bottom ? -this.size.y / 2 : this.alignV === AlignV.Center ? 0 : this.size.y / 2);
+        let align = new Vector2(this.alignH === AlignH.Right ? -this.size.x / 2 : this.alignH === AlignH.Center ? 0 : this.size.x / 2, this.alignV === AlignV.Top ? -this.size.y / 2 : this.alignV === AlignV.Center ? 0 : this.size.y / 2);
         return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
     }
     public set relativePosition(val: Vector2) {
@@ -51,14 +51,12 @@ export class Collider extends Component implements Alignable {
     }
     public set radius(val: number) {
         this._radius = val;
-        this.size = new Vector2(val * 2, val * 2);
     }
     public get radius(): number {
         return this._radius;
     }
     public set size(val: Vector2) {
         this._size = val;
-        this._radius = val.x / 2;
     }
     public get size(): Vector2 {
         return this._size;

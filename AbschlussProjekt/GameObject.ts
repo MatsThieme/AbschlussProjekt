@@ -11,6 +11,7 @@ import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
 import { Scene } from './Scene.js';
 import { Vector2 } from './Vector2.js';
+import { PolygonRenderer } from './Components/PolygonRenderer.js';
 
 export class GameObject {
     private static nextID: number = 0;
@@ -73,13 +74,13 @@ export class GameObject {
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
 
-        const behaviours = this.getComponents(Behaviour);
+        const behaviours = this.getComponents<Behaviour>(ComponentType.Behaviour);
         behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen
         behaviours.forEach(c => c.update(gameTime));
 
-        (<ParticleSystem[]>this.getComponents(ComponentType.ParticleSystem)).forEach(p => p.update(gameTime));
-        (<AnimatedSprite[]>this.getComponents(ComponentType.AnimatedSprite)).forEach(c => c.update(gameTime));
-        (<AudioListener>this.getComponent(ComponentType.AudioListener))?.update();
+        this.getComponents<ParticleSystem>(ComponentType.ParticleSystem).forEach(p => p.update(gameTime));
+        this.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).forEach(c => c.update(gameTime));
+        this.getComponent<AudioListener>(ComponentType.AudioListener)?.update();
     }
     public cloneForCollision(): GameObject {
         const ret = new GameObject('', <any>undefined);
