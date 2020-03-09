@@ -25,7 +25,7 @@ export class PolygonCollider extends Collider {
         this.radius = Math.max(this.size.x, this.size.y) / 2;
     }
     public get vertices(): Vector2[] {
-        return this._vertices.map(v => v.clone.add(this.position));
+        return this._vertices.map(v => v.clone.add(this.position).rotateAroundTo(this.position, this.gameObject.transform.relativeRotation));
     }
     private moveVerticesToOrigin(vertices: Vector2[]): Vector2[] {
         const difference = Vector2.average(...vertices);

@@ -54,7 +54,7 @@ export class Vector2 {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
     }
 
-    public rotateAround(rotatePoint: Vector2, angle: Angle): Vector2 {
+    public rotateAroundTo(rotatePoint: Vector2, angle: Angle): Vector2 {
         const s = Math.sin(angle.radian);
         const c = Math.cos(angle.radian);
 
