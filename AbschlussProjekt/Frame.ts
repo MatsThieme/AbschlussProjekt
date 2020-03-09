@@ -12,12 +12,14 @@ export class Frame {
     public readonly rotation: Angle;
     public readonly drawPriority: number;
     public readonly alpha: number;
-    public constructor(worldCordinates: Vector2, size: Vector2, sprite: Sprite, rotation: Angle, drawPriority: number, alpha: number) {
+    public readonly rotationPoint: Vector2 | undefined;
+    public constructor(worldCordinates: Vector2, size: Vector2, sprite: Sprite, rotation: Angle, drawPriority: number, alpha: number, rotationPoint?:Vector2) {
         this.worldCordinates = worldCordinates;
         this.sprite = sprite;
         this.size = size;
         this.rotation = rotation;
         this.drawPriority = drawPriority;
         this.alpha = clamp(0, 1, alpha);
+        this.rotationPoint = rotationPoint;
     }
 }

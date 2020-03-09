@@ -33,7 +33,7 @@ export class Physics {
     public static collision(first: GameObject, second: GameObject): Collision[] {
         const ret: Collision[] = [];
 
-        if (first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return ret;
+        if (first.id === second.id || /*first.rigidbody.mass === 0 && second.rigidbody.mass === 0 ||*/ Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return ret;
 
         for (const collider of first.getComponents<Collider>(ComponentType.Collider)) {
 
@@ -89,8 +89,8 @@ export class Physics {
                 }
 
             } else if (collider.type === ComponentType.PolygonCollider) {
-
                 for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
+                    console.log(AABB.intersects(collider, otherCollider));
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (collider.type === ComponentType.PolygonCollider) {
@@ -236,7 +236,6 @@ export class Physics {
             const overlap = Math.min(aP.y, bP.y) - Math.max(aP.x, bP.x);
 
             if (overlap <= 0) {
-                console.log(overlap);
                 return new Collision(A, B); // not colliding
             } else {
                 if (overlap < leastPenetration) {

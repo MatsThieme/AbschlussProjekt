@@ -25,7 +25,7 @@ export class CameraManager {
         let frames: (Frame | undefined)[] = [];
 
         for (const gameObject of gameObjects) {
-            frames.push(...(gameObject.getComponent<TileMap>(ComponentType.TileMap)?.currentFrame || []));
+            frames.push(...gameObject.getComponents<TileMap>(ComponentType.ParticleSystem).reduce((t: Frame[], c) => { t.push(...(<Frame[]>c.currentFrame)); return t; }, []));
             frames.push(...gameObject.getComponents<PolygonRenderer>(ComponentType.PolygonRenderer).map(pR => pR.currentFrame));
             frames.push(...gameObject.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).map(aS => aS.currentFrame));
             frames.push(...gameObject.getComponents<Texture>(ComponentType.Texture).map(t => t.currentFrame));
@@ -38,17 +38,20 @@ export class CameraManager {
 
 
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+
         this.context.drawImage(this.cameras[this.mainCameraIndex].currentFrame, 0, 0);
+        this.context.beginPath();
 
         for (const gameObject of gameObjects) {
             if (gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider)) {
                 for (const vertex of gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider).vertices) {
                     const pos = this.mainCamera.worldToScreenPoint(vertex);
-                    this.context.moveTo(pos.x, pos.y);
+                    this.context.moveTo(pos.x + 5, pos.y);
                     this.context.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
                 }
             }
         }
+        this.context.closePath();
 
         this.context.strokeStyle = '#f00';
         this.context.stroke();

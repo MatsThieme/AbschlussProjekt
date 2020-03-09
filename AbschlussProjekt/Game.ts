@@ -37,8 +37,8 @@ class Game {
         const gO1 = this.scene.newGameObject('polygon');
         gO1.transform.relativePosition = new Vector2(0, 0);
         const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        //polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
-        polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
+        polygonCollider1.vertices = [new Vector2(-5, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        //polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
         const polygonRenderer1 = gO1.addComponent(PolygonRenderer);
 
         const gO2 = this.scene.newGameObject('polygon');
@@ -51,9 +51,9 @@ class Game {
         //texture.sprite = new Sprite('spriteTest1.png');
 
 
-        setInterval(() => gO2.transform.relativeRotation.degree += 0.1, 10);
+        setInterval(() => gO1.transform.relativeRotation.degree += 3.6, 10);
 
-        setInterval(() => console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2)), 500);
+        //setInterval(() => console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2)), 500);
 
         // display axis
 

@@ -38,7 +38,7 @@ export class PolygonCollider extends Collider {
 
         const center = topLeft.add(new Vector2(this.size.x / 2, -this.size.y / 2));
 
-
+        const difference = Vector2.average(...vertices);
 
         for (const vertex of vertices) {
             vertex.sub(center).add(origin);

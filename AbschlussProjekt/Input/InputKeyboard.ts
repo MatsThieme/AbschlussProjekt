@@ -14,7 +14,6 @@ export class InputKeyboard {
         this.gameTime = gameTime;
     }
     private onKeyDown(e: KeyboardEvent): void {
-        console.log(e.code);
         let btn = <InputButton>this.keys.get(e.code);
         if (!btn) btn = new InputButton(this.gameTime);
         btn.down = true;

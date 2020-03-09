@@ -93,6 +93,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#alpha" class="tsd-kind-icon">alpha</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#drawpriority" class="tsd-kind-icon">draw<wbr>Priority</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#rotation" class="tsd-kind-icon">rotation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#rotationpoint" class="tsd-kind-icon">rotation<wbr>Point</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#size" class="tsd-kind-icon">size</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#sprite" class="tsd-kind-icon">sprite</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_frame_.frame.html#worldcordinates" class="tsd-kind-icon">world<wbr>Cordinates</a></li>
@@ -107,13 +108,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Frame<span class="tsd-signature-symbol">(</span>worldCordinates<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a>, size<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a>, sprite<span class="tsd-signature-symbol">: </span><a href="_sprite_.sprite.html" class="tsd-signature-type">Sprite</a>, rotation<span class="tsd-signature-symbol">: </span><a href="_angle_.angle.html" class="tsd-signature-type">Angle</a>, drawPriority<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, alpha<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_frame_.frame.html" class="tsd-signature-type">Frame</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Frame<span class="tsd-signature-symbol">(</span>worldCordinates<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a>, size<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a>, sprite<span class="tsd-signature-symbol">: </span><a href="_sprite_.sprite.html" class="tsd-signature-type">Sprite</a>, rotation<span class="tsd-signature-symbol">: </span><a href="_angle_.angle.html" class="tsd-signature-type">Angle</a>, drawPriority<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, alpha<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, rotationPoint<span class="tsd-signature-symbol">?: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_frame_.frame.html" class="tsd-signature-type">Frame</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L14">Frame.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L15">Frame.ts:15</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,6 +137,9 @@
 								<li>
 									<h5>alpha: <span class="tsd-signature-type">number</span></h5>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rotationPoint: <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_frame_.frame.html" class="tsd-signature-type">Frame</a></h4>
 						</li>
@@ -150,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">alpha<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L14">Frame.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L14">Frame.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -160,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">draw<wbr>Priority<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L13">Frame.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L13">Frame.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -170,7 +174,17 @@
 					<div class="tsd-signature tsd-kind-icon">rotation<span class="tsd-signature-symbol">:</span> <a href="_angle_.angle.html" class="tsd-signature-type">Angle</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L12">Frame.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L12">Frame.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="rotationpoint" class="tsd-anchor"></a>
+					<h3>rotation<wbr>Point</h3>
+					<div class="tsd-signature tsd-kind-icon">rotation<wbr>Point<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L15">Frame.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -180,7 +194,7 @@
 					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L11">Frame.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L11">Frame.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -190,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">sprite<span class="tsd-signature-symbol">:</span> <a href="_sprite_.sprite.html" class="tsd-signature-type">Sprite</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L10">Frame.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L10">Frame.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -200,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">world<wbr>Cordinates<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/561b427/AbschlussProjekt/Frame.ts#L9">Frame.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/f20e7a8/AbschlussProjekt/Frame.ts#L9">Frame.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -235,6 +249,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_frame_.frame.html#rotation" class="tsd-kind-icon">rotation</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_frame_.frame.html#rotationpoint" class="tsd-kind-icon">rotation<wbr>Point</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_frame_.frame.html#size" class="tsd-kind-icon">size</a>

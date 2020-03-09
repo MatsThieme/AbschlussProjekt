@@ -32,15 +32,17 @@ export class Camera extends Component {
             if (this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {
                 const frameSize = this.worldToScreen(frame.size);
                 const framePos = this.worldToScreenPoint(frame.worldCordinates).sub(new Vector2(0, frameSize.y));
-                const translate = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
+                let rotationPoint;
+                if (frame.rotationPoint) rotationPoint = this.worldToScreenPoint(frame.rotationPoint);
+                if (!rotationPoint) rotationPoint = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
 
                 this.context.save();
 
-                this.context.translate(translate.x, translate.y);
+                this.context.translate(rotationPoint.x, rotationPoint.y);
 
                 this.context.rotate(frame.rotation.radian);
 
-                this.context.translate(-translate.x, -translate.y);
+                this.context.translate(-rotationPoint.x, -rotationPoint.y);
 
                 this.context.globalAlpha = frame.alpha;
 

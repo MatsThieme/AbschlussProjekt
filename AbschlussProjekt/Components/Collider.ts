@@ -47,7 +47,7 @@ export class Collider extends Component implements Alignable {
         return this.radius * this.gameObject.transform.scale.sum / 2;
     }
     public get AABB(): AABB {
-        return new AABB(this.size, this.position);
+        return new AABB(this.scaledSize, this.position);
     }
     public set radius(val: number) {
         this._radius = val;
