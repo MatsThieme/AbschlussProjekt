@@ -90,7 +90,7 @@ export class Physics {
 
             } else if (collider.type === ComponentType.PolygonCollider) {
                 for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
-                    console.log(AABB.intersects(collider, otherCollider));
+                    //console.log(AABB.intersects(collider, otherCollider));
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (collider.type === ComponentType.PolygonCollider) {
@@ -229,6 +229,7 @@ export class Physics {
         let leastPenetrationNormal!: Vector2;
         let leastPenetration: number = Infinity;
 
+
         for (const normal of [...A.normals, ...B.normals]) {
             const aP = A.project(normal);
             const bP = B.project(normal);
@@ -236,6 +237,9 @@ export class Physics {
             const overlap = Math.min(aP.y, bP.y) - Math.max(aP.x, bP.x);
 
             if (overlap <= 0) {
+                if (overlap === 0) console.log('not colliding', Math.min(aP.y, bP.y), Math.max(aP.x, bP.x));
+                else console.log('not colliding');
+
                 return new Collision(A, B); // not colliding
             } else {
                 if (overlap < leastPenetration) {
@@ -244,6 +248,8 @@ export class Physics {
                 }
             }
         }
+
+        console.log('colliding');
 
         return new Collision(A, B, leastPenetrationNormal, leastPenetration);
     }

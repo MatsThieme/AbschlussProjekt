@@ -1,7 +1,8 @@
 {
   "keyboard": {
-    "4": "ToAxis(KeyD, KeyA)",
-    "5": "ToAxis(KeyS, KeyW)"
+    "4": "Axis(KeyA, KeyD)",
+    "5": "Axis(KeyS, KeyW)",
+    "8": "Axis(ArrowLeft, ArrowRight)"
   },
   "mouse": {
     "6": 0,

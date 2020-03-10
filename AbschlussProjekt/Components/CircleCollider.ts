@@ -15,4 +15,7 @@ export class CircleCollider extends Collider {
         let align = new Vector2(this.alignH === AlignH.Right ? -this.radius : this.alignH === AlignH.Center ? 0 : this.radius, this.alignV === AlignV.Top ? -this.radius : this.alignV === AlignV.Center ? 0 : this.radius);
         return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
     }
+    public get area(): number {
+        return Math.PI * this.radius ** 2;
+    }
 }

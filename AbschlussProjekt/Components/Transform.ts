@@ -21,9 +21,6 @@ export class Transform extends Component {
 
         return this.gameObject.parent?.transform.position.clone.add(x) || x;
     }
-    public set position(val: Vector2) {
-        this.relativePosition = val;
-    }
     public get rotation(): Angle {
         return new Angle((this.gameObject.parent?.transform.rotation.radian || 0) + this.relativeRotation.radian);
     }

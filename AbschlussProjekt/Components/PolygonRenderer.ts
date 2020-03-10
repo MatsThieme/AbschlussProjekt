@@ -11,7 +11,8 @@ export class PolygonRenderer extends Component {
     private context: CanvasRenderingContext2D;
     private polygonCollider: PolygonCollider;
     private sprite: Sprite;
-    private position: Vector2;
+    private _position: Vector2;
+    private size: Vector2;
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.PolygonRenderer);
 
@@ -25,10 +26,9 @@ export class PolygonRenderer extends Component {
 
         this.context.fillStyle = '#' + (~~(0xdddddd * Math.random()) + 0x111111).toString(16);
         this.context.translate(0, this.canvas.height);
-        this.context.scale(1, -1);
+        this.context.scale(1 * this.gameObject.transform.relativeScale.x, -1 * this.gameObject.transform.relativeScale.y);
 
         this.context.beginPath();
-
 
         const topLeft = new Vector2(Infinity, -Infinity);
 
@@ -40,6 +40,7 @@ export class PolygonRenderer extends Component {
         }
 
         const center = topLeft.clone.add(new Vector2(this.polygonCollider.size.x / 2, -this.polygonCollider.size.y / 2));
+
         for (const vertex of vs.map(v => v.sub(center))) {
             this.context.lineTo(this.canvas.width / 2 + vertex.x / this.polygonCollider.size.x * this.canvas.width, this.canvas.height / 2 + vertex.y / this.polygonCollider.size.y * this.canvas.height);
         }
@@ -49,9 +50,13 @@ export class PolygonRenderer extends Component {
 
         this.sprite = new Sprite(this.canvas);
 
-        this.position = new Vector2(topLeft.x, topLeft.y - this.polygonCollider.size.y);
+        this.size = this.polygonCollider.scaledSize;
+        this._position = new Vector2(topLeft.x, topLeft.y - this.polygonCollider.size.y).sub(this.gameObject.transform.position);
+    }
+    private get position(): Vector2 {
+        return this._position.clone.add(this.polygonCollider.position).sub(this.polygonCollider.relativePosition);
     }
     public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.polygonCollider.scaledSize, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, this.polygonCollider.position);
+        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, this.polygonCollider.position);
     }
 }

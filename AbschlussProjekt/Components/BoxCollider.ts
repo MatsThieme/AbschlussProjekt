@@ -11,4 +11,7 @@ export class BoxCollider extends Collider {
         this.size = size;
         this.radius = Math.max(size.x, size.y) / 2;
     }
+    public get area(): number {
+        return 1;
+    }
 }

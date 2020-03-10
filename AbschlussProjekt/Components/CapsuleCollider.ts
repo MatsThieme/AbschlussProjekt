@@ -42,4 +42,7 @@ export class CapsuleCollider extends Collider {
         this.circleColliderTop.relativePosition = this.relativePosition.clone.add(new Vector2(this.radius, this.radius))
         this.circleColliderBottom.relativePosition = this.relativePosition.clone.add(new Vector2(this.radius, this.size.y - this.radius))
     }
+    public get area(): number {
+        return 1;
+    }
 }

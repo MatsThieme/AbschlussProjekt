@@ -53,7 +53,7 @@ export class Camera extends Component {
         }
     }
     public AABBInCamera(rect: AABB): boolean {
-        return rect.intersects(this.AABB);
+        return rect.screenSpaceIntersection(this.AABB);
     }
     public worldToScreenPoint(position: Vector2): Vector2 {
         const localPosition = new Vector2(position.x, -position.y).sub(this.gameObject.transform.position).add(this.size.clone.scale(0.5));

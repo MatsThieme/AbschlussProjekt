@@ -12,6 +12,7 @@ import { AsyncWorker } from './Worker/AsyncWorker.js';
 import { PolygonCollider } from './Components/PolygonCollider.js';
 import { PolygonRenderer } from './Components/PolygonRenderer.js';
 import { AlignH, AlignV } from './Align.js';
+import { Move } from './Behaviours/Move.js';
 
 class Game {
     public scene: Scene;
@@ -33,27 +34,23 @@ class Game {
 
 
 
-
         const gO1 = this.scene.newGameObject('polygon');
         gO1.transform.relativePosition = new Vector2(0, 0);
         const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        polygonCollider1.vertices = [new Vector2(-5, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
         //polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
-        const polygonRenderer1 = gO1.addComponent(PolygonRenderer);
+        gO1.addComponent(PolygonRenderer);
+        gO1.addComponent(Move);
+
+        gO1.transform.relativeScale = new Vector2(1, 2);
+
 
         const gO2 = this.scene.newGameObject('polygon');
         gO2.transform.relativePosition = new Vector2(0.9, 0.9);
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
-        //polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5, 1.1), new Vector2(0, 1), new Vector2(1, 0)];
-        const polygonRenderer2 = gO2.addComponent(PolygonRenderer);
+        polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
+        gO2.addComponent(PolygonRenderer);
 
-        //const texture = gO1.addComponent(Texture);
-        //texture.sprite = new Sprite('spriteTest1.png');
-
-
-        setInterval(() => gO1.transform.relativeRotation.degree += 3.6, 10);
-
-        //setInterval(() => console.log(Physics.collisionPolygon(polygonCollider1, polygonCollider2)), 500);
 
         // display axis
 
@@ -68,6 +65,16 @@ class Game {
         yAxisTexture.sprite = new Sprite('spriteTest1.png');
         yAxis.transform.relativeScale = new Vector2(0.01, 10000);
         yAxis.drawPriority = -1;
+
+
+
+        // floor
+        const floor = this.scene.newGameObject('floor');
+        floor.transform.relativePosition = new Vector2(0, -4.5);
+        floor.transform.relativeScale = new Vector2(100, 0.5);
+        const floorCollider = floor.addComponent(PolygonCollider);
+        floorCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+
     }
 }
 

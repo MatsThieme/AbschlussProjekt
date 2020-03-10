@@ -58,14 +58,16 @@ export class Scene {
     private async update() {
         this.gameTime.update();
 
+        this.getAllGameObjects().forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update()));
+
         // get and solve all collisions
         const collisions: Collision[] = [];
         const idPairs: string[] = [];
 
         for (const gO1 of this.gameObjects.values()) {
-            if (!gO1.getComponent(Collider)) continue;
+            if (!gO1.getComponent<Collider>(ComponentType.Collider)) continue;
             for (const gO2 of this.gameObjects.values()) {
-                if (!gO2.getComponent(Collider)) continue;
+                if (!gO2.getComponent<Collider>(ComponentType.Collider)) continue;
                 const idPair = JSON.stringify([gO1.id, gO2.id].sort((a, b) => a - b));
                 if (gO1.id !== gO2.id && gO1.active && gO2.active && idPairs.indexOf(idPair) === -1) {
                     collisions.push(...await Physics.asyncCollision(gO1, gO2));
@@ -74,7 +76,7 @@ export class Scene {
             }
         }
 
-        console.log(collisions.length, JSON.stringify(idPairs));
+        //console.log(collisions.length + JSON.stringify(idPairs));
 
         const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 

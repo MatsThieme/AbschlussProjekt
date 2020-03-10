@@ -7,7 +7,7 @@ import { Vector2 } from '../Vector2.js';
 import { AABB } from '../Physics/AABB.js';
 import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 
-export class Collider extends Component implements Alignable {
+export abstract class Collider extends Component implements Alignable {
     private static nextID: number = 0;
     public readonly id: number;
     protected _relativePosition: Vector2;
@@ -65,7 +65,8 @@ export class Collider extends Component implements Alignable {
         if (this._autoMass === 0) this._autoMass = this.area * this.density;
         return this._autoMass;
     }
-    private get area(): number {
-        return 1;
+    public abstract get area(): number;
+    public update(): void {
+
     }
 }
