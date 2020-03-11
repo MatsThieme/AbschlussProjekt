@@ -54,7 +54,7 @@ export class GameObject {
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {
-                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.BoxCollider || c.type === ComponentType.CircleCollider || c.type === ComponentType.CapsuleCollider || c.type === ComponentType.PolygonCollider);
+                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider);
             }
 
             return c instanceof <any>type;

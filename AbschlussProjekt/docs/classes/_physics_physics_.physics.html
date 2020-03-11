@@ -93,16 +93,12 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#asynccollision" class="tsd-kind-icon">async<wbr>Collision</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#circleintersection" class="tsd-kind-icon">circle<wbr>Intersection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collision" class="tsd-kind-icon">collision</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisionbox" class="tsd-kind-icon">collision<wbr>Box</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisionboxcircle" class="tsd-kind-icon">collision<wbr>Box<wbr>Circle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisioncapsule" class="tsd-kind-icon">collision<wbr>Capsule</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisioncapsulebox" class="tsd-kind-icon">collision<wbr>Capsule<wbr>Box</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisioncapsulecircle" class="tsd-kind-icon">collision<wbr>Capsule<wbr>Circle</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisioncircle" class="tsd-kind-icon">collision<wbr>Circle</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisionpolygon" class="tsd-kind-icon">collision<wbr>Polygon</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#collisionpolygoncircle" class="tsd-kind-icon">collision<wbr>Polygon<wbr>Circle</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#ignorecollision" class="tsd-kind-icon">ignore<wbr>Collision</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_physics_.physics.html#intersectscircle" class="tsd-kind-icon">intersects<wbr>Circle</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,10 +109,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="gravity" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> gravity</h3>
-					<div class="tsd-signature tsd-kind-icon">gravity<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol"> = new Vector2(0, -9.807 / 1000)</span></div>
+					<div class="tsd-signature tsd-kind-icon">gravity<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol"> = new Vector2(0, -9.807 / 100 / 1000)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L14">Physics/Physics.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L11">Physics/Physics.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -126,17 +122,17 @@
 					<div class="tsd-signature tsd-kind-icon">ignore<wbr>Collisions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L16">Physics/Physics.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L13">Physics/Physics.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="timescale" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> time<wbr>Scale</h3>
-					<div class="tsd-signature tsd-kind-icon">time<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0.001</span></div>
+					<div class="tsd-signature tsd-kind-icon">time<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L15">Physics/Physics.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L12">Physics/Physics.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -153,7 +149,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L27">Physics/Physics.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L24">Physics/Physics.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -170,6 +166,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="circleintersection" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> circle<wbr>Intersection</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">circle<wbr>Intersection<span class="tsd-signature-symbol">(</span>circleCollider1<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a>, circleCollider2<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L72">Physics/Physics.ts:72</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>circleCollider1: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
+								</li>
+								<li>
+									<h5>circleCollider2: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="collision" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -179,7 +201,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L33">Physics/Physics.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L30">Physics/Physics.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -196,136 +218,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="collisionbox" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Box</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">collision<wbr>Box<span class="tsd-signature-symbol">(</span>boxCollider1<span class="tsd-signature-symbol">: </span><a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a>, boxCollider2<span class="tsd-signature-symbol">: </span><a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L131">Physics/Physics.ts:131</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>boxCollider1: <a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a></h5>
-								</li>
-								<li>
-									<h5>boxCollider2: <a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="collisionboxcircle" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Box<wbr>Circle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">collision<wbr>Box<wbr>Circle<span class="tsd-signature-symbol">(</span>boxCollider<span class="tsd-signature-symbol">: </span><a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a>, circleCollider<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L153">Physics/Physics.ts:153</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>boxCollider: <a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a></h5>
-								</li>
-								<li>
-									<h5>circleCollider: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="collisioncapsule" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Capsule</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">collision<wbr>Capsule<span class="tsd-signature-symbol">(</span>capsuleCollider1<span class="tsd-signature-symbol">: </span><a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a>, capsuleCollider2<span class="tsd-signature-symbol">: </span><a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L201">Physics/Physics.ts:201</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>capsuleCollider1: <a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a></h5>
-								</li>
-								<li>
-									<h5>capsuleCollider2: <a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="collisioncapsulebox" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Capsule<wbr>Box</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">collision<wbr>Capsule<wbr>Box<span class="tsd-signature-symbol">(</span>capsuleCollider<span class="tsd-signature-symbol">: </span><a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a>, boxCollider<span class="tsd-signature-symbol">: </span><a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L204">Physics/Physics.ts:204</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>capsuleCollider: <a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a></h5>
-								</li>
-								<li>
-									<h5>boxCollider: <a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="collisioncapsulecircle" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Capsule<wbr>Circle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">collision<wbr>Capsule<wbr>Circle<span class="tsd-signature-symbol">(</span>capsuleCollider<span class="tsd-signature-symbol">: </span><a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a>, circleCollider<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L216">Physics/Physics.ts:216</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>capsuleCollider: <a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a></h5>
-								</li>
-								<li>
-									<h5>circleCollider: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="collisioncircle" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Circle</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -335,7 +227,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L110">Physics/Physics.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L75">Physics/Physics.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -361,7 +253,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L228">Physics/Physics.ts:228</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L96">Physics/Physics.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -378,6 +270,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="collisionpolygoncircle" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> collision<wbr>Polygon<wbr>Circle</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">collision<wbr>Polygon<wbr>Circle<span class="tsd-signature-symbol">(</span>polygonCollider<span class="tsd-signature-symbol">: </span><a href="_components_polygoncollider_.polygoncollider.html" class="tsd-signature-type">PolygonCollider</a>, circleCollider<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L120">Physics/Physics.ts:120</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>polygonCollider: <a href="_components_polygoncollider_.polygoncollider.html" class="tsd-signature-type">PolygonCollider</a></h5>
+								</li>
+								<li>
+									<h5>circleCollider: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_physics_collision_.collision.html" class="tsd-signature-type">Collision</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="ignorecollision" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> ignore<wbr>Collision</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -387,7 +305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L17">Physics/Physics.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Physics/Physics.ts#L14">Physics/Physics.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -403,32 +321,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="intersectscircle" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> intersects<wbr>Circle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">intersects<wbr>Circle<span class="tsd-signature-symbol">(</span>circleCollider1<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a>, circleCollider2<span class="tsd-signature-symbol">: </span><a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Physics/Physics.ts#L107">Physics/Physics.ts:107</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>circleCollider1: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
-								</li>
-								<li>
-									<h5>circleCollider2: <a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -465,22 +357,10 @@
 								<a href="_physics_physics_.physics.html#asynccollision" class="tsd-kind-icon">async<wbr>Collision</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_physics_physics_.physics.html#circleintersection" class="tsd-kind-icon">circle<wbr>Intersection</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_physics_physics_.physics.html#collision" class="tsd-kind-icon">collision</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#collisionbox" class="tsd-kind-icon">collision<wbr>Box</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#collisionboxcircle" class="tsd-kind-icon">collision<wbr>Box<wbr>Circle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#collisioncapsule" class="tsd-kind-icon">collision<wbr>Capsule</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#collisioncapsulebox" class="tsd-kind-icon">collision<wbr>Capsule<wbr>Box</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#collisioncapsulecircle" class="tsd-kind-icon">collision<wbr>Capsule<wbr>Circle</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_physics_physics_.physics.html#collisioncircle" class="tsd-kind-icon">collision<wbr>Circle</a>
@@ -489,10 +369,10 @@
 								<a href="_physics_physics_.physics.html#collisionpolygon" class="tsd-kind-icon">collision<wbr>Polygon</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#ignorecollision" class="tsd-kind-icon">ignore<wbr>Collision</a>
+								<a href="_physics_physics_.physics.html#collisionpolygoncircle" class="tsd-kind-icon">collision<wbr>Polygon<wbr>Circle</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_physics_physics_.physics.html#intersectscircle" class="tsd-kind-icon">intersects<wbr>Circle</a>
+								<a href="_physics_physics_.physics.html#ignorecollision" class="tsd-kind-icon">ignore<wbr>Collision</a>
 							</li>
 						</ul>
 					</li>

@@ -1,6 +1,5 @@
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { Behaviour } from './Components/Behaviour.js';
-import { CapsuleCollider } from './Components/CapsuleCollider.js';
 import { CircleCollider } from './Components/CircleCollider.js';
 import { ComponentType } from './Components/ComponentType.js';
 import { ParticleSystem } from './Components/ParticleSystem.js';
@@ -42,8 +41,6 @@ export class Prefab {
             switch (component.type) {
                 case ComponentType.AnimatedSprite: Object.setPrototypeOf(component, new AnimatedSprite(gO).constructor.prototype);
                 case ComponentType.Behaviour: Object.setPrototypeOf(component, new (await import(('./Behaviours/' + (<Behaviour>component).name + 'js')))[(<Behaviour>component).name](gO).constructor.prototype);
-                case ComponentType.BoxCollider: Object.setPrototypeOf(component, new AnimatedSprite(gO).constructor.prototype);
-                case ComponentType.CapsuleCollider: Object.setPrototypeOf(component, new CapsuleCollider(gO).constructor.prototype);
                 case ComponentType.CircleCollider: Object.setPrototypeOf(component, new CircleCollider(gO).constructor.prototype);
                 case ComponentType.ParticleSystem: Object.setPrototypeOf(component, new ParticleSystem(gO).constructor.prototype);
                 case ComponentType.RigidBody: Object.setPrototypeOf(component, new RigidBody(gO).constructor.prototype);

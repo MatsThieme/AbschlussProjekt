@@ -79,13 +79,7 @@
 								<span class="target">Collider</span>
 								<ul class="tsd-hierarchy">
 									<li>
-										<a href="_components_boxcollider_.boxcollider.html" class="tsd-signature-type">BoxCollider</a>
-									</li>
-									<li>
 										<a href="_components_circlecollider_.circlecollider.html" class="tsd-signature-type">CircleCollider</a>
-									</li>
-									<li>
-										<a href="_components_capsulecollider_.capsulecollider.html" class="tsd-signature-type">CapsuleCollider</a>
 									</li>
 									<li>
 										<a href="_components_polygoncollider_.polygoncollider.html" class="tsd-signature-type">PolygonCollider</a>
@@ -115,16 +109,16 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#_automass" class="tsd-kind-icon">_auto<wbr>Mass</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_components_collider_.collider.html#_radius" class="tsd-kind-icon">_radius</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_components_collider_.collider.html#_relativeposition" class="tsd-kind-icon">_relative<wbr>Position</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_components_collider_.collider.html#_size" class="tsd-kind-icon">_size</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_components_collider_.collider.html#_aabb" class="tsd-kind-icon">_aabb</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_components_collider_.collider.html#_area" class="tsd-kind-icon">_area</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_components_collider_.collider.html#_automass" class="tsd-kind-icon">_auto<wbr>Mass</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#alignh" class="tsd-kind-icon">alignH</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#alignv" class="tsd-kind-icon">alignV</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#density" class="tsd-kind-icon">density</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_components_collider_.collider.html#gameobject" class="tsd-kind-icon">game<wbr>Object</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#material" class="tsd-kind-icon">material</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_components_collider_.collider.html#relativeposition" class="tsd-kind-icon">relative<wbr>Position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_components_collider_.collider.html#type" class="tsd-kind-icon">type</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_components_collider_.collider.html#nextid" class="tsd-kind-icon">nextID</a></li>
 							</ul>
@@ -133,14 +127,10 @@
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#aabb" class="tsd-kind-icon">AABB</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#align" class="tsd-kind-icon">align</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#area" class="tsd-kind-icon">area</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#automass" class="tsd-kind-icon">auto<wbr>Mass</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#position" class="tsd-kind-icon">position</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_components_collider_.collider.html#radius" class="tsd-kind-icon">radius</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_components_collider_.collider.html#relativeposition" class="tsd-kind-icon">relative<wbr>Position</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#scaledradius" class="tsd-kind-icon">scaled<wbr>Radius</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_components_collider_.collider.html#scaledsize" class="tsd-kind-icon">scaled<wbr>Size</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_components_collider_.collider.html#size" class="tsd-kind-icon">size</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -165,7 +155,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_components_component_.component.html">Component</a>.<a href="_components_component_.component.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L20">Components/Collider.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L21">Components/Collider.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -199,43 +189,33 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_aabb" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _aabb</h3>
+					<div class="tsd-signature tsd-kind-icon">_aabb<span class="tsd-signature-symbol">:</span> <a href="_physics_aabb_.aabb.html" class="tsd-signature-type">AABB</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L21">Components/Collider.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_area" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagAbstract">Abstract</span> _area</h3>
+					<div class="tsd-signature tsd-kind-icon">_area<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L20">Components/Collider.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_automass" class="tsd-anchor"></a>
-					<h3>_auto<wbr>Mass</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _auto<wbr>Mass</h3>
 					<div class="tsd-signature tsd-kind-icon">_auto<wbr>Mass<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L19">Components/Collider.ts:19</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_radius" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _radius</h3>
-					<div class="tsd-signature tsd-kind-icon">_radius<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L17">Components/Collider.ts:17</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_relativeposition" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _relative<wbr>Position</h3>
-					<div class="tsd-signature tsd-kind-icon">_relative<wbr>Position<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L13">Components/Collider.ts:13</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_size" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _size</h3>
-					<div class="tsd-signature tsd-kind-icon">_size<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L16">Components/Collider.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L18">Components/Collider.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -246,7 +226,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_alignable_.alignable.html">Alignable</a>.<a href="../interfaces/_alignable_.alignable.html#alignh">alignH</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L14">Components/Collider.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L15">Components/Collider.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -257,7 +237,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_alignable_.alignable.html">Alignable</a>.<a href="../interfaces/_alignable_.alignable.html#alignv">alignV</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L15">Components/Collider.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L16">Components/Collider.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -267,7 +247,7 @@
 					<div class="tsd-signature tsd-kind-icon">density<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L20">Components/Collider.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L19">Components/Collider.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -278,7 +258,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_components_component_.component.html">Component</a>.<a href="_components_component_.component.html#gameobject">gameObject</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Component.ts#L5">Components/Component.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Component.ts#L5">Components/Component.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -288,7 +268,7 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L12">Components/Collider.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L13">Components/Collider.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -298,7 +278,17 @@
 					<div class="tsd-signature tsd-kind-icon">material<span class="tsd-signature-symbol">:</span> <a href="_physics_physicsmaterial_.physicsmaterial.html" class="tsd-signature-type">PhysicsMaterial</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L18">Components/Collider.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L17">Components/Collider.ts:17</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="relativeposition" class="tsd-anchor"></a>
+					<h3>relative<wbr>Position</h3>
+					<div class="tsd-signature tsd-kind-icon">relative<wbr>Position<span class="tsd-signature-symbol">:</span> <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L14">Components/Collider.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -309,7 +299,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_components_component_.component.html">Component</a>.<a href="_components_component_.component.html#type">type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Component.ts#L6">Components/Component.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Component.ts#L6">Components/Component.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -319,7 +309,7 @@
 					<div class="tsd-signature tsd-kind-icon">nextID<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L11">Components/Collider.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L12">Components/Collider.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -336,10 +326,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L49">Components/Collider.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L42">Components/Collider.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_physics_aabb_.aabb.html" class="tsd-signature-type">AABB</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="align" class="tsd-anchor"></a>
+					<h3>align</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> align<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L45">Components/Collider.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -353,7 +360,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L68">Components/Collider.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L39">Components/Collider.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -370,7 +377,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L64">Components/Collider.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L35">Components/Collider.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -387,140 +394,10 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L33">Components/Collider.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L32">Components/Collider.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
-					<a name="radius" class="tsd-anchor"></a>
-					<h3>radius</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> radius<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> radius<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L55">Components/Collider.ts:55</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L52">Components/Collider.ts:52</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>val: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
-					<a name="relativeposition" class="tsd-anchor"></a>
-					<h3>relative<wbr>Position</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> relativePosition<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> relativePosition<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L40">Components/Collider.ts:40</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L37">Components/Collider.ts:37</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>val: <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="scaledradius" class="tsd-anchor"></a>
-					<h3>scaled<wbr>Radius</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> scaledRadius<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L46">Components/Collider.ts:46</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="scaledsize" class="tsd-anchor"></a>
-					<h3>scaled<wbr>Size</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> scaledSize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L43">Components/Collider.ts:43</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
-					<a name="size" class="tsd-anchor"></a>
-					<h3>size</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> size<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> size<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L61">Components/Collider.ts:61</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L58">Components/Collider.ts:58</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>val: <a href="_vector2_.vector2.html" class="tsd-signature-type">Vector2</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -529,18 +406,24 @@
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="update" class="tsd-anchor"></a>
-					<h3>update</h3>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>gameTime<span class="tsd-signature-symbol">: </span><a href="_gametime_.gametime.html" class="tsd-signature-type">GameTime</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/234f134/AbschlussProjekt/Components/Collider.ts#L69">Components/Collider.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/MatsThieme/AbschlussProjekt/blob/8f295b9/AbschlussProjekt/Components/Collider.ts#L50">Components/Collider.ts:50</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>gameTime: <a href="_gametime_.gametime.html" class="tsd-signature-type">GameTime</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -567,17 +450,14 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_components_collider_.collider.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_components_collider_.collider.html#_aabb" class="tsd-kind-icon">_aabb</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_components_collider_.collider.html#_area" class="tsd-kind-icon">_area</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_components_collider_.collider.html#_automass" class="tsd-kind-icon">_auto<wbr>Mass</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_components_collider_.collider.html#_radius" class="tsd-kind-icon">_radius</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_components_collider_.collider.html#_relativeposition" class="tsd-kind-icon">_relative<wbr>Position</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_components_collider_.collider.html#_size" class="tsd-kind-icon">_size</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_components_collider_.collider.html#alignh" class="tsd-kind-icon">alignH</a>
@@ -597,6 +477,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_components_collider_.collider.html#material" class="tsd-kind-icon">material</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_components_collider_.collider.html#relativeposition" class="tsd-kind-icon">relative<wbr>Position</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_components_collider_.collider.html#type" class="tsd-kind-icon">type</a>
 							</li>
@@ -607,6 +490,9 @@
 								<a href="_components_collider_.collider.html#aabb" class="tsd-kind-icon">AABB</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="_components_collider_.collider.html#align" class="tsd-kind-icon">align</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="_components_collider_.collider.html#area" class="tsd-kind-icon">area</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
@@ -614,21 +500,6 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="_components_collider_.collider.html#position" class="tsd-kind-icon">position</a>
-							</li>
-							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_components_collider_.collider.html#radius" class="tsd-kind-icon">radius</a>
-							</li>
-							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_components_collider_.collider.html#relativeposition" class="tsd-kind-icon">relative<wbr>Position</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_components_collider_.collider.html#scaledradius" class="tsd-kind-icon">scaled<wbr>Radius</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_components_collider_.collider.html#scaledsize" class="tsd-kind-icon">scaled<wbr>Size</a>
-							</li>
-							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_components_collider_.collider.html#size" class="tsd-kind-icon">size</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_components_collider_.collider.html#update" class="tsd-kind-icon">update</a>

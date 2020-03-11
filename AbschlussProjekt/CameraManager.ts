@@ -44,28 +44,28 @@ export class CameraManager {
 
         // debugging:
 
-        this.context.beginPath();
+        //this.context.beginPath();
 
-        for (const gameObject of gameObjects) {
-            if (gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider)) {
-                for (const collider of gameObject.getComponents<PolygonCollider>(ComponentType.PolygonCollider)) {
+        //for (const gameObject of gameObjects) {
+        //    if (gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider)) {
+        //        for (const collider of gameObject.getComponents<PolygonCollider>(ComponentType.PolygonCollider)) {
 
-                    for (const vertex of collider.vertices) {
-                        const pos = this.mainCamera.worldToScreenPoint(vertex);
-                        this.context.moveTo(pos.x + 5, pos.y);
-                        this.context.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
-                    }
+        //            for (const vertex of collider.vertices) {
+        //                const pos = this.mainCamera.worldToScreenPoint(vertex);
+        //                this.context.moveTo(pos.x + 5, pos.y);
+        //                this.context.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+        //            }
 
-                    const rect = collider.AABB;
+        //            const rect = collider.AABB;
 
-                    this.context.strokeRect(this.mainCamera.worldToScreenPoint(rect.position).x, this.mainCamera.worldToScreenPoint(rect.position).y, this.mainCamera.worldToScreen(rect.size).x, this.mainCamera.worldToScreen(rect.size).y);
-                }
-            }
-        }
+        //            this.context.strokeRect(this.mainCamera.worldToScreenPoint(rect.position).x, this.mainCamera.worldToScreenPoint(rect.position).y, this.mainCamera.worldToScreen(rect.size).x, this.mainCamera.worldToScreen(rect.size).y);
+        //        }
+        //    }
+        //}
 
-        this.context.closePath();
+        //this.context.closePath();
 
-        this.context.strokeStyle = '#f00';
-        this.context.stroke();
+        //this.context.strokeStyle = '#f00';
+        //this.context.stroke();
     }
 }

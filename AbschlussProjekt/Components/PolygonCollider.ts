@@ -5,33 +5,38 @@ import { PhysicsMaterial } from '../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../Vector2.js';
 import { Collider } from './Collider.js';
 import { ComponentType } from './ComponentType.js';
+import { GameTime } from '../GameTime.js';
 
 export class PolygonCollider extends Collider {
+    protected _aabb: AABB;
+    protected _area: number;
+    public scaledSize: Vector2;
     private _vertices: Vector2[];
     public normals: Vector2[];
-    public radius: number;
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(-0.5, 0), new Vector2(0, Math.sqrt(1 - 0.5 ** 2)), new Vector2(0.5, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV);
 
-        this._size = this.computeSize(vertices);
-        this.radius = Math.max(this._size.x, this._size.y) / 2;
+        this.scaledSize = this.computeSize(vertices);
         this._vertices = this.orderVertices(vertices);
-        this.normals = this.calculateNormals(this._vertices);
+        this.normals = this.computeNormals(this._vertices);
+        this._area = this.computeArea();
+        this._aabb = this.computeAABB();
     }
     public set vertices(vertices: Vector2[]) {
-        this._size = this.computeSize(vertices);
-        this.radius = Math.max(this._size.x, this._size.y) / 2;
+        this.scaledSize = this.computeSize(vertices);
         this._vertices = this.orderVertices(vertices);
-        this.normals = this.calculateNormals(this._vertices);
+        this.normals = this.computeNormals(this._vertices);
+        this._area = this.computeArea();
+        this._aabb = this.computeAABB();
     }
     public get vertices(): Vector2[] {
         return this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
-    public moveVerticesToOrigin(vertices: Vector2[], origin: Vector2 = new Vector2()): Vector2[] {
+    public centerPointsAt(vertices: Vector2[], center: Vector2 = new Vector2()): Vector2[] {
         const difference = Vector2.average(...vertices);
 
         for (const vertex of vertices) {
-            vertex.sub(difference).add(origin);
+            vertex.sub(difference).add(center);
         }
 
         return vertices;
@@ -49,9 +54,9 @@ export class PolygonCollider extends Collider {
         return new Vector2(maxX - minX, maxY - minY);
     }
     private orderVertices(vertices: Vector2[]): Vector2[] {
-        return this.moveVerticesToOrigin(vertices).sort((a, b) => Vector2.up.angleBetween(new Vector2(), a).degree - Vector2.up.angleBetween(new Vector2(), b).degree);
+        return this.centerPointsAt(vertices).sort((a, b) => Vector2.up.angleBetween(new Vector2(), a).degree - Vector2.up.angleBetween(new Vector2(), b).degree);
     }
-    private calculateNormals(vertices: Vector2[]): Vector2[] {
+    private computeNormals(vertices: Vector2[]): Vector2[] {
         const normals = [];
 
         for (let i = 1; i <= vertices.length; i++) {
@@ -71,22 +76,17 @@ export class PolygonCollider extends Collider {
 
         return ret;
     }
-    public update() {
-        this.normals = this.calculateNormals(this.vertices);
-        this.size = this.computeSize(this.vertices);
-        this.radius = Math.max(this._size.x, this._size.y) / 2;
-    }
-    public get area(): number {
+    private computeArea(): number {
         let area = 0;
         const vertices = this.vertices;
 
-        for (let i = 0; i < this.vertices.length; i++) {
+        for (let i = 1; i < this.vertices.length; i++) {
             area += (vertices[i - 1].x + vertices[i].x) * (vertices[i - 1].y - vertices[i].y);
         }
 
         return area / 2;
     }
-    public get AABB(): AABB {
+    private computeAABB(): AABB {
         const topLeft = new Vector2(Infinity, -Infinity);
 
         const vs = this.vertices;
@@ -96,9 +96,11 @@ export class PolygonCollider extends Collider {
             if (vertex.y > topLeft.y) topLeft.y = vertex.y;
         }
 
-        return new AABB(this.size, topLeft);
+        return new AABB(this.scaledSize, topLeft);
     }
-    public get scaledSize(): Vector2 {
-        return this._size;
+    public async update(gameTime: GameTime): Promise<void> {
+        this.normals = this.computeNormals(this.vertices);
+        this.scaledSize = this.computeSize(this.vertices);
+        this._aabb = this.computeAABB();
     }
 }

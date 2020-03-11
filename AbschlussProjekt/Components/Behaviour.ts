@@ -13,17 +13,17 @@ export class Behaviour extends Component {
         this.input = gameObject.scene.input;
         this.name = this.constructor.name;
         this.awake();
-    } 
-    protected awake() {
+    }
+    protected awake(): void {
 
     }
-    public start() {
+    public start(): void {
 
     }
-    public update(gameTime: GameTime) {
+    public async update(gameTime: GameTime): Promise<void> {
 
     }
-    public onCollision(collisions: Collision[]) {
+    public onCollision(collisions: Collision[]): void {
 
     }
 }

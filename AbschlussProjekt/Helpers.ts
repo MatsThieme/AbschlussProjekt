@@ -36,3 +36,9 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
         window.addEventListener('touchmove', end);
     });
 }
+export function awaitPromises<T>(...promises: Promise<T>[]): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+        const ret: T[] = [];
+        promises.forEach(p => p.then((t: T) => ret.push(t) === promises.length ? resolve(ret) : undefined));
+    });
+}

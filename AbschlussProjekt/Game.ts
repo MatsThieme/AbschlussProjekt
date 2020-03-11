@@ -13,11 +13,14 @@ import { PolygonCollider } from './Components/PolygonCollider.js';
 import { PolygonRenderer } from './Components/PolygonRenderer.js';
 import { AlignH, AlignV } from './Align.js';
 import { Move } from './Behaviours/Move.js';
+import { Collider } from './Components/Collider.js';
+import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
 
 class Game {
     public scene: Scene;
     public constructor() {
         this.scene = new Scene();
+
 
         // canvas
         document.body.appendChild(this.scene.domElement);
@@ -34,22 +37,25 @@ class Game {
 
 
 
-        const gO1 = this.scene.newGameObject('polygon');
-        gO1.transform.relativePosition = new Vector2(0, 0);
-        const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
-        //polygonCollider1.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
-        gO1.addComponent(PolygonRenderer);
-        gO1.addComponent(Move);
-
-        gO1.transform.relativeScale = new Vector2(1, 2);
+        //const gO1 = this.scene.newGameObject('polygon');
+        //gO1.transform.relativePosition = new Vector2(0, 0);
+        //const polygonCollider1 = gO1.addComponent(PolygonCollider);
+        //polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        //gO1.addComponent(PolygonRenderer);
+        //gO1.addComponent(Move);
+        //gO1.rigidbody.mass = 100;
 
 
         const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2(0.9, 0.9);
+        gO2.transform.relativePosition = new Vector2();
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
         polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
+        polygonCollider2.material = new PhysicsMaterial(1, 1);
         gO2.addComponent(PolygonRenderer);
+        gO2.rigidbody.mass = 1;
+        gO2.addComponent(Move);
+
+
 
 
         // display axis
@@ -74,23 +80,28 @@ class Game {
         floor.transform.relativeScale = new Vector2(100, 0.5);
         const floorCollider = floor.addComponent(PolygonCollider);
         floorCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+        floorCollider.material = new PhysicsMaterial(1, 1);
+        floor.addComponent(PolygonRenderer);
 
+        this.scene.start();
     }
 }
 
 new Game();
 
 // to do: 
-// alle skalierungen rotationen positionierungen überprüfen
-// collision response
+// collision response, rb inertia, torque, friction
 // prefabs laden
 // physics worker testen, optimieren
+// fps counter
+// ui
+// ggf loading screen
 
 
         //Prefab.load('PrefabTest.prefab', this.scene).then(prefab => this.scene.addPrefab(prefab));
 
 
-
+//new Vector2(this.alignH === AlignH.Right ? -size.x / 2 : this.alignH === AlignH.Center ? 0 : size.x / 2, this.alignV === AlignV.Top ? -size.y / 2 : this.alignV === AlignV.Center ? 0 : size.y / 2);
 
 // children
 

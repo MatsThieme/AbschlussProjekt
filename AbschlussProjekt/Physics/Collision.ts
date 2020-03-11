@@ -21,30 +21,25 @@ export class Collision {
         const rb1 = collision.colliderA.gameObject.rigidbody;
         const rb2 = collision.colliderB.gameObject.rigidbody;
 
-        if (rb1.mass === 0 && rb2.mass === 0) return;
+        if (rb1.mass === 0 && rb2.mass === 0 || !collision.normal || !collision.penetrationDepth) return;
 
-        //const rv = rb1.velocity.sub(rb2.velocity);
+        const rv = rb1.velocity.sub(rb2.velocity);
 
-        //const velAlongNormal = Vector2.dot(rv, collision.normal);
+        let velAlongNormal = Vector2.dot(rv, collision.normal);
 
-        //if (velAlongNormal > 0) return;
+        if (velAlongNormal > 0) return;
 
-        //const e = Math.min(rb1.material.bounciness, rb2.material.bounciness);
+        velAlongNormal = -1;
 
-        //let j = -(1 + e) * velAlongNormal / (rb1.invMass + 1 / rb2.invMass);
+        const e = (rb1.material.bounciness + rb2.material.bounciness) / 2;
 
-        //let impulse = collision.normal.clone.scale(j);
+        let j = -(1 + e) * velAlongNormal / (rb1.invMass / (rb2.invMass || 1)) * collision.penetrationDepth;
 
         return {
             collision,
-            A: collision.normal.clone.normalize().scale(<number>collision.penetrationDepth),
-            B: collision.normal.clone.normalize().scale(-<number>collision.penetrationDepth)
+            A: collision.normal.clone.normalize().scale(j),
+            B: collision.normal.clone.normalize().scale(-j)
         };
-    //    return {
-    //        collision,
-    //        A: impulse.clone.scale(-1),
-    //        B: impulse.clone
-    //    };
     }
     public static reduce(...collisions: Collision[]): Collision | undefined {
         if (collisions.length === 0) return undefined;
