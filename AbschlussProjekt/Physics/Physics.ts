@@ -115,7 +115,9 @@ export class Physics {
         }
         console.log('colliding');
 
-        return new Collision(A, B, leastPenetrationNormal, leastPenetration);
+        const center = Vector2.average(...A.vertices, ...B.vertices);
+
+        return new Collision(A, B, leastPenetrationNormal, leastPenetration, Vector2.orderByDistanceAsc(center, ...A.vertices, ...B.vertices).filter((v, i, a) => v.distance(center) === a[0].distance(center)));
     }
     public static collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Collision {
         return new Collision(polygonCollider, circleCollider);

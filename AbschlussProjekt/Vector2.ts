@@ -127,4 +127,10 @@ export class Vector2 {
     public static get zero(): Vector2 {
         return new Vector2(0, 0);
     }
+    public static orderByDistanceAsc(point: Vector2, ...vectors: Vector2[]): Vector2[] {
+        return vectors.sort((a, b) => (a.x - point.x) ** 2 + (a.y - point.y) ** 2 - (b.x - point.x) ** 2 + (b.y - point.y) ** 2);
+    }
+    public static closestPoint(point: Vector2, ...vectors: Vector2[]): Vector2 {
+        return Vector2.orderByDistanceAsc(point, ...vectors)[0];
+    }
 }

@@ -58,20 +58,23 @@ export class RigidBody extends Component {
         if (this.mass === 0) return;
 
         const solvedCollisions = [];
+        const collisionPoint = new Vector2();
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
                 if (collision.colliderA.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.A);
+                    if (collision.contactPoints) collisionPoint.add(...collision.contactPoints);
                 } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.B);
+                    if (collision.contactPoints) collisionPoint.add(...collision.contactPoints);
                 }
             }
         }
 
-        if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), new Vector2(0, 1));
+        if (solvedCollisions.length > 0) this.applyImpulse(Vector2.average(...solvedCollisions), Vector2.divide(collisionPoint, solvedCollisions.length));
 
-        //this.force.add(Physics.gravity.clone);
+        this.force.add(Physics.gravity);
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
         this.force = new Vector2();
 

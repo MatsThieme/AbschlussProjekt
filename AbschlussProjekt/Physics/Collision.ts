@@ -29,12 +29,11 @@ export class Collision {
 
         if (velAlongNormal > 0) return;
 
-        velAlongNormal = -1;
-
         const e = (rb1.material.bounciness + rb2.material.bounciness) / 2;
 
-        let j = -(1 + e) * velAlongNormal / (rb1.invMass / (rb2.invMass || 1)) * collision.penetrationDepth;
+        let j = ((-(1 + e) * velAlongNormal) / (rb1.invMass / (rb2.invMass || 1))) * collision.penetrationDepth;
 
+        debugger;
         return {
             collision,
             A: collision.normal.clone.normalize().scale(j),

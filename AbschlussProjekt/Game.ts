@@ -50,11 +50,10 @@ class Game {
         gO2.transform.relativePosition = new Vector2();
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
         polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
-        polygonCollider2.material = new PhysicsMaterial(1, 1);
+        polygonCollider2.material = new PhysicsMaterial(0, 1);
         gO2.addComponent(PolygonRenderer);
         gO2.rigidbody.mass = 1;
         gO2.addComponent(Move);
-
 
 
 
@@ -80,7 +79,7 @@ class Game {
         floor.transform.relativeScale = new Vector2(100, 0.5);
         const floorCollider = floor.addComponent(PolygonCollider);
         floorCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
-        floorCollider.material = new PhysicsMaterial(1, 1);
+        floorCollider.material = new PhysicsMaterial(0, 1);
         floor.addComponent(PolygonRenderer);
 
         this.scene.start();

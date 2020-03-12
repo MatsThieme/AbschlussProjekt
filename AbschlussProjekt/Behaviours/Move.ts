@@ -5,7 +5,7 @@ import { Vector2 } from '../Vector2.js';
 
 export class Move extends Behaviour {
     async update(gameTime: GameTime): Promise<void> {
-        this.gameObject.rigidbody.force.add(new Vector2(this.input.getAxis(InputType.MoveHorizontal).value * gameTime.deltaTime / 10000, this.input.getAxis(InputType.MoveVertical).value * gameTime.deltaTime / 10000));
-        this.gameObject.rigidbody.torque += this.input.getAxis(InputType.Rotate).value * gameTime.deltaTime / 100;
+        this.gameObject.rigidbody.velocity.add(new Vector2(this.input.getAxis(InputType.MoveHorizontal).value * gameTime.deltaTime / 10000, this.input.getAxis(InputType.MoveVertical).value * gameTime.deltaTime / 10000));
+        this.gameObject.rigidbody.angularVelocity += this.input.getAxis(InputType.Rotate).value * gameTime.deltaTime / 100000;
     }
 }

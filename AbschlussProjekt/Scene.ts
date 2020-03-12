@@ -30,7 +30,7 @@ export class Scene {
      * 
      * @param name gameObject name
      * 
-     * @returns GameObject of name [´name´] if found in gameObjects.
+     * @returns GameObject of name ´name´ if found in gameObjects.
      * 
      */
     public find(name: string): GameObject | undefined {
