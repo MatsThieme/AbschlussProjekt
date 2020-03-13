@@ -9,7 +9,7 @@ import { Collision } from './Collision.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 100 / 1000);
-    public static timeScale: number = 1;
+    public static timeScale: number = 0.1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
@@ -117,7 +117,7 @@ export class Physics {
 
         const center = Vector2.average(...A.vertices, ...B.vertices);
 
-        return new Collision(A, B, leastPenetrationNormal, leastPenetration, Vector2.orderByDistanceAsc(center, ...A.vertices, ...B.vertices).filter((v, i, a) => v.distance(center) === a[0].distance(center)));
+        return new Collision(A, B, leastPenetrationNormal, leastPenetration, Vector2.orderByDistanceAsc(center, ...A.vertices, ...B.vertices).filter((v, i, a) => i === 0 || v.distance(center) === a[0].distance(center)));
     }
     public static collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Collision {
         return new Collision(polygonCollider, circleCollider);

@@ -29,20 +29,17 @@ export class Input {
 
         const btns: InputButton[] = [this.keyboard.getButton(<string>this.inputMappingButtons.keyboard[t]), this.mouse.getButton(<number>this.inputMappingButtons.mouse[t]), this.gamepad.getButton(<number>this.inputMappingButtons.gamepad[t])].filter(e => e && e.down != undefined);
 
-        for (let btn of btns) {
+        for (const btn of btns) {
             if (btn.down) return btn;
         }
 
         return btns[0] || new InputButton(this.gameTime);
     }
     public getAxis(t: InputType): InputAxis {
-        //if (t === inputtype.movehorizontal && this.inputmappingaxes.keyboard[t]) console.log(this.keyboard.getaxis(this.inputmappingaxes.keyboard[t]));
-
-        if (['keyboard', 'mouse', 'gamepad'].map(n => this.inputMappingAxes[n][t]).filter(x => x).length === 0) return new InputAxis();
 
         const axes: InputAxis[] = [this.keyboard.getAxis(<string>this.inputMappingAxes.keyboard[t]), this.mouse.getAxis(<number>this.inputMappingAxes.mouse[t]), this.gamepad.getAxis(<number>this.inputMappingAxes.gamepad[t])].filter(e => e && e.value != undefined).sort((a, b) => Math.abs(a.value) > Math.abs(b.value) ? -1 : 1);
 
-        for (let axis of axes) {
+        for (const axis of axes) {
             if (axis.value && axis.value != 0) return axis;
         }
 

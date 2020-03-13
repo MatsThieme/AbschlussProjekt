@@ -37,22 +37,21 @@ class Game {
 
 
 
-        //const gO1 = this.scene.newGameObject('polygon');
-        //gO1.transform.relativePosition = new Vector2(0, 0);
-        //const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        //polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
-        //gO1.addComponent(PolygonRenderer);
-        //gO1.addComponent(Move);
-        //gO1.rigidbody.mass = 100;
-
+        const gO1 = this.scene.newGameObject('polygon');
+        gO1.transform.relativePosition = new Vector2(0, 3);
+        const polygonCollider1 = gO1.addComponent(PolygonCollider);
+        polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        polygonCollider1.material = new PhysicsMaterial(0.5, 1, 1);
+        gO1.addComponent(PolygonRenderer);
+        gO1.rigidbody.mass = 1;
 
         const gO2 = this.scene.newGameObject('polygon');
         gO2.transform.relativePosition = new Vector2();
         const polygonCollider2 = gO2.addComponent(PolygonCollider);
         polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
-        polygonCollider2.material = new PhysicsMaterial(0, 1);
+        polygonCollider2.material = new PhysicsMaterial(0.5, 1, 1);
         gO2.addComponent(PolygonRenderer);
-        gO2.rigidbody.mass = 1;
+        gO2.rigidbody.useAutoMass = true;
         gO2.addComponent(Move);
 
 
@@ -79,14 +78,18 @@ class Game {
         floor.transform.relativeScale = new Vector2(100, 0.5);
         const floorCollider = floor.addComponent(PolygonCollider);
         floorCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
-        floorCollider.material = new PhysicsMaterial(0, 1);
+        floorCollider.material = new PhysicsMaterial(0.5, 1, 1);
         floor.addComponent(PolygonRenderer);
+
+
+        (<any>window).input = this.scene.input;
 
         this.scene.start();
     }
 }
 
 new Game();
+
 
 // to do: 
 // collision response, rb inertia, torque, friction

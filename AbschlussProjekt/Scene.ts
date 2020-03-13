@@ -23,8 +23,6 @@ export class Scene {
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
-
-        [...this.gameObjects.values()].forEach(gO => gO.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.start()));
     }
     /**
      * 
@@ -37,9 +35,8 @@ export class Scene {
         return this.gameObjects.get(name);
     }
     public newGameObject(name: string): GameObject {
-        name = this.uniqueGameObjectName(name);
         const gameObject = new GameObject(name, this);
-        this.gameObjects.set(name, gameObject);
+        this.gameObjects.set(gameObject.name, gameObject);
         return gameObject;
     }
     public newCamera(name: string): GameObject {
@@ -51,7 +48,7 @@ export class Scene {
         return gameObject;
     }
     public addPrefab(gameObject: GameObject): GameObject {
-        gameObject.name = this.uniqueGameObjectName(name);
+        gameObject.name = name;
         this.gameObjects.set(gameObject.name, gameObject);
         return gameObject;
     }
@@ -94,33 +91,22 @@ export class Scene {
         requestAnimationFrame(this.update.bind(this));
     }
     /**
-     * 
-     * Looks for GameObjects with same name and appends a number in parentheses to ensure that there are no duplicate names. Example: gameObject -> gameObject (0)
-     *
-     * @param name gameObject name
-     *  
-     * @returns unique name
-     * 
-     */
-    public uniqueGameObjectName(name: string): string {
-        if (/.* \(\d\)/.test(name)) {
-            name = (<RegExpMatchArray>name.match(/(.*) \(\d+\)/))[1];
-        }
-
-        const sameNames = [...this.gameObjects.keys()].filter(gO => new RegExp(name + '(?: \(\d+\))?').test(gO));
-
-        return name + ' (' + sameNames.length + ')';
-    }
-    /**
      * Returns all GameObjects in this Scene.
      */
     public getAllGameObjects(): GameObject[] {
         return [...this.gameObjects.values()];
     }
     public start(): void {
+        this.getAllGameObjects().forEach(gO => gO.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.start()));
         this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
     public stop(): void {
         if (this.requestAnimationFrameHandle) cancelAnimationFrame(this.requestAnimationFrameHandle);
+    }
+    public get isRunning(): boolean {
+        return typeof this.requestAnimationFrameHandle === 'number';
+    }
+    public destroyGameObject(name: string) {
+        this.gameObjects.delete(name);
     }
 }

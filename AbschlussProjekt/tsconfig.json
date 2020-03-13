@@ -6,7 +6,8 @@
     "sourceMap": false,
     "strict": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "stripInternal": true
   },
   "exclude": [
     "node_modules"

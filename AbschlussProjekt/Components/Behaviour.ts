@@ -5,7 +5,7 @@ import { Collision } from '../Physics/Collision.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
-export class Behaviour extends Component {
+export abstract class Behaviour extends Component {
     protected input: Input;
     public readonly name: string;
     public constructor(gameObject: GameObject) {
@@ -13,17 +13,10 @@ export class Behaviour extends Component {
         this.input = gameObject.scene.input;
         this.name = this.constructor.name;
         this.awake();
+        if (this.gameObject.scene.isRunning) this.start();
     }
-    protected awake(): void {
-
-    }
-    public start(): void {
-
-    }
-    public async update(gameTime: GameTime): Promise<void> {
-
-    }
-    public onCollision(collisions: Collision[]): void {
-
-    }
+    protected awake(): void { }
+    public start(): void { }
+    public async update(gameTime: GameTime): Promise<void> { }
+    public onCollision(collisions: Collision[]): void { }
 }

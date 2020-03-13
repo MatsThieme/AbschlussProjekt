@@ -6,4 +6,5 @@ export interface Alignable {
     alignV: AlignV;
     position: Vector2;
     relativePosition: Vector2;
+    align: Vector2;
 }

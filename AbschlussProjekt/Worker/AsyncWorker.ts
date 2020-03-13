@@ -57,6 +57,8 @@ export class AsyncWorker {
     }
 }
 
+
+/** @internal */
 declare interface Worker extends EventTarget, AbstractWorker {
     inQueue: number;
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;

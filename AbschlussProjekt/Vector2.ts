@@ -44,6 +44,12 @@ export class Vector2 {
     public static cross(v: Vector2, ov: Vector2): number {
         return v.x * ov.y - v.y * ov.x;
     }
+    public static cross1(s: number, v: Vector2): Vector2 {
+        return new Vector2(-s * v.y, s * v.x);
+    }
+    public static cross2(v: Vector2, s: number): Vector2 {
+        return new Vector2(s * v.y, -s * v.x);
+    }
 
     public static average(...vectors: Vector2[]): Vector2 {
         return Vector2.divide(Vector2.add(...vectors), vectors.length);
@@ -93,7 +99,7 @@ export class Vector2 {
     public normalize(): Vector2 {
         this.x /= this.magnitude;
         this.y /= this.magnitude;
-        this.recalculateMagnitude();
+        this._magnitude = 1;
 
         return this;
     }
@@ -128,9 +134,16 @@ export class Vector2 {
         return new Vector2(0, 0);
     }
     public static orderByDistanceAsc(point: Vector2, ...vectors: Vector2[]): Vector2[] {
-        return vectors.sort((a, b) => (a.x - point.x) ** 2 + (a.y - point.y) ** 2 - (b.x - point.x) ** 2 + (b.y - point.y) ** 2);
+        //return vectors.sort((a, b) => (a.x - point.x) ** 2 + (a.y - point.y) ** 2 - (b.x - point.x) ** 2 + (b.y - point.y) ** 2);
+        return vectors.sort((a, b) =>a.distance(point) - b.distance(point));
     }
     public static closestPoint(point: Vector2, ...vectors: Vector2[]): Vector2 {
         return Vector2.orderByDistanceAsc(point, ...vectors)[0];
+    }
+    public round(): Vector2 {
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
+
+        return this;
     }
 }

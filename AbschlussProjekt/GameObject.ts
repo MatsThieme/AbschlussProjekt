@@ -15,7 +15,7 @@ import { PolygonRenderer } from './Components/PolygonRenderer.js';
 
 export class GameObject {
     private static nextID: number = 0;
-    public name: string;
+    private _name: string;
     private components: Component[] = [];
     public readonly id: number;
     public children: GameObject[];
@@ -24,13 +24,19 @@ export class GameObject {
     public parent: GameObject | undefined;
     public drawPriority: number;
     public constructor(name: string, scene: Scene) {
-        this.name = name;
         this.id = GameObject.nextID++;
+        this._name = `${name} (${this.id})`;
         this.addComponent(Transform);
         this.addComponent(RigidBody);
         this.children = [];
         this.scene = scene;
         this.drawPriority = 0;
+    }
+    public get name(): string {
+        return this._name;
+    }
+    public set name(val: string) {
+        this._name = `${val} (${this.id})`;
     }
     public get transform(): Transform {
         return this.getComponent(Transform);
@@ -88,5 +94,8 @@ export class GameObject {
         //ret.components.forEach(c => (<any>c).gameObject = ret);
         //ret.rigidbody = this.rigidbody;
         return ret;
+    }
+    public destroy(): void {
+        this.scene.destroyGameObject(this.name);
     }
 }

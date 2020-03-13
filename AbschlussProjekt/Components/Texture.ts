@@ -28,7 +28,9 @@ export class Texture extends Component implements Drawable, Alignable {
         return new Vector2(this.size.x * this.gameObject.transform.scale.x, this.size.y * this.gameObject.transform.scale.y);
     }
     public get position() {
-        const align = new Vector2(this.alignH === AlignH.Right ? -this.scaledSize.x : this.alignH === AlignH.Center ? -this.scaledSize.x / 2 : 0, this.alignV === AlignV.Top ? -this.scaledSize.y : this.alignV === AlignV.Center ? -this.scaledSize.y / 2 : 0);
-        return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
+        return Vector2.add(this.relativePosition, this.gameObject.transform.position, this.align);
+    }
+    public get align(): Vector2 {
+        return new Vector2(this.alignH === AlignH.Right ? -this.scaledSize.x : this.alignH === AlignH.Center ? -this.scaledSize.x / 2 : 0, this.alignV === AlignV.Top ? -this.scaledSize.y : this.alignV === AlignV.Center ? -this.scaledSize.y / 2 : 0);
     }
 }

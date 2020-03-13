@@ -7,6 +7,7 @@ import { Collider } from './Collider.js';
 import { ComponentType } from './ComponentType.js';
 import { GameTime } from '../GameTime.js';
 
+// Polygoncollider should have a relativePosition of 0, 0
 export class PolygonCollider extends Collider {
     protected _aabb: AABB;
     protected _area: number;
@@ -21,6 +22,7 @@ export class PolygonCollider extends Collider {
         this.normals = this.computeNormals(this._vertices);
         this._area = this.computeArea();
         this._aabb = this.computeAABB();
+        this.gameObject.rigidbody.updateInertia();
     }
     public set vertices(vertices: Vector2[]) {
         this.scaledSize = this.computeSize(vertices);
@@ -28,6 +30,7 @@ export class PolygonCollider extends Collider {
         this.normals = this.computeNormals(this._vertices);
         this._area = this.computeArea();
         this._aabb = this.computeAABB();
+        this.gameObject.rigidbody.updateInertia();
     }
     public get vertices(): Vector2[] {
         return this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));

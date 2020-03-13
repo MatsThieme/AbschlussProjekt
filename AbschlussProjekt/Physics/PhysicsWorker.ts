@@ -28,6 +28,7 @@ addEventListener('message', (e: MessageEvent) => {
     return postMessage(0);
 });
 
+/** @internal */
 declare interface MessageEvent extends Event {
     readonly data: {
         readonly name: string;
@@ -35,4 +36,5 @@ declare interface MessageEvent extends Event {
     };
 }
 
+/** @internal */
 declare function postMessage(msg: any): void;

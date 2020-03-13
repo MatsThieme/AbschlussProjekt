@@ -12,14 +12,12 @@ import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
-export class ParticleSystem extends Component implements Drawable, Alignable {
+export class ParticleSystem extends Component implements Drawable {
     public distance: number;
     public angle: Angle;
     public sprites: (Sprite | SpriteAnimation)[];
     public relativePosition: Vector2;
     public size: Vector2;
-    public alignH: AlignH;
-    public alignV: AlignV;
     public emission: number;
     public speed: number;
     public rotationSpeed: number;
@@ -35,8 +33,6 @@ export class ParticleSystem extends Component implements Drawable, Alignable {
         this.sprites = sprites;
         this.relativePosition = relativePosition;
         this.size = size;
-        this.alignH = alignH;
-        this.alignV = alignV;
         this.emission = emission;
         this.speed = speed;
         this.rotationSpeed = rotationSpeed;
@@ -68,7 +64,6 @@ export class ParticleSystem extends Component implements Drawable, Alignable {
         return new Vector2(this.size.x * this.gameObject.transform.scale.x, this.size.y * this.gameObject.transform.scale.y);
     }
     public get position() {
-        const align = new Vector2(this.alignH === AlignH.Right ? -this.scaledSize.x : this.alignH === AlignH.Center ? -this.scaledSize.x / 2 : 0, this.alignV === AlignV.Top ? -this.scaledSize.y : this.alignV === AlignV.Center ? -this.scaledSize.y / 2 : 0);
-        return Vector2.add(this.relativePosition, this.gameObject.transform.position, align);
+        return Vector2.add(this.relativePosition, this.gameObject.transform.position);
     }
 }

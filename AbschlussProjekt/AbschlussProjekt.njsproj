@@ -58,6 +58,9 @@
     <TypeScriptCompile Include="Angle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Destroy.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Move.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
