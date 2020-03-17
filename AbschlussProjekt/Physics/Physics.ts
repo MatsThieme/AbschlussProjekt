@@ -14,17 +14,15 @@ export class Physics {
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
         if (!collide) {
-            Physics.ignoreCollisions.push(pair);
+            if (this.ignoreCollisions.indexOf(pair) === -1) Physics.ignoreCollisions.push(pair);
             return;
         }
 
         const x = Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(pair));
         if (x !== -1) Physics.ignoreCollisions.splice(x, 1);
     }
-    public static async  asyncCollision(first: GameObject, second: GameObject): Promise<Collision[]> {
-        //first.scene = <any>undefined;
-        //second.scene = <any>undefined;
-        //return await AsyncWorker.work('Physics/PhysicsWorker.js', { name: 'collision', parameters: [first, second] });
+    public static async asyncCollision(first: GameObject, second: GameObject): Promise<Collision[]> {
+        //const r = await AsyncWorker.work<Collision[]>('Physics/PhysicsWorker.js');
         return Physics.collision(first, second);
     }
     public static collision(first: GameObject, second: GameObject): Collision[] {
@@ -54,7 +52,7 @@ export class Physics {
                 for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
-                    if (collider.type === ComponentType.PolygonCollider) {
+                    if (otherCollider.type === ComponentType.PolygonCollider) {
                         const c = Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider);
                         if (c.normal) ret.push(c);
                     } else if (otherCollider.type === ComponentType.CircleCollider) {
@@ -94,32 +92,77 @@ export class Physics {
         return new Collision(circleCollider1, circleCollider2, normal, penetration);
     }
     public static collisionPolygon(A: PolygonCollider, B: PolygonCollider): Collision {
-        let leastPenetrationNormal!: Vector2;
         let leastPenetration: number = Infinity;
+        let referenceIndex!: number;
+        let incidentCollider!: PolygonCollider;
+        let referenceCollider!: PolygonCollider;
+        let log!: any;
 
-        for (const normal of [...A.normals, ...B.normals]) {
-            const aP = A.project(normal);
-            const bP = B.project(normal);
+        for (let i = 0; i < A.faces.length; i++) {
+            const aP = A.project(A.faces[i].normal);
+            const bP = B.project(A.faces[i].normal);
 
-            const overlap = Math.min(aP.y, bP.y) - Math.max(aP.x, bP.x);
+            const overlap = Math.min(aP.max, bP.max) - Math.max(aP.min, bP.min);
 
-            if (overlap <= 0) {
-                console.log('not colliding');
+            if (overlap < 0) {
+                return new Collision(A, B);
+            } else {
+                if (overlap <= leastPenetration) {
+                    leastPenetration = overlap;
+                    referenceIndex = i;
+                    referenceCollider = A;
+                    incidentCollider = B;
+                    log = 'A';
+                }
+            }
+        }
+
+        for (let i = 0; i < B.faces.length; i++) {
+            const aP = A.project(B.faces[i].normal);
+            const bP = B.project(B.faces[i].normal);
+
+            const overlap = Math.min(aP.max, bP.max) - Math.max(aP.min, bP.min);
+
+            if (overlap < 0) {
                 return new Collision(A, B);
             } else {
                 if (overlap < leastPenetration) {
                     leastPenetration = overlap;
-                    leastPenetrationNormal = normal;
+                    referenceIndex = i;
+                    referenceCollider = B;
+                    incidentCollider = A;
+                    log = 'B';
                 }
             }
         }
-        console.log('colliding');
 
-        const center = Vector2.average(...A.vertices, ...B.vertices);
+        console.log(log);
 
-        return new Collision(A, B, leastPenetrationNormal, leastPenetration, Vector2.orderByDistanceAsc(center, ...A.vertices, ...B.vertices).filter((v, i, a) => i === 0 || v.distance(center) === a[0].distance(center)));
+        const leastPenetrationNormal = referenceCollider.faces[referenceIndex].normal.normalized;
+
+        if (leastPenetrationNormal.perpendicularCounterClockwise.add(referenceCollider.position).angleTo(referenceCollider.position, incidentCollider.position).degree > 180) leastPenetrationNormal.flip();
+
+        const contacts: Vector2[] = [];
+
+        for (const faceA of A.faces) {
+            for (const faceB of B.faces) {
+                const contact = faceA.line.intersects(faceB.line);
+                if (contact) contacts.push(contact);
+            }
+        }
+
+        //console.log('colliding');
+
+        return new Collision(A, B, leastPenetrationNormal, leastPenetration, contacts);
     }
     public static collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Collision {
-        return new Collision(polygonCollider, circleCollider);
+        const contacts = [];
+
+        for (const v of polygonCollider.vertices) {
+            if (circleCollider.position.distance(v) < circleCollider.radius) contacts.push(v);
+        }
+
+        if (contacts.length === 0) return new Collision(polygonCollider, circleCollider);
+        else return new Collision(polygonCollider, circleCollider, Vector2.average(...contacts).sub(circleCollider.position).normalize(), Vector2.average(...contacts).distance(circleCollider.position), contacts);
     }
 }

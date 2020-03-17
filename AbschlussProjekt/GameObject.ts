@@ -7,11 +7,9 @@ import { ParticleSystem } from './Components/ParticleSystem.js';
 import { RigidBody } from './Components/RigidBody.js';
 import { Transform } from './Components/Transform.js';
 import { GameTime } from './GameTime.js';
+import { awaitPromises } from './Helpers.js';
 import { Collision } from './Physics/Collision.js';
-import { Physics } from './Physics/Physics.js';
 import { Scene } from './Scene.js';
-import { Vector2 } from './Vector2.js';
-import { PolygonRenderer } from './Components/PolygonRenderer.js';
 
 export class GameObject {
     private static nextID: number = 0;
@@ -44,7 +42,7 @@ export class GameObject {
     public get rigidbody(): RigidBody {
         return this.getComponent(RigidBody);
     }
-    public addComponent<T extends Component>(type: new (gameObject: GameObject) => T): T {
+    public addComponent<T extends Component>(type: new (gameObject: GameObject) => T, cb?: (component: T) => any): T {
         const component = new type(this);
 
         if (component.type !== ComponentType.Camera && component.type !== ComponentType.Transform && component.type !== ComponentType.RigidBody && component.type !== ComponentType.AudioListener && component.type !== ComponentType.TileMap ||
@@ -54,6 +52,8 @@ export class GameObject {
             (component.type === ComponentType.AudioListener && this.getComponents(ComponentType.AudioListener).length === 0) ||
             (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
             this.components.push(component);
+
+        if (cb) cb(component);
 
         return component;
     }
@@ -74,7 +74,7 @@ export class GameObject {
         gameObject.parent = this;
         return gameObject;
     }
-    public update(gameTime: GameTime, currentCollisions: Collision[]) {
+    public async update(gameTime: GameTime, currentCollisions: Collision[]): Promise<void> {
         if (!this.active) return;
 
         this.children.forEach(c => c.update(gameTime, currentCollisions));
@@ -82,18 +82,12 @@ export class GameObject {
 
         const behaviours = this.getComponents<Behaviour>(ComponentType.Behaviour);
         behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen
-        behaviours.forEach(c => c.update(gameTime));
+
+        await awaitPromises(...behaviours.map(c => c.update(gameTime)));
 
         this.getComponents<ParticleSystem>(ComponentType.ParticleSystem).forEach(p => p.update(gameTime));
         this.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).forEach(c => c.update(gameTime));
         this.getComponent<AudioListener>(ComponentType.AudioListener)?.update();
-    }
-    public cloneForCollision(): GameObject {
-        const ret = new GameObject('', <any>undefined);
-        //ret.components = this.getComponents(ComponentType.Collider);
-        //ret.components.forEach(c => (<any>c).gameObject = ret);
-        //ret.rigidbody = this.rigidbody;
-        return ret;
     }
     public destroy(): void {
         this.scene.destroyGameObject(this.name);

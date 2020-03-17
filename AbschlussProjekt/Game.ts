@@ -15,74 +15,140 @@ import { AlignH, AlignV } from './Align.js';
 import { Move } from './Behaviours/Move.js';
 import { Collider } from './Components/Collider.js';
 import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
+import { Line } from './Line.js';
+import { CircleCollider } from './Components/CircleCollider.js';
+import { CircleRenderer } from './Components/CircleRenderer.js';
+import { ReloadPage } from './Behaviours/ReloadPage.js';
+import { reduce, asyncTimeout } from './Helpers.js';
 
 class Game {
     public scene: Scene;
     public constructor() {
         this.scene = new Scene();
 
-
-        // canvas
+        this.initialize();
+    }
+    async initialize(): Promise<void> {
         document.body.appendChild(this.scene.domElement);
-        this.scene.domElement.width = 1920;
-        this.scene.domElement.height = 1080;
+        this.scene.domElement.width = innerWidth;
+        this.scene.domElement.height = innerHeight;
         this.scene.domElement.style.position = 'absolute';
         this.scene.domElement.style.left = '0px';
         this.scene.domElement.style.top = '0px';
         document.body.style.overflow = 'hidden';
 
 
-        // creating camera
-        const camera = this.scene.newCamera('cam').getComponent(Camera);
+        this.scene.newCamera('cam', camera => {
+            camera.resolution = new Vector2(innerWidth, innerHeight);
+            camera.size = new Vector2(16, 9);
+        });
+
+
+        this.scene.newGameObject('polygon', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(0, 2);
+            gameObject.rigidbody.useAutoMass = true;
+            gameObject.addComponent(PolygonRenderer);
+        });
+
+        this.scene.newGameObject('polygon', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(0, 0);
+            gameObject.rigidbody.useAutoMass = true;
+            gameObject.addComponent(PolygonRenderer);
+            gameObject.addComponent(Move);
+            gameObject.addComponent(ReloadPage);
+        });
+
+        //this.scene.newGameObject('circle', gameObject => {
+        //    gameObject.addComponent(CircleCollider, circleCollider => {
+        //        circleCollider.material = new PhysicsMaterial(0, 1, 1);
+        //    });
+
+        //    gameObject.transform.relativePosition = new Vector2(0, -2);
+        //    gameObject.rigidbody.useAutoMass = true;
+        //    gameObject.addComponent(Move);
+        //    gameObject.addComponent(CircleRenderer);
+        //});
 
 
 
-        const gO1 = this.scene.newGameObject('polygon');
-        gO1.transform.relativePosition = new Vector2(0, 3);
-        const polygonCollider1 = gO1.addComponent(PolygonCollider);
-        polygonCollider1.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
-        polygonCollider1.material = new PhysicsMaterial(0.5, 1, 1);
-        gO1.addComponent(PolygonRenderer);
-        gO1.rigidbody.mass = 1;
+        this.scene.newGameObject('xAxis', gameObject => {
+            gameObject.addComponent(Texture, texture => {
+                texture.sprite = new Sprite('spriteTest1.png');
+            });
 
-        const gO2 = this.scene.newGameObject('polygon');
-        gO2.transform.relativePosition = new Vector2();
-        const polygonCollider2 = gO2.addComponent(PolygonCollider);
-        polygonCollider2.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
-        polygonCollider2.material = new PhysicsMaterial(0.5, 1, 1);
-        gO2.addComponent(PolygonRenderer);
-        gO2.rigidbody.useAutoMass = true;
-        gO2.addComponent(Move);
+            gameObject.transform.relativeScale = new Vector2(10000, 0.01);
+            gameObject.drawPriority = -1;
+        });
 
+        this.scene.newGameObject('yAxis', gameObject => {
+            gameObject.addComponent(Texture, texture => {
+                texture.sprite = new Sprite('spriteTest1.png');
+            });
 
-
-        // display axis
-
-        const xAxis = this.scene.newGameObject('xAxis');
-        const xAxisTexture = xAxis.addComponent(Texture);
-        xAxisTexture.sprite = new Sprite('spriteTest1.png');
-        xAxis.transform.relativeScale = new Vector2(10000, 0.01);
-        xAxis.drawPriority = -1;
-
-        const yAxis = this.scene.newGameObject('yAxis');
-        const yAxisTexture = yAxis.addComponent(Texture);
-        yAxisTexture.sprite = new Sprite('spriteTest1.png');
-        yAxis.transform.relativeScale = new Vector2(0.01, 10000);
-        yAxis.drawPriority = -1;
+            gameObject.transform.relativeScale = new Vector2(0.01, 10000);
+            gameObject.drawPriority = -1;
+        });
 
 
 
-        // floor
-        const floor = this.scene.newGameObject('floor');
-        floor.transform.relativePosition = new Vector2(0, -4.5);
-        floor.transform.relativeScale = new Vector2(100, 0.5);
-        const floorCollider = floor.addComponent(PolygonCollider);
-        floorCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
-        floorCollider.material = new PhysicsMaterial(0.5, 1, 1);
-        floor.addComponent(PolygonRenderer);
+
+        this.scene.newGameObject('left', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(-8, 0);
+            gameObject.transform.relativeScale = new Vector2(0.5, 100);
+            gameObject.addComponent(PolygonRenderer);
+        });
+
+        this.scene.newGameObject('right', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(8, 0);
+            gameObject.transform.relativeScale = new Vector2(0.5, 100);
+            gameObject.addComponent(PolygonRenderer);
+        });
+
+        this.scene.newGameObject('top', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(0, 4.5);
+            gameObject.transform.relativeScale = new Vector2(100, 0.5);
+            gameObject.addComponent(PolygonRenderer);
+        });
+
+        this.scene.newGameObject('floor', gameObject => {
+            gameObject.addComponent(PolygonCollider, polygonCollider => {
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
+                polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+            });
+
+            gameObject.transform.relativePosition = new Vector2(0, -4.5);
+            gameObject.transform.relativeScale = new Vector2(100, 0.5);
+            gameObject.addComponent(PolygonRenderer);
+        });
 
 
-        (<any>window).input = this.scene.input;
+
+        //await asyncTimeout(1000);
 
         this.scene.start();
     }
@@ -90,14 +156,18 @@ class Game {
 
 new Game();
 
+//to fix:
+// polygon collision (normal direction)
 
 // to do: 
-// collision response, rb inertia, torque, friction
+// friction
 // prefabs laden
 // physics worker testen, optimieren
-// fps counter
 // ui
-// ggf loading screen
+// loading screen while scene not running
+// camera aspect ratio
+// input
+// polygon circle collision, circle circle collision
 
 
         //Prefab.load('PrefabTest.prefab', this.scene).then(prefab => this.scene.addPrefab(prefab));

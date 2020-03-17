@@ -9,6 +9,7 @@ import { awaitPromises } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
+import { Framedata } from './Framedata.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -17,12 +18,14 @@ export class Scene {
     public gameTime: GameTime;
     public input: Input;
     private requestAnimationFrameHandle: number | undefined;
+    public framedata: Framedata;
     public constructor() {
         this.domElement = document.createElement('canvas');
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
+        this.framedata = new Framedata();
     }
     /**
      * 
@@ -34,12 +37,13 @@ export class Scene {
     public find(name: string): GameObject | undefined {
         return this.gameObjects.get(name);
     }
-    public newGameObject(name: string): GameObject {
+    public newGameObject(name: string, cb?: (gameObject: GameObject) => any): GameObject {
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(gameObject.name, gameObject);
+        if (cb) cb(gameObject);
         return gameObject;
     }
-    public newCamera(name: string): GameObject {
+    public newCamera(name: string, cb?: (camera: Camera) => any): GameObject {
         const gameObject = this.newGameObject(name);
 
         const camera = gameObject.addComponent(Camera);
@@ -53,6 +57,8 @@ export class Scene {
         return gameObject;
     }
     private async update() {
+        this.framedata.update();
+
         // calculate deltaTime
         this.gameTime.update();
 
@@ -81,10 +87,11 @@ export class Scene {
         const rigidbodies = [...this.gameObjects.values()].filter(gO => gO.active).map(gO => gO.rigidbody);
 
         rigidbodies.forEach(rb => rb.update(this.gameTime, collisions)); // apply forces and move body
+        await awaitPromises(...this.getAllGameObjects().map(gameObject => gameObject.update(this.gameTime, collisions)));
 
-        for (const gameObject of this.gameObjects.values()) {
-            await gameObject.update(this.gameTime, collisions);
-        }
+        //for (const gameObject of this.gameObjects.values()) {
+        //    await gameObject.update(this.gameTime, collisions);
+        //}
 
         this.cameraManager.update([...this.gameObjects.values()]);
 
@@ -96,8 +103,11 @@ export class Scene {
     public getAllGameObjects(): GameObject[] {
         return [...this.gameObjects.values()];
     }
-    public start(): void {
-        this.getAllGameObjects().forEach(gO => gO.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.start()));
+    public async start(): Promise<void> {
+        for (const gameObject of this.getAllGameObjects()) {
+            await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
+        }
+
         this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
     public stop(): void {

@@ -16,7 +16,7 @@ export abstract class Behaviour extends Component {
         if (this.gameObject.scene.isRunning) this.start();
     }
     protected awake(): void { }
-    public start(): void { }
+    public async start(): Promise<void> { }
     public async update(gameTime: GameTime): Promise<void> { }
     public onCollision(collisions: Collision[]): void { }
 }

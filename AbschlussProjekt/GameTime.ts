@@ -8,7 +8,7 @@ export class GameTime {
         this.start = this.now;
     }
     public get deltaTime(): number {
-        return this._deltaTime;
+        return ~~this._deltaTime;
     }
     public update(): void {
         if (this._lastTime) this._deltaTime = this.now - this._lastTime;

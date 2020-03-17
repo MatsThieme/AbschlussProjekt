@@ -69,7 +69,7 @@ export class Vector2 {
         this.y = y;
         return this;
     }
-    public angleBetween(rotatePoint: Vector2, other: Vector2): Angle {
+    public angleTo(rotatePoint: Vector2, other: Vector2): Angle {
         const r1 = this.clone.sub(rotatePoint);
         const r2 = other.clone.sub(rotatePoint);
 
@@ -100,6 +100,14 @@ export class Vector2 {
         this.x /= this.magnitude;
         this.y /= this.magnitude;
         this._magnitude = 1;
+
+        return this;
+    }
+    public setLength(length: number) {
+        this.x /= this.magnitude;
+        this.y /= this.magnitude;
+        this.scale(length);
+        this._magnitude = length;
 
         return this;
     }
@@ -135,7 +143,7 @@ export class Vector2 {
     }
     public static orderByDistanceAsc(point: Vector2, ...vectors: Vector2[]): Vector2[] {
         //return vectors.sort((a, b) => (a.x - point.x) ** 2 + (a.y - point.y) ** 2 - (b.x - point.x) ** 2 + (b.y - point.y) ** 2);
-        return vectors.sort((a, b) =>a.distance(point) - b.distance(point));
+        return vectors.sort((a, b) => a.distance(point) - b.distance(point));
     }
     public static closestPoint(point: Vector2, ...vectors: Vector2[]): Vector2 {
         return Vector2.orderByDistanceAsc(point, ...vectors)[0];
@@ -146,4 +154,20 @@ export class Vector2 {
 
         return this;
     }
+    public flip(): Vector2 {
+        this.x = -this.x;
+        this.y = -this.y;
+        return this;
+    }
+    public get flipped(): Vector2 {
+        return this.clone.flip();
+    }
+    //public intersects(other: Vector2): Vector2 | undefined {
+    //    const p = this;
+    //    const q = other;
+
+    //    Vector2.cross(q.clone.sub(p) , r) / (r × s)
+
+
+    //}
 }

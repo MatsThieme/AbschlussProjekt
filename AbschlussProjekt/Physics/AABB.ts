@@ -17,4 +17,7 @@ export class AABB {
     public static intersects(collider1: Collider, collider2: Collider): boolean {
         return collider1.AABB.intersects(collider2.AABB);
     }
+    public intersectsPoint(point: Vector2): boolean {
+        return point.x > this.position.x && point.x < this.position.x + this.size.x && point.y > this.position.y && point.y < this.position.y + this.size.y;
+    }
 }

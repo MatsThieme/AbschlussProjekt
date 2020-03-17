@@ -4,18 +4,22 @@ import { AABB } from '../Physics/AABB.js';
 import { Vector2 } from '../Vector2.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
+import { reduce } from '../Helpers.js';
 
 export class Camera extends Component {
     public resolution: Vector2;
     public size: Vector2;
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
-    public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(1920, 1080), size: Vector2 = new Vector2(16, 9)) {
+    public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(), size: Vector2 = new Vector2(16, 9)) {
         super(gameObject, ComponentType.Camera);
         this.resolution = resolution;
         this.size = size;
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+    }
+    public get ratio(): Vector2 {
+        return reduce(this.resolution);
     }
     public get currentFrame(): HTMLCanvasElement {
         return <HTMLCanvasElement>this.canvas;

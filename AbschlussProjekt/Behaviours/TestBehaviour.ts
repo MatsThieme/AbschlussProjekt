@@ -14,7 +14,7 @@ export class TestBehaviour extends Behaviour {
         this.time = 0;
     }
 
-    start(): void {
+    async start(): Promise<void> {
 
     }
 

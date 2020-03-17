@@ -86,9 +86,7 @@ export class RigidBody extends Component {
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
 
-
         //this.force.add(Physics.gravity);
-
 
 
         const solvedCollisions = [];
@@ -107,7 +105,8 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
-            this.applyImpulse(Vector2.add(...solvedCollisions), Vector2.divide(Vector2.average(...contactPoints), solvedCollisions.length));
+            console.log(Vector2.average(...solvedCollisions).toString());
+            this.applyImpulse(Vector2.average(...solvedCollisions), Vector2.average(...contactPoints));
 
             for (const c of contactPoints) {
                 const x = this.gameObject.scene.newGameObject('contact');
@@ -118,6 +117,7 @@ export class RigidBody extends Component {
                 x.transform.relativePosition = c;
             }
         }
+
 
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
         this.force = Vector2.zero;
