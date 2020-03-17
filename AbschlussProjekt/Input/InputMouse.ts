@@ -1,7 +1,7 @@
+import { GameTime } from '../GameTime.js';
 import { Vector2 } from '../Vector2.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
-import { GameTime } from '../GameTime.js';
 
 export class InputMouse {
     private _acceleration: { vec: Vector2, time: number }[];
@@ -10,7 +10,7 @@ export class InputMouse {
     private gameTime: GameTime;
     public constructor(gameTime: GameTime) {
         this.gameTime = gameTime;
-        this.buttons = new Array(3).fill(undefined).map(() => new InputButton(this.gameTime));
+        this.buttons = [new InputButton(), new InputButton(), new InputButton()];
         this._acceleration = [];
         this._position = new Vector2();
 
@@ -42,5 +42,8 @@ export class InputMouse {
     private get acceleration(): Vector2 {
         this._acceleration = this._acceleration.filter(e => this.gameTime.now - e.time <= this.gameTime.deltaTime);
         return this._acceleration.reduce((a, b) => ({ vec: new Vector2(a.vec.x + b.vec.x, a.vec.y + b.vec.y) }), { vec: new Vector2() }).vec;
+    }
+    public update(): void {
+        this.buttons.forEach(b => b.update());
     }
 }

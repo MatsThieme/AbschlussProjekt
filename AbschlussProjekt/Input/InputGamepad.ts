@@ -1,13 +1,10 @@
-import { GameTime } from '../GameTime.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
 
 export class InputGamepad {
-    private gameTime: GameTime;
     private buttons: InputButton[];
-    public constructor(gameTime: GameTime) {
-        this.gameTime = gameTime;
-        this.buttons = new Array(16).fill(undefined).map(() => new InputButton(this.gameTime));
+    public constructor() {
+        this.buttons = new Array(16).fill(undefined).map(() => new InputButton());
     }
     private get gamepads(): Gamepad[] {
         return [...<Gamepad[]>navigator.getGamepads()].filter(g => g?.mapping === 'standard');
@@ -19,5 +16,8 @@ export class InputGamepad {
     }
     public getAxis(a: number): InputAxis {
         return new InputAxis(this.gamepads.map(g => g.axes[a]).sort((a, b) => a - b)[0]);
+    }
+    public update(): void {
+        this.buttons.forEach(b => b.update());
     }
 }

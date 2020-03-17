@@ -1,8 +1,7 @@
 import { Behaviour } from '../Components/Behaviour.js';
 import { GameTime } from '../GameTime.js';
-import { InputType } from '../Input/InputType.js';
-import { Vector2 } from '../Vector2.js';
 import { AABB } from '../Physics/AABB.js';
+import { Vector2 } from '../Vector2.js';
 
 export class ReloadPage extends Behaviour {
     async update(gameTime: GameTime): Promise<void> {

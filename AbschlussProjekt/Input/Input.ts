@@ -11,21 +11,18 @@ export class Input {
     private mouse: InputMouse;
     private keyboard: InputKeyboard;
     private gamepad: InputGamepad;
-    private gameTime: GameTime;
     private inputMappingButtons: InputMapping;
     private inputMappingAxes: InputMapping;
     public constructor(gameTime: GameTime) {
-        this.gameTime = gameTime;
-
         this.mouse = new InputMouse(gameTime);
-        this.keyboard = new InputKeyboard(gameTime);
-        this.gamepad = new InputGamepad(gameTime);
+        this.keyboard = new InputKeyboard();
+        this.gamepad = new InputGamepad();
 
         this.inputMappingButtons = new InputMapping('InputMappingButtons.json');
         this.inputMappingAxes = new InputMapping('InputMappingAxes.json');
     }
     public getButton(t: InputType): InputButton {
-        if (['keyboard', 'mouse', 'gamepad'].map(n => this.inputMappingButtons[n][t]).filter(x => x).length === 0) return new InputButton(this.gameTime);
+        if (['keyboard', 'mouse', 'gamepad'].map(n => this.inputMappingButtons[n][t]).filter(x => x).length === 0) return new InputButton();
 
         const btns: InputButton[] = [this.keyboard.getButton(<string>this.inputMappingButtons.keyboard[t]), this.mouse.getButton(<number>this.inputMappingButtons.mouse[t]), this.gamepad.getButton(<number>this.inputMappingButtons.gamepad[t])].filter(e => e && e.down != undefined);
 
@@ -33,7 +30,7 @@ export class Input {
             if (btn.down) return btn;
         }
 
-        return btns[0] || new InputButton(this.gameTime);
+        return btns[0] || new InputButton();
     }
     public getAxis(t: InputType): InputAxis {
 
@@ -44,5 +41,10 @@ export class Input {
         }
 
         return axes[0] || new InputAxis();
+    }
+    public update(): void {
+        this.mouse.update();
+        this.keyboard.update();
+        this.gamepad.update();
     }
 }

@@ -29,7 +29,11 @@ export class PolygonRenderer extends Component {
         this.size = this.polygonCollider.scaledSize;
         this._position = new Vector2();
 
-        setTimeout(() => {
+        const interval = setInterval(() => {
+            if (!this.gameObject.scene.isRunning) return;
+
+            this.polygonCollider = this.gameObject.getComponent(PolygonCollider);
+
             this.context.fillStyle = '#' + (~~(0xdddddd * Math.random()) + 0x111111).toString(16);
             this.context.translate(0, this.canvas.height);
             this.context.scale(1, -1);
@@ -58,6 +62,9 @@ export class PolygonRenderer extends Component {
 
             this.size = this.polygonCollider.scaledSize;
             this._position = new Vector2(topLeft.x, topLeft.y - this.polygonCollider.scaledSize.y).sub(this.gameObject.transform.position).sub(this.polygonCollider.align);
+
+
+            clearInterval(interval);
         }, 100);
     }
     private get position(): Vector2 {

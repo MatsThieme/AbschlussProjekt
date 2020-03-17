@@ -57,10 +57,12 @@ export class Scene {
         return gameObject;
     }
     private async update() {
-        this.framedata.update();
-
         // calculate deltaTime
         this.gameTime.update();
+
+        this.input.update();
+
+        this.framedata.update();
 
         // update collider
         this.getAllGameObjects().forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));

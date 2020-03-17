@@ -105,7 +105,7 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
-            console.log(Vector2.average(...solvedCollisions).toString());
+            //console.log(Vector2.average(...solvedCollisions).toString());
             this.applyImpulse(Vector2.average(...solvedCollisions), Vector2.average(...contactPoints));
 
             for (const c of contactPoints) {

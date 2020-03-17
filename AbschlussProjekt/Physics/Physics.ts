@@ -136,7 +136,7 @@ export class Physics {
             }
         }
 
-        console.log(log);
+        //console.log(log);
 
         const leastPenetrationNormal = referenceCollider.faces[referenceIndex].normal.normalized;
 

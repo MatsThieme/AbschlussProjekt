@@ -1,50 +1,42 @@
-import { Angle } from './Angle.js';
-import { TestBehaviour } from './Behaviours/TestBehaviour.js';
-import { Camera } from './Components/Camera.js';
-import { ParticleSystem } from './Components/ParticleSystem.js';
+import { InputTest } from './Behaviours/InputTest.js';
+import { Move } from './Behaviours/Move.js';
+import { ReloadPage } from './Behaviours/ReloadPage.js';
+import { PolygonCollider } from './Components/PolygonCollider.js';
+import { PolygonRenderer } from './Components/PolygonRenderer.js';
 import { Texture } from './Components/Texture.js';
-import { Physics } from './Physics/Physics.js';
-import { Prefab } from './Prefab.js';
+import { asyncTimeout } from './Helpers.js';
+import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
 import { Scene } from './Scene.js';
 import { Sprite } from './Sprite.js';
 import { Vector2 } from './Vector2.js';
-import { AsyncWorker } from './Worker/AsyncWorker.js';
-import { PolygonCollider } from './Components/PolygonCollider.js';
-import { PolygonRenderer } from './Components/PolygonRenderer.js';
-import { AlignH, AlignV } from './Align.js';
-import { Move } from './Behaviours/Move.js';
-import { Collider } from './Components/Collider.js';
-import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
-import { Line } from './Line.js';
-import { CircleCollider } from './Components/CircleCollider.js';
-import { CircleRenderer } from './Components/CircleRenderer.js';
-import { ReloadPage } from './Behaviours/ReloadPage.js';
-import { reduce, asyncTimeout } from './Helpers.js';
 
 class Game {
     public scene: Scene;
     public constructor() {
         this.scene = new Scene();
 
-        this.initialize();
+        this.initialize(this.scene).then(() => this.scene.start());
     }
-    async initialize(): Promise<void> {
-        document.body.appendChild(this.scene.domElement);
-        this.scene.domElement.width = innerWidth;
-        this.scene.domElement.height = innerHeight;
-        this.scene.domElement.style.position = 'absolute';
-        this.scene.domElement.style.left = '0px';
-        this.scene.domElement.style.top = '0px';
+    async initialize(scene: Scene): Promise<void> {
+        document.body.appendChild(scene.domElement);
+        scene.domElement.width = innerWidth;
+        scene.domElement.height = innerHeight;
+        scene.domElement.style.position = 'absolute';
+        scene.domElement.style.left = '0px';
+        scene.domElement.style.top = '0px';
         document.body.style.overflow = 'hidden';
 
 
-        this.scene.newCamera('cam', camera => {
+        scene.newCamera('camera', camera => {
             camera.resolution = new Vector2(innerWidth, innerHeight);
             camera.size = new Vector2(16, 9);
         });
 
+        scene.newGameObject('inputTest', gameObject => {
+            gameObject.addComponent(InputTest);
+        });
 
-        this.scene.newGameObject('polygon', gameObject => {
+        scene.newGameObject('polygon', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -55,7 +47,7 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-        this.scene.newGameObject('polygon', gameObject => {
+        scene.newGameObject('polygon', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -68,7 +60,7 @@ class Game {
             gameObject.addComponent(ReloadPage);
         });
 
-        //this.scene.newGameObject('circle', gameObject => {
+        //scene.newGameObject('circle', gameObject => {
         //    gameObject.addComponent(CircleCollider, circleCollider => {
         //        circleCollider.material = new PhysicsMaterial(0, 1, 1);
         //    });
@@ -81,7 +73,7 @@ class Game {
 
 
 
-        this.scene.newGameObject('xAxis', gameObject => {
+        scene.newGameObject('xAxis', gameObject => {
             gameObject.addComponent(Texture, texture => {
                 texture.sprite = new Sprite('spriteTest1.png');
             });
@@ -90,7 +82,7 @@ class Game {
             gameObject.drawPriority = -1;
         });
 
-        this.scene.newGameObject('yAxis', gameObject => {
+        scene.newGameObject('yAxis', gameObject => {
             gameObject.addComponent(Texture, texture => {
                 texture.sprite = new Sprite('spriteTest1.png');
             });
@@ -101,8 +93,7 @@ class Game {
 
 
 
-
-        this.scene.newGameObject('left', gameObject => {
+        scene.newGameObject('left', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -113,7 +104,7 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-        this.scene.newGameObject('right', gameObject => {
+        scene.newGameObject('right', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -124,7 +115,7 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-        this.scene.newGameObject('top', gameObject => {
+        scene.newGameObject('top', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -135,7 +126,7 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-        this.scene.newGameObject('floor', gameObject => {
+        scene.newGameObject('floor', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 1)];
                 polygonCollider.material = new PhysicsMaterial(0, 1, 1);
@@ -147,10 +138,7 @@ class Game {
         });
 
 
-
-        //await asyncTimeout(1000);
-
-        this.scene.start();
+        await asyncTimeout(1000);
     }
 }
 

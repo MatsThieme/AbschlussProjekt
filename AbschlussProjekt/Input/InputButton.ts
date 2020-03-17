@@ -1,23 +1,29 @@
-import { GameTime } from '../GameTime.js';
-
 export class InputButton {
     private _down: boolean;
-    private firstdown: number;
-    private gameTime: GameTime;
-    public constructor(gameTime: GameTime) {
+    private wasDown: boolean;
+    private _clicked: boolean;
+    public constructor() {
         this._down = false;
-        this.firstdown = 0;
-        this.gameTime = gameTime;
+        this.wasDown = false;
+        this._clicked = false;
     }
-    public set down(down: boolean) {
-        if (down && this.firstdown == 0) this.firstdown = this.gameTime.now;
-        else if (!down) this.firstdown = 0;
-        this._down = down;
+    public set down(val: boolean) {
+        this._down = val;
     }
     public get down(): boolean {
         return this._down;
     }
     public get clicked(): boolean {
-        return this._down && this.gameTime.now - this.firstdown >= this.gameTime.deltaTime;
+        return this._clicked;
+    }
+    public update(): void {
+        if (!this.down) {
+            this.wasDown = false;
+            this._clicked = false;
+            return;
+        }
+
+        if (this.down && !this.wasDown) this.wasDown = true;
+        else if (this.down && this.wasDown && !this._clicked) this._clicked = true;
     }
 }
