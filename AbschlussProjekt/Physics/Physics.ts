@@ -83,7 +83,7 @@ export class Physics {
 
         if (AtoB.magnitude != 0) {
             penetration = circleCollider1.radius + circleCollider2.radius - AtoB.magnitude;
-            normal = AtoB.normalized; // test with gos swapped
+            normal = AtoB.normalized;
         } else {
             penetration = Math.max(circleCollider1.radius, circleCollider2.radius);
             normal = new Vector2(0, 1);
