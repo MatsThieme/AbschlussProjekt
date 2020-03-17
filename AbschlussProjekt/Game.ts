@@ -138,7 +138,7 @@ class Game {
         });
 
 
-        await asyncTimeout(1000);
+        //await asyncTimeout(1000);
     }
 }
 
@@ -154,7 +154,6 @@ new Game();
 // ui
 // loading screen while scene not running
 // camera aspect ratio
-// input
 // polygon circle collision, circle circle collision
 // no rigidbody in child objects
 // use child object collider in collision calculations
