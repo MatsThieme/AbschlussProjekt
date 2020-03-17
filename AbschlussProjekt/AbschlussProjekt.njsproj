@@ -161,7 +161,7 @@
     <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefab.ts">
+    <TypeScriptCompile Include="Prefabs\TestPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Projection.ts">
@@ -209,6 +209,7 @@
     <Folder Include="Behaviours\" />
     <Folder Include="Assets\" />
     <Folder Include="Input\" />
+    <Folder Include="Prefabs\" />
     <Folder Include="Worker\" />
     <Folder Include="Physics\" />
   </ItemGroup>

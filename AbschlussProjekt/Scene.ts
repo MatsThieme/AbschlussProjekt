@@ -17,8 +17,10 @@ export class Scene {
     public cameraManager: CameraManager;
     public gameTime: GameTime;
     public input: Input;
-    private requestAnimationFrameHandle: number | undefined;
+    private requestAnimationFrameHandle?: number;
     public framedata: Framedata;
+    public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
+    private loadingScreenInterval?: number;
     public constructor() {
         this.domElement = document.createElement('canvas');
         this.gameObjects = new Map();
@@ -26,6 +28,8 @@ export class Scene {
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
         this.framedata = new Framedata();
+
+        this.stop();
     }
     /**
      * 
@@ -49,11 +53,6 @@ export class Scene {
         const camera = gameObject.addComponent(Camera);
         this.cameraManager.cameras.push(camera);
 
-        return gameObject;
-    }
-    public addPrefab(gameObject: GameObject): GameObject {
-        gameObject.name = name;
-        this.gameObjects.set(gameObject.name, gameObject);
         return gameObject;
     }
     private async update() {
@@ -114,6 +113,8 @@ export class Scene {
     }
     public stop(): void {
         if (this.requestAnimationFrameHandle) cancelAnimationFrame(this.requestAnimationFrameHandle);
+        this.requestAnimationFrameHandle = undefined;
+        this.loadingScreenInterval = setInterval(<TimerHandler>(() => { if (this.loadingScreen && !this.isRunning) this.loadingScreen((<any>this.cameraManager).context, (<any>this.cameraManager).context.canvas); else if (this.isRunning && this.loadingScreenInterval) { clearInterval(this.loadingScreenInterval); this.loadingScreenInterval = undefined } }), 100);
     }
     public get isRunning(): boolean {
         return typeof this.requestAnimationFrameHandle === 'number';

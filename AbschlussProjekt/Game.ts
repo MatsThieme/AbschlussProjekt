@@ -1,4 +1,3 @@
-import { InputTest } from './Behaviours/InputTest.js';
 import { Move } from './Behaviours/Move.js';
 import { ReloadPage } from './Behaviours/ReloadPage.js';
 import { PolygonCollider } from './Components/PolygonCollider.js';
@@ -6,6 +5,7 @@ import { PolygonRenderer } from './Components/PolygonRenderer.js';
 import { Texture } from './Components/Texture.js';
 import { asyncTimeout } from './Helpers.js';
 import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
+import { TestPrefab } from './Prefabs/TestPrefab.js';
 import { Scene } from './Scene.js';
 import { Sprite } from './Sprite.js';
 import { Vector2 } from './Vector2.js';
@@ -32,9 +32,6 @@ class Game {
             camera.size = new Vector2(16, 9);
         });
 
-        scene.newGameObject('inputTest', gameObject => {
-            gameObject.addComponent(InputTest);
-        });
 
         scene.newGameObject('polygon', gameObject => {
             gameObject.addComponent(PolygonCollider, polygonCollider => {
@@ -138,7 +135,21 @@ class Game {
         });
 
 
-        //await asyncTimeout(1000);
+        scene.newGameObject('prefab test', TestPrefab);
+
+        this.createLoadingScreen(scene);
+
+        await asyncTimeout(1000);
+    }
+    createLoadingScreen(scene: Scene): void {
+        let counter = 0;
+        scene.loadingScreen = (context, canvas) => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.font = `${canvas.width / 100}px arial`;
+            context.fillText(`Loading${'.'.repeat(~~(counter++ / 5 % 4))}`, canvas.width / 2, canvas.height / 2);
+        };
     }
 }
 
@@ -146,14 +157,13 @@ new Game();
 
 //to fix:
 // polygon collision (normal direction)
-
-// to do: 
-// friction
-// loading prefabs 
-// simplify polygon collision detection, function collision(vertices1: Vector[], vertices2: Vector2[]): {contacts, collisionNormal...}
-// ui
-// loading screen while scene not running
+// particlesystem align
 // camera aspect ratio
 // polygon circle collision, circle circle collision
+
+// to do:
+// friction
+// simplify polygon collision detection, function collision(vertices1: Vector[], vertices2: Vector2[]): {contacts, collisionNormal...}
+// ui
 // no rigidbody in child objects
 // use child object collider in collision calculations
