@@ -1,23 +1,26 @@
-import { Move } from './Behaviours/Move.js';
-import { ReloadPage } from './Behaviours/ReloadPage.js';
-import { PolygonCollider } from './Components/PolygonCollider.js';
-import { PolygonRenderer } from './Components/PolygonRenderer.js';
-import { Texture } from './Components/Texture.js';
 import { asyncTimeout } from './Helpers.js';
-import { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
-import { TestPrefab } from './Prefabs/TestPrefab.js';
-import { Scene } from './Scene.js';
-import { Sprite } from './Sprite.js';
-import { Vector2 } from './Vector2.js';
+import { Move } from './Scene/GameObject/Behaviours/Move.js';
+import { ReloadPage } from './Scene/GameObject/Behaviours/ReloadPage.js';
+import { PolygonCollider } from './Scene/GameObject/Components/PolygonCollider.js';
+import { PolygonRenderer } from './Scene/GameObject/Components/PolygonRenderer.js';
+import { Texture } from './Scene/GameObject/Components/Texture.js';
+import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
+import { Scene } from './Scene/Scene.js';
+import { Sprite } from './Scene/Sprite.js';
+import { Vector2 } from './Scene/Vector2.js';
 
 class Game {
-    public scene: Scene;
+    private scene: Scene;
     public constructor() {
         this.scene = new Scene();
 
+        (<any>window).scene = this.scene;
+
+        this.createLoadingScreen(this.scene);
+
         this.initialize(this.scene).then(() => this.scene.start());
     }
-    async initialize(scene: Scene): Promise<void> {
+    private async initialize(scene: Scene): Promise<void> {
         document.body.appendChild(scene.domElement);
         scene.domElement.width = innerWidth;
         scene.domElement.height = innerHeight;
@@ -134,21 +137,16 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-
-        scene.newGameObject('prefab test', TestPrefab);
-
-        this.createLoadingScreen(scene);
-
-        await asyncTimeout(1000);
+        await asyncTimeout(2500);
     }
-    createLoadingScreen(scene: Scene): void {
+    private createLoadingScreen(scene: Scene): void {
         let counter = 0;
         scene.loadingScreen = (context, canvas) => {
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.textAlign = 'center';
             context.textBaseline = 'middle';
             context.font = `${canvas.width / 100}px arial`;
-            context.fillText(`Loading${'.'.repeat(~~(counter++ / 5 % 4))}`, canvas.width / 2, canvas.height / 2);
+            context.fillText(`Loading${'.'.repeat(~~(counter++ / 5) % 4)}`, canvas.width / 2, canvas.height / 2);
         };
     }
 }
@@ -167,3 +165,4 @@ new Game();
 // ui
 // no rigidbody in child objects
 // use child object collider in collision calculations
+// frame align

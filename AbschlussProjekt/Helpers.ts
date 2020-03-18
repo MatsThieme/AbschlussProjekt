@@ -1,4 +1,4 @@
-import { Vector2 } from './Vector2.js';
+import { Vector2 } from './Scene/Vector2.js';
 
 export const clamp = (min: number, max: number, val: number) => val < min ? min : val > max ? max : val;
 export const asyncTimeout = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));

@@ -33,15 +33,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Game.ts" />
-    <Content Include="Assets\InputMappingAxes.json" />
-    <Content Include="Assets\InputMappingButtons.json">
+    <Content Include="Scene\Assets\InputMappingAxes.json" />
+    <Content Include="Scene\Assets\InputMappingButtons.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Assets\PrefabTest.prefab" />
+    <Content Include="Scene\Assets\PrefabTest.prefab" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Physics\PhysicsWorker.ts">
+    <Content Include="Scene\Physics\PhysicsWorker.ts">
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
@@ -49,169 +49,173 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Align.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Align.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Alignable.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Alignable.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Angle.ts">
+    <TypeScriptCompile Include="Scene\Angle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Destroy.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Behaviours\Destroy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\InputTest.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Behaviours\InputTest.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Move.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Behaviours\Move.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\ReloadPage.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Behaviours\ReloadPage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\TestBehaviour.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Behaviours\TestBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\AnimatedSprite.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\AnimatedSprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\AudioListener.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\AudioListener.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\AudioSource.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\AudioSource.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Behaviour.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Camera.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Camera.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="CameraManager.ts">
+    <TypeScriptCompile Include="Scene\Camera\CameraManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\CircleCollider.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\CircleCollider.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\CircleRenderer.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\CircleRenderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\ComponentType.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\ComponentType.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\ParticleSystem.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\ParticleSystem.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\PolygonCollider.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\PolygonCollider.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\PolygonRenderer.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\PolygonRenderer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\RigidBody.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\RigidBody.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Texture.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Texture.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\TileMap.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\TileMap.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Transform.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Transform.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Drawable.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Drawable.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Face.ts">
+    <TypeScriptCompile Include="Scene\Face.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Frame.ts">
+    <TypeScriptCompile Include="Scene\Camera\Frame.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Framedata.ts">
+    <TypeScriptCompile Include="Scene\Framedata.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="GameTime.ts">
+    <TypeScriptCompile Include="Scene\GameTime.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Input\Input.ts">
+    <TypeScriptCompile Include="Scene\Input\Input.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Input\InputAxis.ts" />
-    <TypeScriptCompile Include="Input\InputButton.ts" />
-    <TypeScriptCompile Include="Input\InputGamepad.ts" />
-    <TypeScriptCompile Include="Input\InputKeyboard.ts" />
-    <TypeScriptCompile Include="Input\InputMapping.ts" />
-    <TypeScriptCompile Include="Input\InputMouse.ts" />
-    <TypeScriptCompile Include="Input\InputType.ts" />
-    <TypeScriptCompile Include="Line.ts">
+    <TypeScriptCompile Include="Scene\Input\InputAxis.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputButton.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputGamepad.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputKeyboard.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputMapping.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputMouse.ts" />
+    <TypeScriptCompile Include="Scene\Input\InputType.ts" />
+    <TypeScriptCompile Include="Scene\Line.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Particle.ts">
+    <TypeScriptCompile Include="Scene\Particle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\AABB.ts">
+    <TypeScriptCompile Include="Scene\Physics\AABB.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\PhysicsMaterial.ts">
+    <TypeScriptCompile Include="Scene\Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\TestPrefab.ts">
+    <TypeScriptCompile Include="Scene\Prefabs\TestPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Projection.ts">
+    <TypeScriptCompile Include="Scene\Projection.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Sprite.ts">
+    <TypeScriptCompile Include="Scene\Sprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Collider.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Collider.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Components\Component.ts">
+    <TypeScriptCompile Include="Scene\GameObject\Components\Component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="GameObject.ts">
+    <TypeScriptCompile Include="Scene\GameObject\GameObject.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\Collision.ts">
+    <TypeScriptCompile Include="Scene\Physics\Collision.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Physics\Physics.ts">
+    <TypeScriptCompile Include="Scene\Physics\Physics.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene.ts">
+    <TypeScriptCompile Include="Scene\Scene.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Settings.ts">
+    <TypeScriptCompile Include="Scene\Settings.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SpriteAnimation.ts">
+    <TypeScriptCompile Include="Scene\SpriteAnimation.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Tile.ts">
+    <TypeScriptCompile Include="Scene\Tile.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Vector2.ts">
+    <TypeScriptCompile Include="Scene\Vector2.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Worker\AsyncWorker.ts">
+    <TypeScriptCompile Include="Scene\Worker\AsyncWorker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Components\" />
-    <Folder Include="Behaviours\" />
-    <Folder Include="Assets\" />
-    <Folder Include="Input\" />
-    <Folder Include="Prefabs\" />
-    <Folder Include="Worker\" />
-    <Folder Include="Physics\" />
+    <Folder Include="Scene\GameObject\Components\" />
+    <Folder Include="Scene\GameObject\Behaviours\" />
+    <Folder Include="Scene\Assets\" />
+    <Folder Include="Scene\Input\" />
+    <Folder Include="Scene\" />
+    <Folder Include="Scene\GameObject\" />
+    <Folder Include="Scene\Camera\" />
+    <Folder Include="Scene\UI\" />
+    <Folder Include="Scene\Prefabs\" />
+    <Folder Include="Scene\Worker\" />
+    <Folder Include="Scene\Physics\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
