@@ -8,8 +8,11 @@ import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
 import { Input } from './Input/Input.js';
+import { AABB } from './Physics/AABB.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
+import { UI } from './UI/UI.js';
+import { Vector2 } from './Vector2.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -17,6 +20,7 @@ export class Scene {
     public cameraManager: CameraManager;
     public gameTime: GameTime;
     public input: Input;
+    public ui: UI;
     private requestAnimationFrameHandle?: number;
     public framedata: Framedata;
     public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
@@ -27,6 +31,7 @@ export class Scene {
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this.gameTime);
+        this.ui = new UI(this.input, new AABB(new Vector2(innerWidth, innerHeight), new Vector2()));
         this.framedata = new Framedata();
 
         this.stop();
@@ -91,7 +96,10 @@ export class Scene {
         await awaitPromises(...this.getAllGameObjects().map(gameObject => gameObject.update(this.gameTime, collisions)));
 
 
-        this.cameraManager.update([...this.gameObjects.values()]);
+        this.ui.update(this.gameTime);
+
+        this.cameraManager.update([...this.gameObjects.values()], this.ui.currentFrame);
+
 
         requestAnimationFrame(this.update.bind(this));
     }

@@ -8,6 +8,8 @@ import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
 import { Scene } from './Scene/Scene.js';
 import { Sprite } from './Scene/Sprite.js';
 import { Vector2 } from './Scene/Vector2.js';
+import { AABB } from './Scene/Physics/AABB.js';
+import { UIButton } from './Scene/UI/UIElements/UIButton.js';
 
 class Game {
     private scene: Scene;
@@ -137,7 +139,18 @@ class Game {
             gameObject.addComponent(PolygonRenderer);
         });
 
-        await asyncTimeout(2500);
+
+        scene.ui.addMenu('test', menu => {
+            menu.aabb = new AABB(new Vector2(innerWidth, innerHeight), new Vector2());
+            menu.active = true;
+            menu.addUIElement(UIButton, button => {
+                button.aabb = new AABB(new Vector2(200, 140), new Vector2(500, 500));
+                button.cbOnInput = b => { console.log('click', b.label); };
+                button.label = 'test button';
+            });
+        });
+
+        //await asyncTimeout(2500);
     }
     private createLoadingScreen(scene: Scene): void {
         let counter = 0;
@@ -166,3 +179,4 @@ new Game();
 // no rigidbody in child objects
 // use child object collider in collision calculations
 // frame align
+// canvas rotation in camera component

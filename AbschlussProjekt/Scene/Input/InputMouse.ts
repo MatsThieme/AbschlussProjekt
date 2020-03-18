@@ -27,10 +27,16 @@ export class InputMouse {
     }
     private onMouseUp(e: MouseEvent): void {
         e.preventDefault();
+        this._position.x = e.clientX;
+        this._position.y = e.clientY;
+
         this.buttons[e.button].down = false;
     }
     private onMouseDown(e: MouseEvent): void {
         e.preventDefault();
+        this._position.x = e.clientX;
+        this._position.y = e.clientY;
+
         this.buttons[e.button].down = true;
     }
     public getButton(index: number): InputButton {

@@ -44,6 +44,9 @@
     <Content Include="Scene\Physics\PhysicsWorker.ts">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Scene\UI\UIElements\UIElement.ts">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -197,6 +200,27 @@
     <TypeScriptCompile Include="Scene\Tile.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UIButton.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIMenu.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UI.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElementType.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIFont.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIFontSize.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIFrame.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Vector2.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -205,6 +229,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Font\" />
     <Folder Include="Scene\GameObject\Components\" />
     <Folder Include="Scene\GameObject\Behaviours\" />
     <Folder Include="Assets\" />
@@ -214,6 +239,7 @@
     <Folder Include="Scene\Camera\" />
     <Folder Include="Scene\UI\" />
     <Folder Include="Scene\Prefabs\" />
+    <Folder Include="Scene\UI\UIElements\" />
     <Folder Include="Scene\Worker\" />
     <Folder Include="Scene\Physics\" />
   </ItemGroup>
