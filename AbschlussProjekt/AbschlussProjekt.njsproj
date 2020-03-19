@@ -209,6 +209,15 @@
     <TypeScriptCompile Include="Scene\UI\UIElements\UIButton.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UICheckbox.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UIDropdown.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UIText.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\UI\UIMenu.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

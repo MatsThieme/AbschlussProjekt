@@ -1,4 +1,6 @@
+import { FontLoader } from './FontLoader.js';
 import { asyncTimeout } from './Helpers.js';
+import { AlignH, AlignV } from './Scene/GameObject/Align.js';
 import { Move } from './Scene/GameObject/Behaviours/Move.js';
 import { ReloadPage } from './Scene/GameObject/Behaviours/ReloadPage.js';
 import { PolygonCollider } from './Scene/GameObject/Components/PolygonCollider.js';
@@ -9,8 +11,11 @@ import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
 import { Scene } from './Scene/Scene.js';
 import { Sprite } from './Scene/Sprite.js';
 import { UIButton } from './Scene/UI/UIElements/UIButton.js';
+import { UICheckbox } from './Scene/UI/UIElements/UICheckbox.js';
+import { UIText } from './Scene/UI/UIElements/UIText.js';
+import { UIFontSize } from './Scene/UI/UIFontSize.js';
 import { Vector2 } from './Scene/Vector2.js';
-import { FontLoader } from './FontLoader.js';
+import { UIDropdown } from './Scene/UI/UIElements/UIDropdown.js';
 
 class Game {
     private scene: Scene;
@@ -146,9 +151,24 @@ class Game {
             menu.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
             menu.active = true;
             menu.addUIElement(UIButton, button => {
-                button.aabb = new AABB(new Vector2(200, 140), new Vector2(500, 500));
+                button.aabb = new AABB(new Vector2(200, 120), new Vector2());
+                button.alignH = AlignH.Center;
+                button.alignV = AlignV.Center;
                 button.cbOnInput = b => { menu.active = !menu.active; };
-                button.label = 'test button';
+                button.label = 'play';
+                button.fontSize = UIFontSize.Large;
+            });
+
+            menu.addUIElement(UICheckbox, checkbox => {
+                checkbox.label = 'check';
+                checkbox.cbOnInput = c => console.log(c.checked);
+                checkbox.aabb = new AABB(new Vector2(50, 50), new Vector2(200, 200));
+            });
+
+            menu.addUIElement(UIDropdown, dropdown => {
+                dropdown.aabb = new AABB(new Vector2(100, 150), new Vector2(200, 350));
+                dropdown.values = ['first', 'second', 'third'];
+                dropdown.cbOnInput = d => console.log(d.value);
             });
         });
 
@@ -156,14 +176,16 @@ class Game {
             menu.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
             menu.active = true;
             menu.pauseScene = false;
-            menu.addUIElement(UIButton, button => {
-                button.aabb = new AABB(new Vector2(100, 50), new Vector2(50, 25));
-                setInterval(() => button.label = this.scene.framedata.fps.toString(), 200);
+            menu.addUIElement(UIText, text => {
+                text.aabb = new AABB(new Vector2(100, 50), new Vector2(50, 25));
+                text.fontSize = UIFontSize.Small;
+                setInterval(() => text.label = this.scene.framedata.fps.toString(), 500);
+                text.fitText(1.3);
             });
         });
 
 
-        //await asyncTimeout(2500);
+        await asyncTimeout(500);
     }
     private createLoadingScreen(scene: Scene): void {
         let counter = 0;

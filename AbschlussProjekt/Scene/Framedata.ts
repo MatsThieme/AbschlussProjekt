@@ -5,7 +5,7 @@ export class Framedata {
     private avgFrameTime: number;
     private frames: number;
     public highestFt: number;
-    public constructor(update = 1000) {
+    public constructor(update = 500) {
         this._update = update;
         this.lastTime = performance.now();
         this.avgFramesPerSecond = 0;

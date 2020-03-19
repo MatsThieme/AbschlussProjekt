@@ -1,4 +1,3 @@
-import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
@@ -6,19 +5,9 @@ import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
 
-export class UIButton extends UIElement {
+export class UIText extends UIElement {
     public constructor(menu: UIMenu, input: Input) {
-        super(menu, input, UIElementType.Button);
-    }
-    public update(gameTime: GameTime): void {
-        super.update(gameTime);
-
-        if (this.click) {
-            if (this.cbOnInput) this.cbOnInput(this);
-            this.sprite = new Sprite(this.draw.bind(this));
-        }
-
-        if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
+        super(menu, input, UIElementType.Text);
     }
     protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
@@ -34,6 +23,7 @@ export class UIButton extends UIElement {
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
+        //context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, false), this.aabb.size.clone.scale(0.9));
         context.font = this.menu.font.getFont('MainFont', this.fontSize);
 
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);

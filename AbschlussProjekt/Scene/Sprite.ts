@@ -17,6 +17,8 @@ export class Sprite {
             const context = <OffscreenCanvasRenderingContext2D>canvas.getContext('2d');
 
             src(context, canvas);
+            if (canvas.width === 0) canvas.width = 1;
+            if (canvas.height === 0) canvas.height = 1;
             this.canvasImageSource = canvas;
         }
 

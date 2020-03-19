@@ -8,13 +8,13 @@ export class UIFont {
         this.menu = menu;
     }
     private get fontMultiplier() {
-        return this.menu.aabb.size.magnitude / 250;
+        return this.menu.aabb.size.magnitude / 50;
     }
     public getFont(name: string, size: UIFontSize = UIFontSize.Medium, bold: boolean = false) {
         return `${(bold ? 'bold ' : '') + ~~(this.fontMultiplier * size)}px ${name}`;
     }
     public parseFontString(font: string): { bold: boolean, px: number, name: string } {
-        return { bold: font.indexOf('bold') !== -1, px: parseInt((<any>font.match(/.*(\d+)px.*/))[1]), name: (<any>font.match(/.*px (\w+).*/))[1] };
+        return { bold: font.indexOf('bold') !== -1, px: parseInt((<any>font.match(/[^\d]*(\d+)px.*/))[1]), name: (<any>font.match(/.*px (\w+).*/))[1] };
     }
     public measureText(text: string, font: string): Vector2 {
         const { px, bold, name } = this.parseFontString(font);
@@ -27,8 +27,8 @@ export class UIFont {
         el.style.visibility = 'hidden';
         document.body.appendChild(el);
 
-        const width = parseFloat(getComputedStyle(el).width);
-        const height = parseFloat(getComputedStyle(el).height);
+        const width = el.offsetWidth;
+        const height = el.offsetHeight;
 
         el.remove();
 
