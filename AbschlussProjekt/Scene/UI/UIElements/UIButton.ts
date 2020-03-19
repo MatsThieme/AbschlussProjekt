@@ -20,7 +20,7 @@ export class UIButton extends UIElement {
 
         if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
     }
-    private draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
         context.save();
@@ -34,7 +34,7 @@ export class UIButton extends UIElement {
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
-        context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, true), this.aabb.size.clone.scale(0.9));
+        context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, true), this.aabb.size.clone.scale(1));
 
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 

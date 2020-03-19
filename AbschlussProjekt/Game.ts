@@ -147,13 +147,21 @@ class Game {
             menu.active = true;
             menu.addUIElement(UIButton, button => {
                 button.aabb = new AABB(new Vector2(200, 140), new Vector2(500, 500));
-                button.cbOnInput = b => { console.log('click', b.label); };
+                button.cbOnInput = b => { menu.active = !menu.active; };
                 button.label = 'test button';
             });
         });
 
+        scene.ui.addMenu('debug overlay', menu => {
+            menu.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
+            menu.active = true;
+            menu.pauseScene = false;
+            menu.addUIElement(UIButton, button => {
+                button.aabb = new AABB(new Vector2(100, 50), new Vector2(50, 25));
+                setInterval(() => button.label = this.scene.framedata.fps.toString(), 200);
+            });
+        });
 
-        setInterval(() => { console.clear(); console.log(this.scene.framedata.fps); }, 500);
 
         //await asyncTimeout(2500);
     }

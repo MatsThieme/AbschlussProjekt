@@ -9,6 +9,7 @@ import { UIFont } from './UIFont.js';
 
 export class UIMenu {
     public active: boolean;
+    public pauseScene: boolean;
     public drawPriority: number;
     private uiElements: UIElement[];
     public aabb: AABB;
@@ -16,12 +17,14 @@ export class UIMenu {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
     public font: UIFont;
+    public background?: Sprite;
     private frame!: UIFrame;
     public constructor(input: Input) {
         this.active = false;
+        this.pauseScene = true;
         this.drawPriority = 0;
         this.uiElements = [];
-        this.aabb = new AABB(new Vector2(0, 0), new Vector2(1920, 1080));
+        this.aabb = new AABB(new Vector2(1920, 1080), new Vector2(0, 0));
         this.input = input;
 
         this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
@@ -41,7 +44,9 @@ export class UIMenu {
     public update(gameTime: GameTime): void {
         this.canvas.width = this.aabb.size.x;
         this.canvas.height = this.aabb.size.y;
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        if (this.background) this.context.drawImage(this.background.canvasImageSource, 0, 0, this.background.size.x, this.background.size.y);
+        else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const uiElement of this.uiElements) {
             uiElement.update(gameTime);

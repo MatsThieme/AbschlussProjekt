@@ -1,6 +1,6 @@
 export class AsyncWorker {
     private static workers: Map<string, Worker[]> = new Map();
-    public static work<T>(url: string, data: { name: string, parameters?: any[] } = { name: '', parameters: [] }): Promise<T> {
+    public static work<T>(url: string, data: any): Promise<T> {
         return new Promise((resolve, reject) => {
             let worker: Worker = AsyncWorker.getWorker(url);
 

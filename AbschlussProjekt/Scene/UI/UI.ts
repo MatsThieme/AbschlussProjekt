@@ -43,4 +43,7 @@ export class UI {
     public get currentFrame(): UIFrame {
         return new UIFrame(this.aabb, new Sprite(this.canvas));
     }
+    public get pauseScene(): boolean {
+        return [...this.menus.values()].findIndex(m => m.active && m.pauseScene) !== -1;
+    }
 }

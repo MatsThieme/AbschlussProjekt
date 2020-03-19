@@ -15,7 +15,7 @@ export abstract class UIElement {
     public down: boolean;
     public checked: boolean;
     protected _aabb: AABB;
-    public label: string;
+    private _label: string;
     public active: boolean;
     public localAlignH: AlignH;
     public localAlignV: AlignV;
@@ -23,18 +23,18 @@ export abstract class UIElement {
     public alignV: AlignV;
     public cbOnInput?: (uiElement: this) => any;
     protected sprite?: Sprite;
-    public background?: Sprite;
+    private _background?: Sprite;
     public fontSize: UIFontSize;
     protected menu: UIMenu;
     protected input: Input
     public readonly type: UIElementType;
     public abstract get currentFrame(): UIFrame;
-    //protected abstract draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void;
+    protected abstract draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
     public constructor(menu: UIMenu, input: Input, type: UIElementType) {
         this.click = false;
         this.down = false;
         this._aabb = new AABB(new Vector2(), new Vector2());
-        this.label = '';
+        this._label = '';
         this.active = true;
         this.checked = false;
         this.localAlignH = AlignH.Center;
@@ -69,5 +69,19 @@ export abstract class UIElement {
     }
     public set aabb(val: AABB) {
         this._aabb = val;
+    }
+    public get label(): string {
+        return this._label;
+    }
+    public set label(val: string) {
+        this._label = val;
+        this.sprite = new Sprite(this.draw.bind(this));
+    }
+    public get background(): Sprite | undefined {
+        return this._background;
+    }
+    public set background(val: Sprite | undefined) {
+        this._background = val;
+        this.sprite = new Sprite(this.draw.bind(this));
     }
 }

@@ -27,7 +27,7 @@ export class PolygonRenderer extends Component {
         this._position = new Vector2();
 
         const interval = setInterval(() => {
-            if (!this.gameObject.scene.isRunning) return;
+            if (!this.gameObject.scene.isRunning || this.gameObject.scene.ui.pauseScene) return;
 
             this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
 

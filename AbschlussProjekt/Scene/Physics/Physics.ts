@@ -6,6 +6,8 @@ import { GameObject } from '../GameObject/GameObject.js';
 import { Vector2 } from '../Vector2.js';
 import { AABB } from './AABB.js';
 import { Collision } from './Collision.js';
+import { awaitPromises } from '../../Helpers.js';
+import { AsyncWorker } from '../Worker/AsyncWorker.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 100 / 1000);
@@ -21,14 +23,10 @@ export class Physics {
         const x = Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(pair));
         if (x !== -1) Physics.ignoreCollisions.splice(x, 1);
     }
-    public static async asyncCollision(first: GameObject, second: GameObject): Promise<Collision[]> {
-        //const r = await AsyncWorker.work<Collision[]>('Physics/PhysicsWorker.js');
-        return Physics.collision(first, second);
-    }
-    public static collision(first: GameObject, second: GameObject): Collision[] {
-        const ret: Collision[] = [];
+    public static async collision(first: GameObject, second: GameObject): Promise<Collision[]> {
+        if (first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return [];
 
-        if (first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return ret;
+        const promises: Promise<Collision>[] = [];
 
         for (const collider of first.getComponents<Collider>(ComponentType.Collider)) {
 
@@ -38,11 +36,9 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.CircleCollider) {
-                        const c = Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        promises.push(Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider));
                     } else if (otherCollider.type === ComponentType.PolygonCollider) {
-                        const c = Physics.collisionPolygonCircle(<PolygonCollider>otherCollider, <CircleCollider>collider);
-                        if (c.normal) ret.push(c);
+                        promises.push(Physics.collisionPolygonCircle(<PolygonCollider>otherCollider, <CircleCollider>collider));
                     }
 
                 }
@@ -53,11 +49,9 @@ export class Physics {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.PolygonCollider) {
-                        const c = Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        promises.push(Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider));
                     } else if (otherCollider.type === ComponentType.CircleCollider) {
-                        const c = Physics.collisionPolygonCircle(<PolygonCollider>collider, <CircleCollider>otherCollider);
-                        if (c.normal) ret.push(c);
+                        promises.push(Physics.collisionPolygonCircle(<PolygonCollider>collider, <CircleCollider>otherCollider));
                     }
                 }
 
@@ -65,12 +59,12 @@ export class Physics {
 
         }
 
-        return ret;
+        return promises.length === 0 ? [] : (await awaitPromises(...promises)).filter(c => c.normal);
     }
     public static circleIntersection(circleCollider1: CircleCollider, circleCollider2: CircleCollider): boolean {
         return circleCollider2.gameObject.transform.position.sub(circleCollider1.gameObject.transform.position).magnitudeSquared < (circleCollider1.radius + circleCollider2.radius) ** 2;
     }
-    public static collisionCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Collision {
+    public static async collisionCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Promise<Collision> {
         const gO1 = circleCollider1.gameObject;
         const gO2 = circleCollider2.gameObject;
 
@@ -91,12 +85,11 @@ export class Physics {
 
         return new Collision(circleCollider1, circleCollider2, normal, penetration);
     }
-    public static collisionPolygon(A: PolygonCollider, B: PolygonCollider): Collision {
+    public static async collisionPolygon(A: PolygonCollider, B: PolygonCollider): Promise<Collision> {
         let leastPenetration: number = Infinity;
         let referenceIndex!: number;
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
-        let log!: any;
 
         for (let i = 0; i < A.faces.length; i++) {
             const aP = A.project(A.faces[i].normal);
@@ -112,7 +105,6 @@ export class Physics {
                     referenceIndex = i;
                     referenceCollider = A;
                     incidentCollider = B;
-                    log = 'A';
                 }
             }
         }
@@ -131,31 +123,28 @@ export class Physics {
                     referenceIndex = i;
                     referenceCollider = B;
                     incidentCollider = A;
-                    log = 'B';
                 }
             }
         }
-
-        //console.log(log);
 
         const leastPenetrationNormal = referenceCollider.faces[referenceIndex].normal.normalized;
 
         if (leastPenetrationNormal.perpendicularCounterClockwise.add(referenceCollider.position).angleTo(referenceCollider.position, incidentCollider.position).degree > 180) leastPenetrationNormal.flip();
 
-        const contacts: Vector2[] = [];
 
-        for (const faceA of A.faces) {
-            for (const faceB of B.faces) {
-                const contact = faceA.line.intersects(faceB.line);
-                if (contact) contacts.push(contact);
-            }
-        }
+        const contacts: Vector2[] = (<Vector2[]>(await AsyncWorker.work('/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
 
-        //console.log('colliding');
+        //for (const faceA of A.faces) {
+        //    for (const faceB of B.faces) {
+        //        const contact = faceA.line.intersects(faceB.line);
+        //        if (contact) contacts.push(contact);
+        //    }
+        //}
+
 
         return new Collision(A, B, leastPenetrationNormal, leastPenetration, contacts);
     }
-    public static collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Collision {
+    public static async collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Promise<Collision> {
         const contacts = [];
 
         for (const v of polygonCollider.vertices) {
