@@ -13,9 +13,10 @@ export class UIMenu {
     private uiElements: UIElement[];
     public aabb: AABB;
     private input: Input;
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: OffscreenCanvas;
+    private context: OffscreenCanvasRenderingContext2D;
     public font: UIFont;
+    private frame!: UIFrame;
     public constructor(input: Input) {
         this.active = false;
         this.drawPriority = 0;
@@ -23,8 +24,8 @@ export class UIMenu {
         this.aabb = new AABB(new Vector2(0, 0), new Vector2(1920, 1080));
         this.input = input;
 
-        this.canvas = document.createElement('canvas');
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
+        this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
 
         this.font = new UIFont(this);
     }
@@ -35,20 +36,20 @@ export class UIMenu {
         return e;
     }
     public get currentFrame(): UIFrame {
+        return this.frame;
+    }
+    public update(gameTime: GameTime): void {
         this.canvas.width = this.aabb.size.x;
         this.canvas.height = this.aabb.size.y;
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const uiElement of this.uiElements) {
-            const f = uiElement.currentFrame;
-            this.context.drawImage(f.sprite.image, f.aabb.position.x, f.aabb.position.y, f.aabb.size.x, f.aabb.size.y);
+            uiElement.update(gameTime);
+
+            const { sprite, aabb } = uiElement.currentFrame;
+            this.context.drawImage(sprite.canvasImageSource, aabb.position.x, aabb.position.y, aabb.size.x, aabb.size.y);
         }
 
-        return new UIFrame(this.aabb, new Sprite(this.canvas));
-    }
-    public update(gameTime: GameTime): void {
-        for (const uiElement of this.uiElements) {
-            uiElement.update(gameTime);
-        }
+        this.frame = new UIFrame(this.aabb, new Sprite(this.canvas));
     }
 }

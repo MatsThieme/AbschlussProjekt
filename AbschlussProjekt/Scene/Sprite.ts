@@ -2,23 +2,24 @@ import { Settings } from './Settings.js';
 import { Vector2 } from './Vector2.js';
 
 export class Sprite {
-    public image: HTMLImageElement;
+    public canvasImageSource!: CanvasImageSource;
     public size: Vector2;
-    public constructor(src: string | HTMLCanvasElement | ((context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any)) {
-        this.image = new Image();
-
+    public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => any)) {
         if (typeof src === 'string') {
-            this.image.src = Settings.assetPath + src;
-        } else if ('toDataURL' in src) {
-            this.image.src = src.toDataURL();
+            this.canvasImageSource = new Image();
+            this.canvasImageSource.src = Settings.assetPath + src;
+        } else if (src instanceof OffscreenCanvas || src instanceof HTMLCanvasElement) {
+            this.canvasImageSource = src;
+        } else if (src instanceof Image) {
+            this.canvasImageSource = src;
         } else {
-            const canvas = document.createElement('canvas');
-            const context = <CanvasRenderingContext2D>canvas.getContext('2d');
+            const canvas = new OffscreenCanvas(0, 0);
+            const context = <OffscreenCanvasRenderingContext2D>canvas.getContext('2d');
 
             src(context, canvas);
-            this.image.src = canvas.toDataURL();
+            this.canvasImageSource = canvas;
         }
 
-        this.size = new Vector2(this.image.width, this.image.height);
+        this.size = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
     }
 }

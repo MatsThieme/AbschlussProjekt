@@ -48,15 +48,18 @@ export abstract class UIElement {
     }
     public update(gameTime: GameTime): void {
         if (!this.active) return;
+
         const trigger = this.input.getButton(InputType.Trigger);
         const pointerPosition = new Vector2(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
 
-        if (trigger.down && !trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) this.click = this.down = true;
-        else if (trigger.down && trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) {
+        if (trigger.down && !trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) {
+            this.click = this.down = true;
+        } else if (trigger.down && trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) {
             this.down = true;
             this.click = false;
+        } else if (this.down || this.click) {
+            this.click = this.down = false;
         }
-        else if (this.down || this.click) this.click = this.down = false;
     }
     public get aabb(): AABB {
         const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? - this._aabb.size.x / 2 : - this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? - this._aabb.size.y / 2 : - this._aabb.size.y);

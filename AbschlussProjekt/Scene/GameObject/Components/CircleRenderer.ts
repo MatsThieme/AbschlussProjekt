@@ -9,8 +9,8 @@ import { ComponentType } from './ComponentType.js';
 
 // for debugging
 export class CircleRenderer extends Component {
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: OffscreenCanvas;
+    private context: OffscreenCanvasRenderingContext2D;
     private circleCollider: CircleCollider;
     private sprite: Sprite;
     private _position: Vector2;
@@ -18,12 +18,10 @@ export class CircleRenderer extends Component {
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.CircleRenderer);
 
-        this.circleCollider = this.gameObject.getComponent(CircleCollider);
+        this.circleCollider = <CircleCollider>this.gameObject.getComponent<CircleCollider>(ComponentType.CircleCollider);
 
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = this.circleCollider.scaledRadius * 2 * 100;
-        this.canvas.height = this.circleCollider.scaledRadius * 2 * 100;
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.canvas = new OffscreenCanvas(this.circleCollider.scaledRadius * 2 * 100, this.circleCollider.scaledRadius * 2 * 100);
+        this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.sprite = new Sprite(this.canvas);
 
         this.size = new Vector2(this.circleCollider.scaledRadius * 2, this.circleCollider.scaledRadius * 2);

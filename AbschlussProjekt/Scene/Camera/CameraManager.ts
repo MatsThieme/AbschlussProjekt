@@ -46,6 +46,6 @@ export class CameraManager {
 
         this.context.drawImage(this.cameras[this.mainCameraIndex].currentFrame, 0, 0);
 
-        this.context.drawImage(ui.sprite.image, ui.aabb.position.x, ui.aabb.position.y, ui.aabb.size.x, ui.aabb.size.y);
+        this.context.drawImage(ui.sprite.canvasImageSource, ui.aabb.position.x, ui.aabb.position.y, ui.aabb.size.x, ui.aabb.size.y);
     }
 }

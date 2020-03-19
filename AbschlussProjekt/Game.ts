@@ -4,12 +4,13 @@ import { ReloadPage } from './Scene/GameObject/Behaviours/ReloadPage.js';
 import { PolygonCollider } from './Scene/GameObject/Components/PolygonCollider.js';
 import { PolygonRenderer } from './Scene/GameObject/Components/PolygonRenderer.js';
 import { Texture } from './Scene/GameObject/Components/Texture.js';
+import { AABB } from './Scene/Physics/AABB.js';
 import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
 import { Scene } from './Scene/Scene.js';
 import { Sprite } from './Scene/Sprite.js';
-import { Vector2 } from './Scene/Vector2.js';
-import { AABB } from './Scene/Physics/AABB.js';
 import { UIButton } from './Scene/UI/UIElements/UIButton.js';
+import { Vector2 } from './Scene/Vector2.js';
+import { FontLoader } from './FontLoader.js';
 
 class Game {
     private scene: Scene;
@@ -24,13 +25,14 @@ class Game {
     }
     private async initialize(scene: Scene): Promise<void> {
         document.body.appendChild(scene.domElement);
-        scene.domElement.width = innerWidth;
-        scene.domElement.height = innerHeight;
+        scene.domElement.width = 1920;
+        scene.domElement.height = 1080;
         scene.domElement.style.position = 'absolute';
         scene.domElement.style.left = '0px';
         scene.domElement.style.top = '0px';
         document.body.style.overflow = 'hidden';
 
+        await FontLoader.load('/Assets/Font/JosefinSlab-Regular.ttf', 'MainFont');
 
         scene.newCamera('camera', camera => {
             camera.resolution = new Vector2(innerWidth, innerHeight);
@@ -80,7 +82,7 @@ class Game {
                 texture.sprite = new Sprite('spriteTest1.png');
             });
 
-            gameObject.transform.relativeScale = new Vector2(10000, 0.01);
+            gameObject.transform.relativeScale = new Vector2(100, 0.01);
             gameObject.drawPriority = -1;
         });
 
@@ -89,7 +91,7 @@ class Game {
                 texture.sprite = new Sprite('spriteTest1.png');
             });
 
-            gameObject.transform.relativeScale = new Vector2(0.01, 10000);
+            gameObject.transform.relativeScale = new Vector2(0.01, 100);
             gameObject.drawPriority = -1;
         });
 
@@ -141,7 +143,7 @@ class Game {
 
 
         scene.ui.addMenu('test', menu => {
-            menu.aabb = new AABB(new Vector2(innerWidth, innerHeight), new Vector2());
+            menu.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
             menu.active = true;
             menu.addUIElement(UIButton, button => {
                 button.aabb = new AABB(new Vector2(200, 140), new Vector2(500, 500));
@@ -150,10 +152,14 @@ class Game {
             });
         });
 
+
+        setInterval(() => { console.clear(); console.log(this.scene.framedata.fps); }, 500);
+
         //await asyncTimeout(2500);
     }
     private createLoadingScreen(scene: Scene): void {
         let counter = 0;
+
         scene.loadingScreen = (context, canvas) => {
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.textAlign = 'center';

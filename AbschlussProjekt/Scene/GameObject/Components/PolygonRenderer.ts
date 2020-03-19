@@ -8,8 +8,8 @@ import { PolygonCollider } from './PolygonCollider.js';
 
 // for debugging
 export class PolygonRenderer extends Component {
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: OffscreenCanvas;
+    private context: OffscreenCanvasRenderingContext2D;
     private polygonCollider: PolygonCollider;
     private sprite: Sprite;
     private _position: Vector2;
@@ -17,12 +17,10 @@ export class PolygonRenderer extends Component {
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.PolygonRenderer);
 
-        this.polygonCollider = this.gameObject.getComponent(PolygonCollider);
+        this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
 
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = this.polygonCollider.scaledSize.x * 1000;
-        this.canvas.height = this.polygonCollider.scaledSize.y * 1000;
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.canvas = new OffscreenCanvas(this.polygonCollider.scaledSize.x * 1000, this.polygonCollider.scaledSize.y * 1000);
+        this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.sprite = new Sprite(this.canvas);
 
         this.size = this.polygonCollider.scaledSize;
@@ -31,7 +29,7 @@ export class PolygonRenderer extends Component {
         const interval = setInterval(() => {
             if (!this.gameObject.scene.isRunning) return;
 
-            this.polygonCollider = this.gameObject.getComponent(PolygonCollider);
+            this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
 
             this.context.fillStyle = '#' + (~~(0xdddddd * Math.random()) + 0x111111).toString(16);
             this.context.translate(0, this.canvas.height);

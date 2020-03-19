@@ -9,20 +9,20 @@ import { ComponentType } from './ComponentType.js';
 export class Camera extends Component {
     public resolution: Vector2;
     public size: Vector2;
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: OffscreenCanvas;
+    private context: OffscreenCanvasRenderingContext2D;
     public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(), size: Vector2 = new Vector2(16, 9)) {
         super(gameObject, ComponentType.Camera);
         this.resolution = resolution;
         this.size = size;
-        this.canvas = document.createElement('canvas');
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.canvas = new OffscreenCanvas(this.resolution.x, this.resolution.y);
+        this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
     }
     public get ratio(): Vector2 {
         return reduce(this.resolution);
     }
-    public get currentFrame(): HTMLCanvasElement {
-        return <HTMLCanvasElement>this.canvas;
+    public get currentFrame(): CanvasImageSource {
+        return this.canvas;
     }
     public update(frames: Frame[]) {
         this.canvas.width = this.resolution.x;
@@ -50,7 +50,7 @@ export class Camera extends Component {
 
                 this.context.globalAlpha = frame.alpha;
 
-                this.context.drawImage(frame.sprite.image, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                this.context.drawImage(frame.sprite.canvasImageSource, framePos.x, framePos.y, frameSize.x, frameSize.y);
 
                 this.context.restore();
             }

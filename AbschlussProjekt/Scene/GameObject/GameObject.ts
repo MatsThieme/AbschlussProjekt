@@ -37,10 +37,10 @@ export class GameObject {
         this._name = `${val} (${this.id})`;
     }
     public get transform(): Transform {
-        return this.getComponent(Transform);
+        return <Transform>this.getComponent<Transform>(ComponentType.Transform);
     }
     public get rigidbody(): RigidBody {
-        return this.getComponent(RigidBody);
+        return <RigidBody>this.getComponent<RigidBody>(ComponentType.RigidBody);
     }
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T, cb?: (component: T) => any): T {
         const component = new type(this);
@@ -66,8 +66,17 @@ export class GameObject {
             return c instanceof <any>type;
         });
     }
-    public getComponent<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T {
-        return this.getComponents<T>(type)[0];
+    public getComponent<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
+        for (const c of this.components) {
+            if (typeof type === 'number') {
+                if (c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider)) return <T>c;
+                continue;
+            }
+
+            if (c instanceof <any>type) return <T>c;
+        }
+
+        return;
     }
     public addChild(gameObject: GameObject): GameObject {
         this.children.push(gameObject);

@@ -2,21 +2,21 @@ import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
 import { Sprite } from '../Sprite.js';
-import { UIMenu } from './UIMenu.js';
 import { UIFrame } from './UIFrame.js';
+import { UIMenu } from './UIMenu.js';
 
 export class UI {
     private menus: Map<string, UIMenu>;
     private input: Input;
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: OffscreenCanvas;
+    private context: OffscreenCanvasRenderingContext2D;
     public aabb: AABB;
     public constructor(input: Input, aabb: AABB) {
         this.menus = new Map();
         this.input = input;
-        this.canvas = document.createElement('canvas');
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.aabb = aabb;
+        this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
+        this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
     }
     public addMenu(name: string, cb?: (menu: UIMenu) => any): UIMenu {
         if (this.menus.has(name)) return <UIMenu>this.menus.get(name);
@@ -35,7 +35,8 @@ export class UI {
         for (const menu of this.menus.values()) {
             if (menu.active) {
                 menu.update(gameTime);
-                this.context.drawImage(menu.currentFrame.sprite.image, menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
+
+                this.context.drawImage(menu.currentFrame.sprite.canvasImageSource, menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
             }
         }
     }

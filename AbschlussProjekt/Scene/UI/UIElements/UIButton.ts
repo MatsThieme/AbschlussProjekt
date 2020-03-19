@@ -20,23 +20,23 @@ export class UIButton extends UIElement {
 
         if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
     }
-    private draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+    private draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+        canvas.width = this.aabb.size.x;
+        canvas.height = this.aabb.size.y;
         context.save();
 
-        debugger;
-
-        if (this.background) context.drawImage(this.background.image, 0, 0, this.aabb.size.x, this.aabb.size.y);
+        if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, this.aabb.size.x, this.aabb.size.y);
 
         context.strokeStyle = '#333';
-        context.lineWidth = this.aabb.size.magnitude / 100;
+        context.lineWidth = this.menu.aabb.size.magnitude / 500;
         context.strokeRect(0, 0, this.aabb.size.x, this.aabb.size.y);
 
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
-        context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize), this.aabb.size.clone.scale(0.8));
-        context.fillText(this.label, canvas.width / 2, canvas.height / 2);
+        context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, true), this.aabb.size.clone.scale(0.9));
 
+        context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 
         context.restore();
     }

@@ -52,6 +52,9 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="FontLoader.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\GameObject\Align.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -101,7 +101,7 @@ export class Scene {
         this.cameraManager.update([...this.gameObjects.values()], this.ui.currentFrame);
 
 
-        requestAnimationFrame(this.update.bind(this));
+        if (this.requestAnimationFrameHandle) requestAnimationFrame(this.update.bind(this));
     }
     /**
      * Returns all GameObjects in this Scene.
@@ -121,7 +121,7 @@ export class Scene {
         this.requestAnimationFrameHandle = undefined;
 
         if (!this.loadingScreenInterval) this.loadingScreenInterval = setInterval(<TimerHandler>(() => {
-            if (this.loadingScreen && !this.isRunning) this.loadingScreen((<any>this.cameraManager).context, (<any>this.cameraManager).context.canvas);
+            if (this.loadingScreen && !this.isRunning) this.loadingScreen(<CanvasRenderingContext2D>(<any>this.cameraManager).context, <HTMLCanvasElement>(<any>this.cameraManager).context.canvas);
             else if (this.isRunning && this.loadingScreenInterval) {
                 clearInterval(this.loadingScreenInterval);
                 this.loadingScreenInterval = undefined;
