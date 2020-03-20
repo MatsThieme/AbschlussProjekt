@@ -27,9 +27,10 @@ export class UIButton extends UIElement {
 
         if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, canvas.width, canvas.height);
 
-        context.strokeStyle = '#333';
+        context.strokeStyle = this.color;
+        context.fillStyle = this.color;
         context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
-        context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
+        if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
 
         context.textAlign = 'center';
         context.textBaseline = 'middle';

@@ -1,11 +1,12 @@
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
+import { Scene } from '../Scene.js';
 import { Sprite } from '../Sprite.js';
 import { Vector2 } from '../Vector2.js';
 import { UIElement } from './UIElements/UIElement.js';
-import { UIFrame } from './UIFrame.js';
 import { UIFont } from './UIFont.js';
+import { UIFrame } from './UIFrame.js';
 
 export class UIMenu {
     public active: boolean;
@@ -19,22 +20,24 @@ export class UIMenu {
     public font: UIFont;
     public background?: Sprite;
     private frame!: UIFrame;
-    public constructor(input: Input) {
+    private scene: Scene;
+    public constructor(input: Input, scene: Scene) {
         this.active = false;
         this.pauseScene = true;
         this.drawPriority = 0;
         this.uiElements = [];
         this.aabb = new AABB(new Vector2(1920, 1080), new Vector2(0, 0));
         this.input = input;
+        this.scene = scene;
 
         this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
 
         this.font = new UIFont(this);
     }
-    public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, cb?: (uiElement: T) => any): T {
+    public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, cb?: (uiElement: T, scene: Scene) => any): T {
         const e = new type(this, this.input);
-        if (cb) cb(e);
+        if (cb) cb(e, this.scene);
         e.start();
         this.uiElements.push(e);
         return e;

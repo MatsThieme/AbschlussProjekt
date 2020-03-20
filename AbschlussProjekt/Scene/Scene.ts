@@ -14,7 +14,6 @@ import { Physics } from './Physics/Physics.js';
 import { UI } from './UI/UI.js';
 import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
-import { InputType } from './Input/InputType.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -37,8 +36,8 @@ export class Scene {
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
-        this.input = new Input();
-        this.ui = new UI(this.input, new AABB(new Vector2(innerWidth, innerHeight), new Vector2()));
+        this.input = new Input(this);
+        this.ui = new UI(this.input, new AABB(new Vector2(innerWidth, innerHeight), new Vector2()), this);
         this.framedata = new Framedata();
 
         this.stop();
@@ -47,16 +46,17 @@ export class Scene {
      * 
      * @param name gameObject name
      * 
-     * @returns GameObject of name ´name´ if found in gameObjects.
+     * @returns GameObject if present in Scene
      * 
      */
     public find(name: string): GameObject | undefined {
-        return this.gameObjects.get(name) || this.gameObjects.get((name.match(/(.*) \(\d+\)/) || '')[1]);
+        return this.gameObjects.get(name) || this.gameObjects.get([...this.gameObjects.keys()].find(n => (n.match(/(.*) \(\d+\)/) || '')[1] === name) || '');
     }
     public newGameObject(name: string, cb?: (gameObject: GameObject) => any): GameObject {
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(gameObject.name, gameObject);
         if (cb) cb(gameObject);
+
         return gameObject;
     }
     public newCamera(name: string, cb?: (camera: Camera) => any): GameObject {
@@ -68,7 +68,6 @@ export class Scene {
         return gameObject;
     }
     private async update() {
-        console.log(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
         // calculate deltaTime
         this.gameTime.update();
 

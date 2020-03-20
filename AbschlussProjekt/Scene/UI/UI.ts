@@ -1,6 +1,7 @@
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
+import { Scene } from '../Scene.js';
 import { Sprite } from '../Sprite.js';
 import { UIFrame } from './UIFrame.js';
 import { UIMenu } from './UIMenu.js';
@@ -11,19 +12,21 @@ export class UI {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
     public aabb: AABB;
-    public constructor(input: Input, aabb: AABB) {
+    private scene: Scene;
+    public constructor(input: Input, aabb: AABB, scene: Scene) {
         this.menus = new Map();
         this.input = input;
         this.aabb = aabb;
         this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.scene = scene;
     }
-    public addMenu(name: string, cb?: (menu: UIMenu) => any): UIMenu {
+    public addMenu(name: string, cb?: (menu: UIMenu, scene: Scene) => any): UIMenu {
         if (this.menus.has(name)) return <UIMenu>this.menus.get(name);
 
-        const menu = new UIMenu(this.input);
+        const menu = new UIMenu(this.input, this.scene);
         this.menus.set(name, menu);
-        if (cb) cb(menu);
+        if (cb) cb(menu, this.scene);
 
         return menu;
     }

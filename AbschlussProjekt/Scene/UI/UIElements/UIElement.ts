@@ -29,6 +29,8 @@ export abstract class UIElement {
     protected input: Input;
     private lastPaddingScalar: number;
     public readonly type: UIElementType;
+    public color: string;
+    public stroke: boolean;
     public abstract get currentFrame(): UIFrame;
     protected abstract draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
     public constructor(menu: UIMenu, input: Input, type: UIElementType) {
@@ -46,6 +48,8 @@ export abstract class UIElement {
         this.type = type;
         this._fontSize = UIFontSize.Medium;
         this.lastPaddingScalar = -1;
+        this.color = '#333';
+        this.stroke = type !== UIElementType.Text;
     }
     public start(): void {
         this.sprite = new Sprite(this.draw.bind(this));

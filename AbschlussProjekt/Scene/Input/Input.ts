@@ -1,3 +1,4 @@
+import { Scene } from '../Scene.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
 import { InputGamepad } from './InputGamepad.js';
@@ -5,6 +6,7 @@ import { InputKeyboard } from './InputKeyboard.js';
 import { InputMapping } from './InputMapping.js';
 import { InputMouse } from './InputMouse.js';
 import { InputType } from './InputType.js';
+import { Vector2 } from '../Vector2.js';
 
 export class Input {
     private mouse: InputMouse;
@@ -12,10 +14,12 @@ export class Input {
     private gamepad: InputGamepad;
     private inputMappingButtons: InputMapping;
     private inputMappingAxes: InputMapping;
-    public constructor() {
+    private scene: Scene;
+    public constructor(scene: Scene) {
         this.mouse = new InputMouse();
         this.keyboard = new InputKeyboard();
         this.gamepad = new InputGamepad();
+        this.scene = scene;
 
         this.inputMappingButtons = new InputMapping('InputMappingButtons.json');
         this.inputMappingAxes = new InputMapping('InputMappingAxes.json');
@@ -42,7 +46,8 @@ export class Input {
         return axes[0] || new InputAxis();
     }
     public update(): void {
-        this.mouse.update();
+        const diff = new Vector2(this.scene.domElement.getBoundingClientRect().x, this.scene.domElement.getBoundingClientRect().y);
+        this.mouse.update(diff);
         this.keyboard.update();
         this.gamepad.update();
     }

@@ -53,7 +53,8 @@ export class UIDropdown extends UIElement {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
 
-        context.strokeStyle = '#333';
+        context.strokeStyle = this.color;
+        context.fillStyle = this.color;
         context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
         context.textAlign = 'center';
         context.textBaseline = 'middle';
@@ -65,7 +66,7 @@ export class UIDropdown extends UIElement {
             const btnPos = new Vector2(0, this.extendUpward ? this._aabb.size.y - (i + 1) * buttonSize.y : i * buttonSize.y);
             if (this.background) context.drawImage(this.background.canvasImageSource, btnPos.x, btnPos.y, buttonSize.x, buttonSize.y);
 
-            context.strokeRect(context.lineWidth / 2 + btnPos.x, context.lineWidth / 2 + btnPos.y, buttonSize.x - context.lineWidth, buttonSize.y - (i === this._values.length && !this.extendUpward || this.extendUpward && i === 0 ? context.lineWidth : 0));
+            if (this.stroke) context.strokeRect(context.lineWidth / 2 + btnPos.x, context.lineWidth / 2 + btnPos.y, buttonSize.x - context.lineWidth, buttonSize.y - (i === this._values.length && !this.extendUpward || this.extendUpward && i === 0 ? context.lineWidth : 0));
 
             context.fillText(i === 0 ? this.value : this.values[i - 1], buttonSize.x / 2, buttonSize.y / 2 + btnPos.y);
         }

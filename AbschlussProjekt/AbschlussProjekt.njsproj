@@ -170,7 +170,29 @@
     <TypeScriptCompile Include="Scene\Physics\PhysicsWorkerLineIntersection.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\TestPrefab.ts">
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\LeftPrefab.ts" />
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\PlayerPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\PolygonPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\RightPrefab.ts" />
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\TopPrefab.ts" />
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\FloorPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\xAxisPrefab.ts" />
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\yAxisPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\LoadingScreenPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\UI\DebugOverlayPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Prefabs\UI\MainMenu\MainMenuPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Projection.ts">
@@ -252,6 +274,9 @@
     <Folder Include="Scene\" />
     <Folder Include="Scene\GameObject\" />
     <Folder Include="Scene\Camera\" />
+    <Folder Include="Scene\Prefabs\GameObjects\" />
+    <Folder Include="Scene\Prefabs\UI\" />
+    <Folder Include="Scene\Prefabs\UI\MainMenu\" />
     <Folder Include="Scene\UI\" />
     <Folder Include="Scene\Prefabs\" />
     <Folder Include="Scene\UI\UIElements\" />
