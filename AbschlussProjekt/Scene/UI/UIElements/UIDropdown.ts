@@ -1,35 +1,51 @@
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
+import { InputType } from '../../Input/InputType.js';
 import { AABB } from '../../Physics/AABB.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
-import { UIButton } from './UIButton.js';
 import { UIElement } from './UIElement.js';
-import { AlignH, AlignV } from '../../GameObject/Align.js';
 
 export class UIDropdown extends UIElement {
     private _values: string[];
-    private uiButtons: UIButton[];
-    private activeIndex: number;
+    public activeIndex: number;
     public extendUpward: boolean;
+    public extended: boolean;
     public constructor(menu: UIMenu, input: Input) {
         super(menu, input, UIElementType.Dropdown);
 
         this._values = [];
-        this.uiButtons = [];
         this.activeIndex = 0;
         this.extendUpward = false;
+        this.extended = false;
     }
     public update(gameTime: GameTime): void {
         super.update(gameTime);
 
         if (this.click) {
-            //if (this.cbOnInput) this.cbOnInput(this);
-            this.sprite = new Sprite(this.draw.bind(this));
-        }
+            const pointerPos = new Vector2(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
+            const buttonSize = new Vector2(this.aabb.size.x, this.aabb.size.y / (1 + this._values.length)).round();
+
+            if (this.extended) {
+                this.extended = false;
+
+                for (let i = 1; i < this._values.length + 1; i++) {
+                    const btnPos = new Vector2(0, this.extendUpward ? this._aabb.size.y - (i + 1) * buttonSize.y : i * buttonSize.y);
+
+                    if (new AABB(buttonSize, btnPos.add(this.aabb.position)).intersectsPoint(pointerPos) && this.activeIndex !== i - 1) {
+                        this.activeIndex = i - 1;
+                        if (this.cbOnInput) this.cbOnInput(this);
+                        this.sprite = new Sprite(this.draw.bind(this));
+                        break;
+                    }
+                }
+            } else if (new AABB(buttonSize, this.aabb.position).intersectsPoint(pointerPos) && !this.extendUpward || new AABB(buttonSize, this.aabb.position.clone.add(new Vector2(0, buttonSize.y * this.values.length))).intersectsPoint(pointerPos) && this.extendUpward) {
+                this.extended = true;
+            }
+        } else if (this.input.getButton(InputType.Trigger).down && !this.input.getButton(InputType.Trigger).clicked) this.extended = false;
 
         this.sprite = new Sprite(this.draw.bind(this));
     }
@@ -37,11 +53,22 @@ export class UIDropdown extends UIElement {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
 
-        for (const button of this.uiButtons) {
-            //console.log(button.currentFrame);
-            context.drawImage(button.currentFrame.sprite.canvasImageSource, button.currentFrame.aabb.position.x, button.currentFrame.aabb.position.y, this._aabb.size.x, this._aabb.size.y / this.uiButtons.length);
-        }
+        context.strokeStyle = '#333';
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.font = this.menu.font.getFont('MainFont', this.fontSize);
 
+        const buttonSize = new Vector2(this.aabb.size.x, this.aabb.size.y / (1 + this._values.length)).round();
+
+        for (let i = 0; i < (this.extended ? this._values.length + 1 : 1); i++) {
+            const btnPos = new Vector2(0, this.extendUpward ? this._aabb.size.y - (i + 1) * buttonSize.y : i * buttonSize.y);
+            if (this.background) context.drawImage(this.background.canvasImageSource, btnPos.x, btnPos.y, buttonSize.x, buttonSize.y);
+
+            context.strokeRect(context.lineWidth / 2 + btnPos.x, context.lineWidth / 2 + btnPos.y, buttonSize.x - context.lineWidth, buttonSize.y - (i === this._values.length && !this.extendUpward || this.extendUpward && i === 0 ? context.lineWidth : 0));
+
+            context.fillText(i === 0 ? this.value : this.values[i - 1], buttonSize.x / 2, buttonSize.y / 2 + btnPos.y);
+        }
     }
     public get currentFrame(): UIFrame {
         return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
@@ -51,25 +78,7 @@ export class UIDropdown extends UIElement {
     }
     public set values(val: string[]) {
         this._values = val;
-        this.uiButtons = [];
-
-        const buttonSize = new Vector2(this.aabb.size.x, this.aabb.size.y / val.length).round();
-
-        if (this.extendUpward) val.reverse();
-
-        for (let i = 0; i < val.length; i++) {
-            const button = new UIButton(this.menu, this.input);
-            button.localAlignH = AlignH.Left;
-            button.localAlignV = AlignV.Top;
-            button.label = val[i];
-            button.cbOnInput = b => console.log(this);
-
-            button.aabb = new AABB(buttonSize, new Vector2(0, i * buttonSize.y));
-            console.log(i * buttonSize.y);
-            this.uiButtons.push(button);
-        }
-
-        if (this.extendUpward) val.reverse();
+        this.sprite = new Sprite(this.draw.bind(this));
     }
     public get value(): string {
         return this._values[this.activeIndex];

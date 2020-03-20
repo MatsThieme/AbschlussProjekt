@@ -91,7 +91,9 @@ export class Physics {
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
 
+        //const AAxis = A.getAxis(B.position);
         for (let i = 0; i < A.faces.length; i++) {
+            //if (AAxis.findIndex(a => a.equal(A.faces[i].normal)) === -1) continue;
             const aP = A.project(A.faces[i].normal);
             const bP = B.project(A.faces[i].normal);
 
@@ -109,7 +111,9 @@ export class Physics {
             }
         }
 
+        //const BAxis = B.getAxis(A.position);
         for (let i = 0; i < B.faces.length; i++) {
+            //if (BAxis.findIndex(a => a.equal(B.faces[i].normal)) === -1) continue;
             const aP = A.project(B.faces[i].normal);
             const bP = B.project(B.faces[i].normal);
 

@@ -1,4 +1,3 @@
-import { GameTime } from '../GameTime.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
 import { InputGamepad } from './InputGamepad.js';
@@ -13,8 +12,8 @@ export class Input {
     private gamepad: InputGamepad;
     private inputMappingButtons: InputMapping;
     private inputMappingAxes: InputMapping;
-    public constructor(gameTime: GameTime) {
-        this.mouse = new InputMouse(gameTime);
+    public constructor() {
+        this.mouse = new InputMouse();
         this.keyboard = new InputKeyboard();
         this.gamepad = new InputGamepad();
 

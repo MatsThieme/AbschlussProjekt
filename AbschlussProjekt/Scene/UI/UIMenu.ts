@@ -35,6 +35,7 @@ export class UIMenu {
     public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, cb?: (uiElement: T) => any): T {
         const e = new type(this, this.input);
         if (cb) cb(e);
+        e.start();
         this.uiElements.push(e);
         return e;
     }

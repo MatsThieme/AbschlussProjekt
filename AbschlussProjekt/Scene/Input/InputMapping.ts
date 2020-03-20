@@ -5,10 +5,12 @@ export class InputMapping {
     public keyboard: { [key: number]: string };
     public mouse: { [key: number]: string | number };
     public gamepad: { [key: number]: string | number };
+    public touch: { [key: number]: string | number };
     public constructor(path?: string) {
         this.keyboard = {};
         this.mouse = {};
         this.gamepad = {};
+        this.touch = {};
         if (path) this.load(path);
     }
     public async load(path: string): Promise<void> {

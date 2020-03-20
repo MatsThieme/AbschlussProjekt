@@ -6,14 +6,14 @@ import { AABB } from '../../Physics/AABB.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { UIElementType } from '../UIElementType.js';
+import { UIFontSize } from '../UIFontSize.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
-import { UIFontSize } from '../UIFontSize.js';
+import { UIDropdown } from './UIDropdown.js';
 
 export abstract class UIElement {
     public click: boolean;
     public down: boolean;
-    public checked: boolean;
     protected _aabb: AABB;
     private _label: string;
     public active: boolean;
@@ -37,9 +37,8 @@ export abstract class UIElement {
         this._aabb = new AABB(new Vector2(1, 1), new Vector2());
         this._label = '';
         this.active = true;
-        this.checked = false;
-        this.localAlignH = AlignH.Center;
-        this.localAlignV = AlignV.Center;
+        this.localAlignH = AlignH.Left;
+        this.localAlignV = AlignV.Top;
         this.alignH = AlignH.Left;
         this.alignV = AlignV.Top;
         this.menu = menu;
@@ -47,6 +46,9 @@ export abstract class UIElement {
         this.type = type;
         this._fontSize = UIFontSize.Medium;
         this.lastPaddingScalar = -1;
+    }
+    public start(): void {
+        this.sprite = new Sprite(this.draw.bind(this));
     }
     public update(gameTime: GameTime): void {
         if (!this.active) return;
@@ -67,10 +69,24 @@ export abstract class UIElement {
     }
     public fitText(paddingScalar: number): void {
         this.lastPaddingScalar = paddingScalar;
-        if (this.label.length === 0) return;
+        if (this.type === UIElementType.Dropdown) {
+            if ((<any>this).values.length === 0) return;
+            let size = new Vector2();
 
-        const m = this.menu.font.measureText(this.label, this.menu.font.getFont('MainFont', this.fontSize));
-        this.aabb = new AABB(new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1)), this._aabb.position);
+            for (const val of (<any>this).values) {
+                const m = this.menu.font.measureText(val, this.menu.font.getFont('MainFont', this.fontSize));
+                if (m.x > size.x) size.x = m.x;
+                if (m.y > size.y) size.y = m.y;
+            }
+
+            this.aabb = new AABB(new Vector2(~~Math.max(size.x * paddingScalar, 1), ~~Math.max(size.y * paddingScalar * ((<any>this).values.length + 1), 1)), this._aabb.position);
+        } else {
+            if (this.label.length === 0) return;
+
+            const m = this.menu.font.measureText(this.label, this.menu.font.getFont('MainFont', this.fontSize));
+            this.aabb = new AABB(new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1)), this._aabb.position);
+        }
+
         this.sprite = new Sprite(this.draw.bind(this));
     }
     public get aabb(): AABB {
@@ -81,6 +97,7 @@ export abstract class UIElement {
     }
     public set aabb(val: AABB) {
         this._aabb = val;
+        this.sprite = new Sprite(this.draw.bind(this));
     }
     public get label(): string {
         return this._label;

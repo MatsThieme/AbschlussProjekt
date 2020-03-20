@@ -4,11 +4,8 @@ export enum InputType {
     TogglePauseMenu,
     ToggleInventoryGUI,
 
-
     MoveHorizontal,
     MoveVertical,
-    PointerAccelerationHorizontal,
-    PointerAccelerationVertical,
     PointerPositionHorizontal,
     PointerPositionVertical,
     Rotate

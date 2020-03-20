@@ -81,7 +81,7 @@ export class RigidBody extends Component {
     }
     public applyImpulse(impulse: Vector2, at: Vector2): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
-        this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
+        //this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;

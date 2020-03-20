@@ -132,4 +132,27 @@ export class PolygonCollider extends Collider {
 
         return ret;
     }
+    //public getAxis(otherColliderPosition: Vector2): Vector2[] {
+    //    const thisPosition: Vector2 = this.position;
+    //    const axis: Vector2[] = [];
+
+    //    for (const normal of this.faces.map(f => f.normal)) {
+    //        if (axis.findIndex(a => a.equal(normal)) === -1) axis.push(normal);
+    //    }
+
+    //    const blub: Vector2[] = [];
+
+    //    for (const a of axis) {
+    //        let foundOpposite = false;
+    //        for (const b of axis) {
+    //            if (Vector2.dot(a, b) === -1) foundOpposite = true;
+    //        }
+
+    //        if (foundOpposite) {
+    //            blub.push(thisPosition.clone.add(a).distance(otherColliderPosition) > thisPosition.clone.add(a.flipped).distance(otherColliderPosition) ? a : a.flipped);
+    //        } else blub.push(a);
+    //    }
+
+    //    return blub;
+    //}
 }

@@ -14,6 +14,7 @@ import { Physics } from './Physics/Physics.js';
 import { UI } from './UI/UI.js';
 import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
+import { InputType } from './Input/InputType.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -28,10 +29,15 @@ export class Scene {
     private loadingScreenInterval?: number;
     public constructor() {
         this.domElement = document.createElement('canvas');
+        this.domElement.style.position = 'absolute';
+        this.domElement.style.left = '0px';
+        this.domElement.style.top = '0px';
+        this.domElement.style.overflow = 'hidden';
+
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
-        this.input = new Input(this.gameTime);
+        this.input = new Input();
         this.ui = new UI(this.input, new AABB(new Vector2(innerWidth, innerHeight), new Vector2()));
         this.framedata = new Framedata();
 
@@ -45,7 +51,7 @@ export class Scene {
      * 
      */
     public find(name: string): GameObject | undefined {
-        return this.gameObjects.get(name);
+        return this.gameObjects.get(name) || this.gameObjects.get((name.match(/(.*) \(\d+\)/) || '')[1]);
     }
     public newGameObject(name: string, cb?: (gameObject: GameObject) => any): GameObject {
         const gameObject = new GameObject(name, this);
@@ -62,6 +68,7 @@ export class Scene {
         return gameObject;
     }
     private async update() {
+        console.log(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
         // calculate deltaTime
         this.gameTime.update();
 

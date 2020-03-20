@@ -11,11 +11,10 @@ import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
 import { Scene } from './Scene/Scene.js';
 import { Sprite } from './Scene/Sprite.js';
 import { UIButton } from './Scene/UI/UIElements/UIButton.js';
-import { UICheckbox } from './Scene/UI/UIElements/UICheckbox.js';
+import { UIDropdown } from './Scene/UI/UIElements/UIDropdown.js';
 import { UIText } from './Scene/UI/UIElements/UIText.js';
 import { UIFontSize } from './Scene/UI/UIFontSize.js';
 import { Vector2 } from './Scene/Vector2.js';
-import { UIDropdown } from './Scene/UI/UIElements/UIDropdown.js';
 
 class Game {
     private scene: Scene;
@@ -32,10 +31,6 @@ class Game {
         document.body.appendChild(scene.domElement);
         scene.domElement.width = 1920;
         scene.domElement.height = 1080;
-        scene.domElement.style.position = 'absolute';
-        scene.domElement.style.left = '0px';
-        scene.domElement.style.top = '0px';
-        document.body.style.overflow = 'hidden';
 
         await FontLoader.load('/Assets/Font/JosefinSlab-Regular.ttf', 'MainFont');
 
@@ -152,6 +147,8 @@ class Game {
             menu.active = true;
             menu.addUIElement(UIButton, button => {
                 button.aabb = new AABB(new Vector2(200, 120), new Vector2());
+                button.localAlignH = AlignH.Center;
+                button.localAlignV = AlignV.Center;
                 button.alignH = AlignH.Center;
                 button.alignV = AlignV.Center;
                 button.cbOnInput = b => { menu.active = !menu.active; };
@@ -159,14 +156,21 @@ class Game {
                 button.fontSize = UIFontSize.Large;
             });
 
-            menu.addUIElement(UICheckbox, checkbox => {
-                checkbox.label = 'check';
-                checkbox.cbOnInput = c => console.log(c.checked);
-                checkbox.aabb = new AABB(new Vector2(50, 50), new Vector2(200, 200));
+            //menu.addUIElement(UICheckbox, checkbox => {
+            //    checkbox.label = 'check';
+            //    checkbox.cbOnInput = c => console.log(c.checked);
+            //    checkbox.aabb = new AABB(new Vector2(50, 50), new Vector2(200, 200));
+            //});
+
+            menu.addUIElement(UIDropdown, dropdown => {
+                dropdown.aabb = new AABB(new Vector2(150, 200), new Vector2(200, 350));
+                dropdown.values = ['first', 'second', 'third'];
+                dropdown.cbOnInput = d => console.log(d.value);
+                dropdown.fitText(1.2);
             });
 
             menu.addUIElement(UIDropdown, dropdown => {
-                dropdown.aabb = new AABB(new Vector2(100, 150), new Vector2(200, 350));
+                dropdown.aabb = new AABB(new Vector2(150, 200), new Vector2(370, 350));
                 dropdown.values = ['first', 'second', 'third'];
                 dropdown.cbOnInput = d => console.log(d.value);
             });
@@ -177,14 +181,14 @@ class Game {
             menu.active = true;
             menu.pauseScene = false;
             menu.addUIElement(UIText, text => {
-                text.aabb = new AABB(new Vector2(100, 50), new Vector2(50, 25));
+                text.aabb = new AABB(new Vector2(100, 50), new Vector2(0, 0));
                 text.fontSize = UIFontSize.Small;
                 setInterval(() => text.label = this.scene.framedata.fps.toString(), 500);
-                text.fitText(1.3);
             });
         });
 
-
+        //console.log(this.scene.find('polygon'));
+        
         await asyncTimeout(500);
     }
     private createLoadingScreen(scene: Scene): void {
@@ -199,6 +203,8 @@ class Game {
         };
     }
 }
+
+if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: number, height: number) { const canvas = document.createElement('canvas'); canvas.width = width, canvas.height = height; return canvas; } // polyfill OffscreenCanvas
 
 new Game();
 
@@ -216,3 +222,7 @@ new Game();
 // use child object collider in collision calculations
 // frame align
 // canvas rotation in camera component
+// stroke option for ui elements
+// ui color options
+// mainfont variable in settings
+// ggf change static class Settings to class Settings, 1 instance per scene

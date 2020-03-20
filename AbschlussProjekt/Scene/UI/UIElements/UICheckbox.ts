@@ -7,8 +7,11 @@ import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
 
 export class UICheckbox extends UIElement {
+    public checked: boolean;
     public constructor(menu: UIMenu, input: Input) {
         super(menu, input, UIElementType.Checkbox);
+
+        this.checked = false;
     }
     public update(gameTime: GameTime): void {
         super.update(gameTime);

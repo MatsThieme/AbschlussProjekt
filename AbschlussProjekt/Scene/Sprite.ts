@@ -7,7 +7,7 @@ export class Sprite {
     public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => any)) {
         if (typeof src === 'string') {
             this.canvasImageSource = new Image();
-            this.canvasImageSource.src = Settings.assetPath + src;
+            this.canvasImageSource.src = src.substr(0, 'http://'.length) === 'http://' || src.substr(0, 'https://'.length) === 'https://' ? src : Settings.assetPath + src;
         } else if (src instanceof OffscreenCanvas || src instanceof HTMLCanvasElement) {
             this.canvasImageSource = src;
         } else if (src instanceof Image) {

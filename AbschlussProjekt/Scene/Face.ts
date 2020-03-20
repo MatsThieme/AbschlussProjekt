@@ -9,7 +9,7 @@ export class Face {
     public constructor(v1: Vector2, v2: Vector2) {
         this.v1 = v1;
         this.v2 = v2;
-        this.normal = v1.clone.sub(v2).perpendicularCounterClockwise;
+        this.normal = v1.clone.sub(v2).perpendicularCounterClockwise.normalize();
         this.line = new Line(v1, v2);
     }
 }

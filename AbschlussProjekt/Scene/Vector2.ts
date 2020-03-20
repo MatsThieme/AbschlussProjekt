@@ -162,12 +162,7 @@ export class Vector2 {
     public get flipped(): Vector2 {
         return this.clone.flip();
     }
-    //public intersects(other: Vector2): Vector2 | undefined {
-    //    const p = this;
-    //    const q = other;
-
-    //    Vector2.cross(q.clone.sub(p) , r) / (r × s)
-
-
-    //}
+    public equal(other: Vector2): boolean {
+        return this.x === other.x && this.y === other.y;
+    }
 }
