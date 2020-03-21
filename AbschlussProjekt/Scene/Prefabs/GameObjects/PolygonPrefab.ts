@@ -10,7 +10,7 @@ export function PolygonPrefab(gameObject: GameObject): void {
         polygonCollider.material = new PhysicsMaterial(1, 1, 1);
     });
 
-    gameObject.transform.relativePosition = new Vector2(0, 2);
+    gameObject.transform.relativePosition = new Vector2(-0.3, 2);
     gameObject.rigidbody.useAutoMass = true;
     gameObject.addComponent(PolygonRenderer);
 }

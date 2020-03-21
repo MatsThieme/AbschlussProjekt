@@ -3,5 +3,6 @@ export enum UIElementType {
     Button,
     Checkbox,
     Dropdown,
-    TextInput
+    TextInputField,
+    NumberInputField
 }

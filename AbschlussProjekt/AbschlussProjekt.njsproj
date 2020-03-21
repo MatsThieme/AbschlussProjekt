@@ -37,7 +37,6 @@
     <Content Include="Assets\InputMappingButtons.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Assets\PrefabTest.prefab" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
@@ -237,7 +236,16 @@
     <TypeScriptCompile Include="Scene\UI\UIElements\UIDropdown.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UIInputField.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UINumberInputField.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\UI\UIElements\UIText.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\UI\UIElements\UITextInputField.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\UI\UIMenu.ts">

@@ -1,8 +1,10 @@
+import { Settings } from './Scene/Settings.js';
+
 export class FontLoader {
     public static load(url: string, name: string): Promise<void> {
         return new Promise((resolve, reject) => {
             const e = document.querySelector('style') || document.createElement('style');
-            e.innerHTML += `@font-face { font-family: ${name}; src: url('${url}'); }`;
+            e.innerHTML += `@font-face { font-family: ${name}; src: url('${url.substr(0, 'https://'.length) === 'https://' ? url : Settings.assetPath + url}'); }`;
             document.head.appendChild(e);
 
             const p = document.createElement('span');

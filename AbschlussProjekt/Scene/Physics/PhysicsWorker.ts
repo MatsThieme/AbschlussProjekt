@@ -2,7 +2,9 @@ self.addEventListener('message', async (e: MessageEvent) => {
     if (!e.data) return postMessage(0);
     if (!e.isTrusted || e.data.name === 'close') return close();
 
-    if (e.data && typeof e.data.name === 'string' && e.data.data) return postMessage(await (await import(`/Scene/Physics/${e.data.name}.js`))[e.data.name](e.data.data));
+    const funcName = ((<string>e.data.name).match(/.*\/(\w+).js /) || '')[0];
+    if (funcName.length === 0) return postMessage(0);
+    if (e.data && typeof e.data.name === 'string' && e.data.data) return postMessage(await (await import(e.data.name))[funcName](e.data.data));
 
     return postMessage(0);
 });

@@ -14,6 +14,7 @@ import { Physics } from './Physics/Physics.js';
 import { UI } from './UI/UI.js';
 import { Vector2 } from './Vector2.js';
 import { AsyncWorker } from './Worker/AsyncWorker.js';
+import { Settings } from './Settings.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -37,7 +38,7 @@ export class Scene {
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this);
-        this.ui = new UI(this.input, new AABB(new Vector2(innerWidth, innerHeight), new Vector2()), this);
+        this.ui = new UI(this.input, new AABB(new Vector2(1920, 1080), new Vector2()), this);
         this.framedata = new Framedata();
 
         this.stop();
@@ -119,7 +120,7 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        await AsyncWorker.createWorker('/Scene/Physics/PhysicsWorker.js', navigator.hardwareConcurrency);
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PhysicsWorker.js', navigator.hardwareConcurrency);
 
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));

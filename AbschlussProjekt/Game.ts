@@ -31,10 +31,10 @@ class Game {
 
         scene.loadingScreen = LoadingScreenPrefab;
 
-        await FontLoader.load('/Assets/Font/JosefinSlab-Regular.ttf', 'MainFont');
+        await FontLoader.load('/Font/JosefinSlab-Regular.ttf', 'MainFont');
 
         scene.newCamera('camera', camera => {
-            camera.resolution = new Vector2(innerWidth, innerHeight);
+            camera.resolution = new Vector2(1920, 1080);
             camera.size = new Vector2(16, 9);
         });
 

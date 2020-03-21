@@ -37,9 +37,9 @@ export class UIMenu {
     }
     public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, cb?: (uiElement: T, scene: Scene) => any): T {
         const e = new type(this, this.input);
+        this.uiElements.push(e);
         if (cb) cb(e, this.scene);
         e.start();
-        this.uiElements.push(e);
         return e;
     }
     public get currentFrame(): UIFrame {
