@@ -1,13 +1,11 @@
+import { awaitPromises } from '../../Helpers.js';
 import { CircleCollider } from '../GameObject/Components/CircleCollider.js';
-import { Collider } from '../GameObject/Components/Collider.js';
 import { ComponentType } from '../GameObject/Components/ComponentType.js';
 import { PolygonCollider } from '../GameObject/Components/PolygonCollider.js';
 import { GameObject } from '../GameObject/GameObject.js';
 import { Vector2 } from '../Vector2.js';
 import { AABB } from './AABB.js';
 import { Collision } from './Collision.js';
-import { awaitPromises } from '../../Helpers.js';
-import { AsyncWorker } from '../Worker/AsyncWorker.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 100 / 1000);
@@ -136,7 +134,7 @@ export class Physics {
         if (leastPenetrationNormal.perpendicularCounterClockwise.add(referenceCollider.position).angleTo(referenceCollider.position, incidentCollider.position).degree > 180) leastPenetrationNormal.flip();
 
 
-        const contacts: Vector2[] = [];//(<Vector2[]>(await AsyncWorker.work('/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
+        const contacts: Vector2[] = [];//(<Vector2[]>(await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
 
         for (const faceA of A.faces) {
             for (const faceB of B.faces) {
@@ -148,13 +146,6 @@ export class Physics {
         return new Collision(A, B, leastPenetrationNormal, leastPenetration, contacts);
     }
     public static async collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Promise<Collision> {
-        const contacts = [];
-
-        for (const v of polygonCollider.vertices) {
-            if (circleCollider.position.distance(v) < circleCollider.radius) contacts.push(v);
-        }
-
-        if (contacts.length === 0) return new Collision(polygonCollider, circleCollider);
-        else return new Collision(polygonCollider, circleCollider, Vector2.average(...contacts).sub(circleCollider.position).normalize(), Vector2.average(...contacts).distance(circleCollider.position), contacts);
+        return new Collision(polygonCollider, circleCollider);
     }
 }

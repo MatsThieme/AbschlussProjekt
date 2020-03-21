@@ -91,30 +91,62 @@ export class RigidBody extends Component {
 
         const solvedCollisions = [];
         const contactPoints = [];
+        const normals: Vector2[] = [];
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
                 if (collision.colliderA.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.A);
+                    if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
                 } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.B);
+                    if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
                 }
             }
         }
 
         if (solvedCollisions.length > 0) {
-            //console.log(Vector2.average(...solvedCollisions).toString());
             this.applyImpulse(Vector2.average(...solvedCollisions), Vector2.average(...contactPoints));
 
+
+
             for (const c of contactPoints) {
-                const x = this.gameObject.scene.newGameObject('contact');
-                x.addComponent(Destroy);
-                const tex = x.addComponent(Texture);
-                tex.sprite = new Sprite('spriteTest1.png');
-                tex.size = new Vector2(0.1, 0.1);
-                x.transform.relativePosition = c;
+                this.gameObject.scene.newGameObject('contact', gameObject => {
+                    gameObject.addComponent(Texture, texture => {
+                        texture.sprite = new Sprite('spriteTest1.png');
+                        texture.size = new Vector2(0.1, 0.1);
+                    });
+
+                    gameObject.transform.relativePosition = c;
+                    gameObject.addComponent(Destroy);
+                });
+            }
+
+            for (const n of normals) {
+                this.gameObject.scene.newGameObject('contact', gameObject => {
+                    gameObject.addComponent(Texture, texture => {
+                        texture.sprite = new Sprite((context, canvas) => {
+                            canvas.width = canvas.height = 50;
+
+                            context.arc(canvas.width / 2, 8, 8, 0, Math.PI * 2);
+                            context.fillStyle = context.strokeStyle = '#f00';
+                            context.fill();
+
+                            context.beginPath();
+
+                            context.moveTo(canvas.width / 2, 8);
+                            context.lineTo(canvas.width / 2, canvas.height);
+                            context.stroke();
+                        });
+
+                        texture.size = new Vector2(0.5, 0.5);
+                    });
+
+                    gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
+                    gameObject.addComponent(Destroy);
+                });
             }
         }
 

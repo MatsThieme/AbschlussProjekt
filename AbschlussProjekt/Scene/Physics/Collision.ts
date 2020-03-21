@@ -28,12 +28,12 @@ export class Collision {
         //const rb = contact.clone.sub(this.colliderB.position);
 
         //const rv = rb2.velocity.clone.add(Vector2.cross1(rb2.angularVelocity, rb)).sub(rb1.velocity).sub(Vector2.cross1(rb1.angularVelocity, ra));
-        //console.log(rv);
+
         //const velocityAlongNormal = Vector2.dot(rv, this.normal);
 
         const velocityAlongNormal = Vector2.dot(rb1.velocity.clone.sub(rb2.velocity), this.normal);
 
-        if (velocityAlongNormal > 0) return;
+        //if (velocityAlongNormal > 0) return;
 
 
         const e = (this.colliderA.material.bounciness + this.colliderB.material.bounciness) / 2;

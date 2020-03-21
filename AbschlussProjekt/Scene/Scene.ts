@@ -53,10 +53,10 @@ export class Scene {
     public find(name: string): GameObject | undefined {
         return this.gameObjects.get(name) || this.gameObjects.get([...this.gameObjects.keys()].find(n => (n.match(/(.*) \(\d+\)/) || '')[1] === name) || '');
     }
-    public newGameObject(name: string, cb?: (gameObject: GameObject) => any): GameObject {
+    public newGameObject(name: string, ...cb: ((gameObject: GameObject) => any)[]): GameObject {
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(gameObject.name, gameObject);
-        if (cb) cb(gameObject);
+        if (cb) cb.forEach(cb => cb(gameObject));
 
         return gameObject;
     }
