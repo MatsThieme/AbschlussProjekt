@@ -1,5 +1,6 @@
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
+import { Settings } from '../../Settings.js';
 import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIFrame } from '../UIFrame.js';
@@ -35,7 +36,7 @@ export class UIButton extends UIElement {
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
-        context.font = this.menu.font.getFont('MainFont', this.fontSize);
+        context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 

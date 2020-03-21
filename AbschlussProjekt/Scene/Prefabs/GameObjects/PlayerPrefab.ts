@@ -17,5 +17,4 @@ export function PlayerPrefab(gameObject: GameObject): void {
     gameObject.addComponent(PolygonRenderer);
     gameObject.addComponent(Move);
     gameObject.addComponent(ReloadPage);
-
 }

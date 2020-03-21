@@ -12,6 +12,7 @@ import { LoadingScreenPrefab } from './Scene/Prefabs/LoadingScreenPrefab.js';
 import { DebugOverlayPrefab } from './Scene/Prefabs/UI/DebugOverlayPrefab.js';
 import { MainMenuPrefab } from './Scene/Prefabs/UI/MainMenu/MainMenuPrefab.js';
 import { Scene } from './Scene/Scene.js';
+import { Settings } from './Scene/Settings.js';
 import { Vector2 } from './Scene/Vector2.js';
 
 class Game {
@@ -31,7 +32,7 @@ class Game {
 
         scene.loadingScreen = LoadingScreenPrefab;
 
-        await FontLoader.load('/Font/JosefinSlab-Regular.ttf', 'MainFont');
+        await FontLoader.load('/Font/JosefinSlab-Regular.ttf', Settings.mainFont);
 
         scene.newCamera('camera', camera => {
             camera.resolution = new Vector2(1920, 1080);
@@ -58,7 +59,8 @@ class Game {
         scene.ui.addMenu('Main Menu', MainMenuPrefab);
         scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
 
-        await asyncTimeout(0);
+
+        await asyncTimeout(100);
     }
 }
 
@@ -68,16 +70,17 @@ new Game();
 
 //to fix:
 // polygon collision (normal direction)
-// particlesystem align
-// camera aspect ratio
+// collision response 
 // polygon circle collision, circle circle collision
 
 // to do:
 // friction
-// simplify polygon collision detection, function collision(vertices1: Vector[], vertices2: Vector2[]): {contacts, collisionNormal...}
-// no rigidbody in child objects
+// simplify polygon collision detection, function collision(vertices1: { x: number, y: number }[], vertices2: { x: number, y: number }[]): {contacts, collisionNormal...}
 // use child object collider in collision calculations
 // frame align
 // canvas rotation in camera component
-// mainfont variable in settings
-// ggf change static class Settings to class Settings, 1 instance per scene
+
+
+// to test:
+// child collider
+// circle collisions

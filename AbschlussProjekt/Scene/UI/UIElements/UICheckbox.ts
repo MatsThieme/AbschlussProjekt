@@ -1,5 +1,6 @@
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
+import { Settings } from '../../Settings.js';
 import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIFrame } from '../UIFrame.js';
@@ -23,7 +24,7 @@ export class UICheckbox extends UIElement {
         }
     }
     protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
-        const labelSize = this.menu.font.measureText(this.label, this.menu.font.getFont('MainFont', this.fontSize));
+        const labelSize = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
 
         canvas.height = Math.min(this.aabb.size.x, this.aabb.size.y);
         canvas.width = ~~(canvas.height * 1.2 + labelSize.x);
@@ -53,7 +54,7 @@ export class UICheckbox extends UIElement {
         context.textBaseline = 'middle';
 
         //context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, false), this.aabb.size.clone.scale(0.9));
-        context.font = this.menu.font.getFont('MainFont', this.fontSize);
+        context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
         context.fillText(this.label, canvas.width, canvas.height / 2);
 

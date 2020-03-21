@@ -3,13 +3,13 @@ import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { InputType } from '../../Input/InputType.js';
 import { AABB } from '../../Physics/AABB.js';
+import { Settings } from '../../Settings.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIFontSize } from '../UIFontSize.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
-import { UIDropdown } from './UIDropdown.js';
 
 export abstract class UIElement {
     public click: boolean;
@@ -78,7 +78,7 @@ export abstract class UIElement {
             let size = new Vector2();
 
             for (const val of (<any>this).values) {
-                const m = this.menu.font.measureText(val, this.menu.font.getFont('MainFont', this.fontSize));
+                const m = this.menu.font.measureText(val, this.menu.font.getFont(Settings.mainFont, this.fontSize));
                 if (m.x > size.x) size.x = m.x;
                 if (m.y > size.y) size.y = m.y;
             }
@@ -87,7 +87,7 @@ export abstract class UIElement {
         } else {
             if (this.label.length === 0) return;
 
-            const m = this.menu.font.measureText(this.label, this.menu.font.getFont('MainFont', this.fontSize));
+            const m = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
             this.aabb = new AABB(new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1)), this._aabb.position);
         }
 

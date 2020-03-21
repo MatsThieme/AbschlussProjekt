@@ -6,6 +6,7 @@ import { Scene } from '../Scene.js';
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
+import { Collider } from './Components/Collider.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
 import { ParticleSystem } from './Components/ParticleSystem.js';
@@ -25,7 +26,6 @@ export class GameObject {
         this.id = GameObject.nextID++;
         this._name = `${name} (${this.id})`;
         this.addComponent(Transform);
-        this.addComponent(RigidBody);
         this.children = [];
         this.scene = scene;
         this.drawPriority = 0;
@@ -40,7 +40,10 @@ export class GameObject {
         return <Transform>this.getComponent<Transform>(ComponentType.Transform);
     }
     public get rigidbody(): RigidBody {
-        return <RigidBody>this.getComponent<RigidBody>(ComponentType.RigidBody);
+        return this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody) || this.addComponent(RigidBody);
+    }
+    public get collider(): Collider[] {
+        return [...this.getComponents<Collider>(ComponentType.Collider), ...this.getComponentsInChildren<Collider>(ComponentType.Collider), ...this.getComponentsInParents<Collider>(ComponentType.Collider)];
     }
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T, cb?: (component: T) => any): T {
         const component = new type(this);
@@ -52,6 +55,8 @@ export class GameObject {
             (component.type === ComponentType.AudioListener && this.getComponents(ComponentType.AudioListener).length === 0) ||
             (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
             this.components.push(component);
+
+        if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) && !this.rigidbody) this.addComponent(RigidBody);
 
         if (cb) cb(component);
 
@@ -77,6 +82,32 @@ export class GameObject {
         }
 
         return;
+    }
+    public getComponentsInChildren<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
+        const ret: T[] = [];
+
+        for (const child of this.children) {
+            ret.push(...child.getComponents(type));
+            ret.push(...child.getComponentsInChildren(type));
+        }
+
+        return ret;
+    }
+    public getComponentInChildren<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
+        for (const child of this.children) {
+            let c = child.getComponent(type);
+            if (c) return c;
+            c = child.getComponentInChildren(type);
+            if (c) return c;
+        }
+
+        return undefined;
+    }
+    public getComponentsInParents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
+        return [...(this.parent?.getComponents(type) || []), ...(this.parent?.getComponentsInParents(type) || [])];
+    }
+    public getComponentInParents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
+        return this.parent?.getComponent(type) || this.parent?.getComponentInParents(type);
     }
     public addChild(gameObject: GameObject): GameObject {
         this.children.push(gameObject);

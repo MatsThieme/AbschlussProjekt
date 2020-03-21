@@ -2,6 +2,7 @@ import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { InputType } from '../../Input/InputType.js';
 import { AABB } from '../../Physics/AABB.js';
+import { Settings } from '../../Settings.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { UIElementType } from '../UIElementType.js';
@@ -58,7 +59,7 @@ export class UIDropdown extends UIElement {
         context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
         context.textAlign = 'center';
         context.textBaseline = 'middle';
-        context.font = this.menu.font.getFont('MainFont', this.fontSize);
+        context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
         const buttonSize = new Vector2(this.aabb.size.x, this.aabb.size.y / (1 + this._values.length)).round();
 

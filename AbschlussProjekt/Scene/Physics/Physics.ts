@@ -28,11 +28,11 @@ export class Physics {
 
         const promises: Promise<Collision>[] = [];
 
-        for (const collider of first.getComponents<Collider>(ComponentType.Collider)) {
+        for (const collider of first.collider) {
 
             if (collider.type === ComponentType.CircleCollider) {
 
-                for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
+                for (const otherCollider of second.collider) {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.CircleCollider) {
@@ -45,7 +45,7 @@ export class Physics {
 
             } else if (collider.type === ComponentType.PolygonCollider) {
 
-                for (const otherCollider of second.getComponents<Collider>(ComponentType.Collider)) {
+                for (const otherCollider of second.collider) {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.PolygonCollider) {

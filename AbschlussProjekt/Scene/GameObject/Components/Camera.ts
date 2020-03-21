@@ -30,7 +30,12 @@ export class Camera extends Component {
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.context.rotate(this.gameObject.transform.rotation.radian);
+        //this.context.translate(this.canvas.width / 2, this.canvas.height/ 2);
+
+        //this.context.rotate(this.gameObject.transform.rotation.radian);
+
+        //this.context.translate(-this.canvas.width / 2, -this.canvas.height / 2);
+
 
         for (const frame of frames) {
             if (this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {

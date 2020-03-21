@@ -5,4 +5,5 @@ export class Settings {
     public static get assetPath(): string {
         return Settings.appPath + Settings.relativeAssetPath;
     }
+    public static mainFont: string = 'MainFont';
 } 

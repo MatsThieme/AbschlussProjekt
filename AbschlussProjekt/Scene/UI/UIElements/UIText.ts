@@ -1,4 +1,5 @@
 import { Input } from '../../Input/Input.js';
+import { Settings } from '../../Settings.js';
 import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIFrame } from '../UIFrame.js';
@@ -25,7 +26,7 @@ export class UIText extends UIElement {
         context.textBaseline = 'middle';
 
         //context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, false), this.aabb.size.clone.scale(0.9));
-        context.font = this.menu.font.getFont('MainFont', this.fontSize);
+        context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 
