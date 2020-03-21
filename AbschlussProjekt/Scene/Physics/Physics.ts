@@ -136,15 +136,14 @@ export class Physics {
         if (leastPenetrationNormal.perpendicularCounterClockwise.add(referenceCollider.position).angleTo(referenceCollider.position, incidentCollider.position).degree > 180) leastPenetrationNormal.flip();
 
 
-        const contacts: Vector2[] = (<Vector2[]>(await AsyncWorker.work('/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
+        const contacts: Vector2[] = [];//(<Vector2[]>(await AsyncWorker.work('/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
 
-        //for (const faceA of A.faces) {
-        //    for (const faceB of B.faces) {
-        //        const contact = faceA.line.intersects(faceB.line);
-        //        if (contact) contacts.push(contact);
-        //    }
-        //}
-
+        for (const faceA of A.faces) {
+            for (const faceB of B.faces) {
+                const contact = faceA.line.intersects(faceB.line);
+                if (contact) contacts.push(contact);
+            }
+        }
 
         return new Collision(A, B, leastPenetrationNormal, leastPenetration, contacts);
     }

@@ -1,6 +1,5 @@
 import { FontLoader } from './FontLoader.js';
 import { asyncTimeout } from './Helpers.js';
-import { AABB } from './Scene/Physics/AABB.js';
 import { FloorPrefab } from './Scene/Prefabs/GameObjects/FloorPrefab.js';
 import { LeftPrefab } from './Scene/Prefabs/GameObjects/LeftPrefab.js';
 import { PlayerPrefab } from './Scene/Prefabs/GameObjects/PlayerPrefab.js';
@@ -10,12 +9,10 @@ import { TopPrefab } from './Scene/Prefabs/GameObjects/TopPrefab.js';
 import { xAxisprefab } from './Scene/Prefabs/GameObjects/xAxisPrefab.js';
 import { yAxisprefab } from './Scene/Prefabs/GameObjects/yAxisPrefab.js';
 import { LoadingScreenPrefab } from './Scene/Prefabs/LoadingScreenPrefab.js';
+import { DebugOverlayPrefab } from './Scene/Prefabs/UI/DebugOverlayPrefab.js';
 import { MainMenuPrefab } from './Scene/Prefabs/UI/MainMenu/MainMenuPrefab.js';
 import { Scene } from './Scene/Scene.js';
-import { UIText } from './Scene/UI/UIElements/UIText.js';
-import { UIFontSize } from './Scene/UI/UIFontSize.js';
 import { Vector2 } from './Scene/Vector2.js';
-import { DebugOverlayPrefab } from './Scene/Prefabs/UI/DebugOverlayPrefab.js';
 
 class Game {
     private scene: Scene;
@@ -65,7 +62,7 @@ class Game {
     }
 }
 
-//if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: number, height: number) { const canvas = document.createElement('canvas'); canvas.width = width, canvas.height = height; return canvas; } // polyfill OffscreenCanvas
+if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: number, height: number) { const canvas = document.createElement('canvas'); canvas.width = width, canvas.height = height; return canvas; } // polyfill OffscreenCanvas
 
 new Game();
 

@@ -27,7 +27,7 @@ export function MainMenuPrefab(menu: UIMenu): void {
     //});
 
     menu.addUIElement(UIDropdown, dropdown => {
-        dropdown.aabb = new AABB(new Vector2(0, 150), new Vector2(200, 350));
+        dropdown.aabb = new AABB(new Vector2(200, 150), new Vector2(0, 100));
         dropdown.values = ['first', 'second', 'third'];
         dropdown.cbOnInput = d => console.log(d.value);
         dropdown.fitText(1.2);
