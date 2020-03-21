@@ -9,12 +9,12 @@ import { Vector2 } from '../../Vector2.js';
 export function PlayerPrefab(gameObject: GameObject): void {
     gameObject.addComponent(PolygonCollider, polygonCollider => {
         polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0), new Vector2(0.5, -0.5)];
-        polygonCollider.material = new PhysicsMaterial(1, 1, 1);
+        polygonCollider.material = new PhysicsMaterial(0, 1, 1);
     });
 
     gameObject.transform.relativePosition = new Vector2(0, 0);
     gameObject.rigidbody.useAutoMass = true;
     gameObject.addComponent(PolygonRenderer);
     gameObject.addComponent(Move);
-    gameObject.addComponent(ReloadPage);
+    //gameObject.addComponent(ReloadPage);
 }

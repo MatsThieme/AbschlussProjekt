@@ -22,7 +22,7 @@ export class Physics {
         if (x !== -1) Physics.ignoreCollisions.splice(x, 1);
     }
     public static async collision(first: GameObject, second: GameObject): Promise<Collision[]> {
-        if (first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return [];
+        if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return [];
 
         const promises: Promise<Collision>[] = [];
 
@@ -59,14 +59,11 @@ export class Physics {
 
         return promises.length === 0 ? [] : (await awaitPromises(...promises)).filter(c => c.normal);
     }
-    public static circleIntersection(circleCollider1: CircleCollider, circleCollider2: CircleCollider): boolean {
-        return circleCollider2.gameObject.transform.position.sub(circleCollider1.gameObject.transform.position).magnitudeSquared < (circleCollider1.radius + circleCollider2.radius) ** 2;
-    }
     public static async collisionCircle(circleCollider1: CircleCollider, circleCollider2: CircleCollider): Promise<Collision> {
         const gO1 = circleCollider1.gameObject;
         const gO2 = circleCollider2.gameObject;
 
-        if (!Physics.circleIntersection(circleCollider1, circleCollider2)) return new Collision(circleCollider1, circleCollider2);
+        if (!circleCollider1.intersects(circleCollider2)) return new Collision(circleCollider1, circleCollider2);
 
         let penetration: number;
         let normal: Vector2;
@@ -89,9 +86,7 @@ export class Physics {
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
 
-        //const AAxis = A.getAxis(B.position);
         for (let i = 0; i < A.faces.length; i++) {
-            //if (AAxis.findIndex(a => a.equal(A.faces[i].normal)) === -1) continue;
             const aP = A.project(A.faces[i].normal);
             const bP = B.project(A.faces[i].normal);
 
@@ -109,9 +104,7 @@ export class Physics {
             }
         }
 
-        //const BAxis = B.getAxis(A.position);
         for (let i = 0; i < B.faces.length; i++) {
-            //if (BAxis.findIndex(a => a.equal(B.faces[i].normal)) === -1) continue;
             const aP = A.project(B.faces[i].normal);
             const bP = B.project(B.faces[i].normal);
 

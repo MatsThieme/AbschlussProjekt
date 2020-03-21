@@ -33,4 +33,7 @@ export class CircleCollider extends Collider {
     public async update(gameTime: GameTime): Promise<void> {
         this._aabb = new AABB(new Vector2(this.scaledRadius * 2, this.scaledRadius * 2), this.position);
     }
+    public intersects(other: CircleCollider): boolean {
+        return other.position.sub(this.position).magnitudeSquared < (this.radius + other.radius) ** 2;
+    }
 }

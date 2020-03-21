@@ -39,20 +39,37 @@ export class Collision {
         const e = (this.colliderA.material.bounciness + this.colliderB.material.bounciness) / 2;
 
         const j = (-(e + 1) * velocityAlongNormal) / (rb1.invMass + rb2.invMass);
+        console.log((j < 0 ? -1 : 1));
 
+        const impulse = this.normal.clone.setLength(j);
 
-        const impulse = this.normal.normalized.setLength(j);
+        const project = this.normal.clone.setLength(this.penetrationDepth / 2 * (j < 0 ? -1 : 1));
+
+        const projectA = rb2.mass === 0 ? project.clone.scale(2) : project;
+        const projectB = rb1.mass === 0 ? project.clone.scale(2) : project;
 
         return {
             collision: this,
-            A: impulse,
-            B: impulse.flipped
+            A: {
+                impulse,
+                project: projectA
+            },
+            B: {
+                impulse: impulse.flipped,
+                project: projectB.flipped
+            }
         };
     }
 }
 
 declare interface Solved {
     readonly collision: Collision;
-    readonly A: Vector2;
-    readonly B: Vector2;
+    readonly A: {
+        impulse: Vector2;
+        project: Vector2;
+    };
+    readonly B: {
+        impulse: Vector2;
+        project: Vector2;
+    };
 }

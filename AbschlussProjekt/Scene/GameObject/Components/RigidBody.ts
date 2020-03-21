@@ -108,9 +108,12 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
-            this.applyImpulse(Vector2.average(...solvedCollisions), Vector2.average(...contactPoints));
+            this.applyImpulse(Vector2.average(...solvedCollisions.map(c => c.impulse)), Vector2.average(...contactPoints));
 
+            this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
 
+            //this.gameObject.transform.relativePosition.add(Vector2.average(...solvedCollisions.map(c => c.project)));
+            //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
             for (const c of contactPoints) {
                 this.gameObject.scene.newGameObject('contact', gameObject => {

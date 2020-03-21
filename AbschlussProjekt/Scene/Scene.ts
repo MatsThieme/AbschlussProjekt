@@ -100,7 +100,7 @@ export class Scene {
             const collisions: Collision[] = (await awaitPromises(...collisionPromises)).reduce((t, c) => { t.push(...c); return t; }, <Collision[]>[]); // wait for all collision calculations
 
 
-            const rigidbodies = this.getAllGameObjects().filter(gO => gO.active).map(gO => gO.rigidbody);
+            const rigidbodies = this.getAllGameObjects().map(gO => gO.rigidbody);
 
             rigidbodies.forEach(rb => rb.update(this.gameTime, collisions)); // apply forces and move body
             await awaitPromises(...this.getAllGameObjects().map(gameObject => gameObject.update(this.gameTime, collisions)));
