@@ -16,5 +16,5 @@ export function PlayerPrefab(gameObject: GameObject): void {
     gameObject.rigidbody.useAutoMass = true;
     gameObject.addComponent(PolygonRenderer);
     gameObject.addComponent(Move);
-    //gameObject.addComponent(ReloadPage);
+    gameObject.addComponent(ReloadPage);
 }

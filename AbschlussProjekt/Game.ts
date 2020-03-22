@@ -72,10 +72,10 @@ new Game();
 // polygon collision (normal direction)
 // collision response rotation
 // polygon circle collision, circle circle collision
+// line intersection: aufeinanderliegende linien
 
 // to do:
 // friction
-// simplify polygon collision detection, function collision(vertices1: { x: number, y: number }[], vertices2: { x: number, y: number }[]): {contacts, collisionNormal...}
 // use child object collider in collision calculations
 // frame align
 // canvas rotation in camera component
