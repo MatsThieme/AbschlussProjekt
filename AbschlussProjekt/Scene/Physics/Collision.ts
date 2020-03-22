@@ -1,5 +1,6 @@
 import { Collider } from '../GameObject/Components/Collider.js';
 import { Vector2 } from '../Vector2.js';
+import { Physics } from './Physics.js';
 
 export class Collision {
     public readonly A: Collider;
@@ -37,42 +38,41 @@ export class Collision {
         const ra = contact.clone.sub(this.A.position);
         const rb = contact.clone.sub(this.B.position);
 
-        const t = this.normal.perpendicularClockwise;
         //const rv = rb2.velocity.clone.add(Vector2.cross1(rb2.angularVelocity, rb)).sub(rb1.velocity).sub(Vector2.cross1(rb1.angularVelocity, ra));
 
         //const velocityAlongNormal = Vector2.dot(rv, this.normal);
 
         let velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
 
-        if (velocityAlongNormal > 0) {
-            this.normal.flip();
-            velocityAlongNormal = velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
-            return;
-        }
+        //if (velocityAlongNormal > 0) {
+        //    this.normal.flip();
+        //    velocityAlongNormal = velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
+        //    return;
+        //}
 
 
 
-        if (velocityAlongNormal > 0) return;
+        if (velocityAlongNormal > 0) return; //
 
 
-        const j = (-(this.e + 1) * velocityAlongNormal) / (rbA.invMass + rbB.invMass + (Vector2.cross(ra, t) ** 2 / rbA.invInertia) + (Vector2.cross(rb, t) ** 2 / rbB.invInertia));
+        const j = (-(this.e + 1) * velocityAlongNormal) / (Vector2.dot(this.normal, this.normal) * (rbA.invMass + rbB.invMass + (Vector2.dot(ra, this.normal) ** 2 / rbA.invInertia) + (Vector2.dot(rb, this.normal) ** 2 / rbB.invInertia)));//+ (Vector2.cross(ra, this.normal) ** 2 / rbA.invInertia) + (Vector2.cross(rb, this.normal) ** 2 / rbB.invInertia)
 
         const impulse = this.normal.clone.setLength(j);
 
         const project = this.normal.clone.setLength(this.penetrationDepth / 2);
 
-        const projectA = rbB.mass === 0 ? project.clone.scale(2) : project;
-        const projectB = rbA.mass === 0 ? project.clone.scale(2) : project;
+        console.log(rbA.velocity.magnitude < Physics.gravity.magnitude * 10, rbB.velocity.magnitude < Physics.gravity.magnitude * 10);
+
 
         return {
             collision: this,
             A: {
-                impulse,
-                project: projectA
+                impulse: /*rbA.velocity.magnitude < Physics.gravity.magnitude ? rbA.velocity.flipped : */impulse,
+                project: rbB.mass === 0 ? project.clone.scale(2) : project
             },
             B: {
-                impulse: impulse.flipped,
-                project: projectB.flipped
+                impulse: /*rbB.velocity.magnitude < Physics.gravity.magnitude ? rbB.velocity.flipped : */impulse.flipped,
+                project: rbA.mass === 0 ? project.flipped.scale(2) : project.flipped
             }
         };
     }

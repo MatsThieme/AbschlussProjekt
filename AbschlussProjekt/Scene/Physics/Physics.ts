@@ -10,7 +10,7 @@ import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { Settings } from '../Settings.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, -9.807 / 100 / 1000);
+    public static gravity: Vector2 = new Vector2(0, -0.00001);
     public static timeScale: number = 0.1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
@@ -88,7 +88,6 @@ export class Physics {
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
 
-
         for (let i = 0; i < A.faces.length; i++) {
             const aP = A.project(A.faces[i].normal);
             const bP = B.project(A.faces[i].normal);
@@ -98,7 +97,7 @@ export class Physics {
             if (overlap < 0) {
                 return new Collision(A, B);
             } else {
-                if (overlap <= leastPenetration) {
+                if (overlap < leastPenetration) {
                     leastPenetration = overlap;
                     referenceIndex = i;
                     referenceCollider = A;
