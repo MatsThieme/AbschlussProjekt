@@ -121,7 +121,7 @@ export class GameObject {
 
 
         const behaviours = this.getComponents<Behaviour>(ComponentType.Behaviour);
-        behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.colliderA.gameObject.id === this.id || c.colliderB.gameObject.id === this.id))); // onCollision in behaviours aufrufen
+        behaviours.forEach(b => (x => x.length > 0 ? b.onCollision(x) : 0)(currentCollisions.filter(c => c.A.gameObject.id === this.id || c.B.gameObject.id === this.id))); // onCollision in behaviours aufrufen
 
         await awaitPromises(...behaviours.map(c => c.update(gameTime)));
 

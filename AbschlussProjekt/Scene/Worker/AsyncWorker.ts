@@ -2,7 +2,7 @@ export class AsyncWorker {
     private static workers: Map<string, Worker[]> = new Map();
     public static work<T>(url: string, data: any): Promise<T> {
         return new Promise((resolve, reject) => {
-            let worker: Worker = AsyncWorker.getWorker(url);
+            const worker: Worker = AsyncWorker.getWorker(url);
 
             worker.onerror = e => reject(e.error);
             worker.onmessage = e => {
@@ -11,6 +11,8 @@ export class AsyncWorker {
                 resolve(e.data);
                 worker.inQueue--;
             };
+
+            worker.onerror = console.error;
 
             worker.inQueue++;
             worker.postMessage(data);
@@ -34,7 +36,7 @@ export class AsyncWorker {
 
             let complete = 0;
             for (let i = 0; i < count; i++) {
-                w[i] = <any>new Worker(url, { type: 'module' });
+                w[i] = <any>new Worker(url);
                 w[i].inQueue = 0;
                 AsyncWorker.warmup(w[i]).then(() => {
                     if (++complete === count) resolve();

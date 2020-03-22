@@ -70,7 +70,7 @@ new Game();
 
 //to fix:
 // polygon collision (normal direction)
-// collision response 
+// collision response rotation
 // polygon circle collision, circle circle collision
 
 // to do:

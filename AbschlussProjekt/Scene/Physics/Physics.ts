@@ -6,6 +6,8 @@ import { GameObject } from '../GameObject/GameObject.js';
 import { Vector2 } from '../Vector2.js';
 import { AABB } from './AABB.js';
 import { Collision } from './Collision.js';
+import { AsyncWorker } from '../Worker/AsyncWorker.js';
+import { Settings } from '../Settings.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -9.807 / 100 / 1000);
@@ -86,6 +88,7 @@ export class Physics {
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
 
+
         for (let i = 0; i < A.faces.length; i++) {
             const aP = A.project(A.faces[i].normal);
             const bP = B.project(A.faces[i].normal);
@@ -124,10 +127,8 @@ export class Physics {
 
         const leastPenetrationNormal = referenceCollider.faces[referenceIndex].normal.normalized;
 
-        if (leastPenetrationNormal.perpendicularCounterClockwise.add(referenceCollider.position).angleTo(referenceCollider.position, incidentCollider.position).degree > 180) leastPenetrationNormal.flip();
 
-
-        const contacts: Vector2[] = [];//(<Vector2[]>(await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PhysicsWorker.js', { name: 'PhysicsWorkerLineIntersection', data: { ALines: A.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]), BLines: B.faces.map(f => [[f.v1.x, f.v1.y], [f.v2.x, f.v2.y]]) } }))).map(v => new Vector2(v.x, v.y));
+        const contacts: Vector2[] = [];
 
         for (const faceA of A.faces) {
             for (const faceB of B.faces) {
@@ -135,6 +136,15 @@ export class Physics {
                 if (contact) contacts.push(contact);
             }
         }
+
+
+        //const r: { contacts: { x: number, y: number }[], penetrationDepth: number, normal: { x: number, y: number } } | undefined = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', { A: A.vertices, B: B.vertices });
+        //if (!r) return new Collision(A, B);
+        //const { contacts, penetrationDepth, normal } = r;
+        //debugger;
+
+        //return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map(c => new Vector2(c.x, c.y)));
+
 
         return new Collision(A, B, leastPenetrationNormal, leastPenetration, contacts);
     }

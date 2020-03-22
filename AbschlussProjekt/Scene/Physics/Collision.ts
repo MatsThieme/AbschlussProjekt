@@ -2,51 +2,67 @@ import { Collider } from '../GameObject/Components/Collider.js';
 import { Vector2 } from '../Vector2.js';
 
 export class Collision {
-    public readonly colliderA: Collider;
-    public readonly colliderB: Collider;
+    public readonly A: Collider;
+    public readonly B: Collider;
     public readonly normal: Vector2 | undefined;
     public readonly penetrationDepth: number | undefined;
     public readonly contactPoints: Vector2[] | undefined;
     public readonly solved: Solved | undefined;
+    public readonly e: number;
+    public readonly df: number;
+    public readonly sf: number;
+
     public constructor(colliderA: Collider, colliderB: Collider, normal?: Vector2, penetrationDepth?: number, contactPoints?: Vector2[]) {
-        this.colliderA = colliderA;
-        this.colliderB = colliderB;
+        this.A = colliderA;
+        this.B = colliderB;
         this.normal = normal?.normalized;
         this.penetrationDepth = penetrationDepth;
         this.contactPoints = contactPoints;
-        if (this.normal && this.contactPoints && this.penetrationDepth) this.solved = this.solve();
+
+        this.e = Math.min(this.A.material.bounciness, this.B.material.bounciness);
+
+        this.sf = Math.sqrt(this.A.material.staticFriction ** 2 + this.B.material.staticFriction ** 2);
+        this.df = Math.sqrt(this.A.material.dynamicFriction ** 2 + this.B.material.dynamicFriction ** 2);
+
+        this.solved = this.solve();
     }
     private solve(): Solved | undefined {
         if (!this.normal) return;
-        const rb1 = this.colliderA.gameObject.rigidbody;
-        const rb2 = this.colliderB.gameObject.rigidbody;
+        const rbA = this.A.gameObject.rigidbody;
+        const rbB = this.B.gameObject.rigidbody;
 
-        if (rb1.mass === 0 && rb2.mass === 0 || !this.normal || !this.contactPoints || !this.penetrationDepth) return;
+        if (rbA.mass === 0 && rbB.mass === 0 || !this.normal || !this.contactPoints || !this.penetrationDepth) return;
 
-        //const contact = Vector2.average(...this.contactPoints);
-        //const ra = contact.clone.sub(this.colliderA.position);
-        //const rb = contact.clone.sub(this.colliderB.position);
+        const contact = Vector2.average(...this.contactPoints);
+        const ra = contact.clone.sub(this.A.position);
+        const rb = contact.clone.sub(this.B.position);
 
+        const t = this.normal.perpendicularClockwise;
         //const rv = rb2.velocity.clone.add(Vector2.cross1(rb2.angularVelocity, rb)).sub(rb1.velocity).sub(Vector2.cross1(rb1.angularVelocity, ra));
 
         //const velocityAlongNormal = Vector2.dot(rv, this.normal);
 
-        const velocityAlongNormal = Vector2.dot(rb1.velocity.clone.sub(rb2.velocity), this.normal);
+        let velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
 
-        //if (velocityAlongNormal > 0) return;
+        if (velocityAlongNormal > 0) {
+            this.normal.flip();
+            velocityAlongNormal = velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
+            return;
+        }
 
 
-        const e = (this.colliderA.material.bounciness + this.colliderB.material.bounciness) / 2;
 
-        const j = (-(e + 1) * velocityAlongNormal) / (rb1.invMass + rb2.invMass);
-        console.log((j < 0 ? -1 : 1));
+        if (velocityAlongNormal > 0) return;
+
+
+        const j = (-(this.e + 1) * velocityAlongNormal) / (rbA.invMass + rbB.invMass + (Vector2.cross(ra, t) ** 2 / rbA.invInertia) + (Vector2.cross(rb, t) ** 2 / rbB.invInertia));
 
         const impulse = this.normal.clone.setLength(j);
 
-        const project = this.normal.clone.setLength(this.penetrationDepth / 2 * (j < 0 ? -1 : 1));
+        const project = this.normal.clone.setLength(this.penetrationDepth / 2);
 
-        const projectA = rb2.mass === 0 ? project.clone.scale(2) : project;
-        const projectB = rb1.mass === 0 ? project.clone.scale(2) : project;
+        const projectA = rbB.mass === 0 ? project.clone.scale(2) : project;
+        const projectB = rbA.mass === 0 ? project.clone.scale(2) : project;
 
         return {
             collision: this,
@@ -61,6 +77,7 @@ export class Collision {
         };
     }
 }
+
 
 declare interface Solved {
     readonly collision: Collision;

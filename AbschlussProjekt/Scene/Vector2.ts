@@ -97,15 +97,13 @@ export class Vector2 {
         return this.clone.normalize();
     }
     public normalize(): Vector2 {
-        this.x /= this.magnitude;
-        this.y /= this.magnitude;
-        this._magnitude = 1;
+        this.setLength(1);
 
         return this;
     }
-    public setLength(length: number) {
-        this.x /= this.magnitude;
-        this.y /= this.magnitude;
+    public setLength(length: number): Vector2 {
+        if (this.x !== 0) this.x /= this.magnitude;
+        if (this.y !== 0) this.y /= this.magnitude;
         this.scale(length);
         this._magnitude = length;
 

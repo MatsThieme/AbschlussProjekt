@@ -120,7 +120,7 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PhysicsWorker.js', navigator.hardwareConcurrency);
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
 
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));

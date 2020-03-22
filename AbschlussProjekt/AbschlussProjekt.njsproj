@@ -166,7 +166,10 @@
     <TypeScriptCompile Include="Scene\Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Physics\PhysicsWorkerLineIntersection.ts">
+    <TypeScriptCompile Include="Scene\Physics\PhysicsWorkerPolygonCollision.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Physics\PolygonCollisionWorker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Prefabs\GameObjects\LeftPrefab.ts" />

@@ -37,7 +37,7 @@ export class RigidBody extends Component {
         return this.mass === 0 ? 0 : 1 / this.mass;
     }
     public get invInertia(): number {
-        return 1 / this.inertia;
+        return this.inertia === 0 ? 0 : 1 / this.inertia;
     }
     public set mass(val: number) {
         this._mass = val;
@@ -81,7 +81,7 @@ export class RigidBody extends Component {
     }
     public applyImpulse(impulse: Vector2, at: Vector2): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
-        //this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
+        this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
@@ -95,11 +95,11 @@ export class RigidBody extends Component {
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
-                if (collision.colliderA.gameObject.id === this.gameObject.id) {
+                if (collision.A.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.A);
                     if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
-                } else if (collision.colliderB.gameObject.id === this.gameObject.id) {
+                } else if (collision.B.gameObject.id === this.gameObject.id) {
                     solvedCollisions.push(collision.solved.B);
                     if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
@@ -108,12 +108,13 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
+
             this.applyImpulse(Vector2.average(...solvedCollisions.map(c => c.impulse)), Vector2.average(...contactPoints));
 
-            this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
+            //this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
 
             //this.gameObject.transform.relativePosition.add(Vector2.average(...solvedCollisions.map(c => c.project)));
-            //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
+            this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
             for (const c of contactPoints) {
                 this.gameObject.scene.newGameObject('contact', gameObject => {
