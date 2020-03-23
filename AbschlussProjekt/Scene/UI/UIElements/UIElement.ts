@@ -12,6 +12,8 @@ import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 
 export abstract class UIElement {
+    private static nextID: number = 0;
+    public readonly id: number;
     public click: boolean;
     public down: boolean;
     protected _aabb: AABB;
@@ -50,6 +52,8 @@ export abstract class UIElement {
         this.lastPaddingScalar = -1;
         this.color = '#333';
         this.stroke = type !== UIElementType.Text;
+
+        this.id = UIElement.nextID++;
     }
     public start(): void {
         this.sprite = new Sprite(this.draw.bind(this));
@@ -126,5 +130,8 @@ export abstract class UIElement {
         this._fontSize = val;
         if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
         else this.sprite = new Sprite(this.draw.bind(this));
+    }
+    public remove(): void {
+        this.menu.removeUIElement(this.id);
     }
 }

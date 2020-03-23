@@ -163,4 +163,7 @@ export class Vector2 {
     public equal(other: Vector2): boolean {
         return this.x === other.x && this.y === other.y;
     }
+    public compareDistances(p1: Vector2, p2: Vector2): -1 | 1 {
+        return (this.x - p1.x) ** 2 + (this.y - p1.y) ** 2 < (this.x - p2.x) ** 2 + (this.y - p2.y) ** 2 ? -1 : 1;
+    }
 }

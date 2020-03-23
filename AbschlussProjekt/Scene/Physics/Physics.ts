@@ -10,7 +10,7 @@ import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { Settings } from '../Settings.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, -0.00001);
+    public static gravity: Vector2 = new Vector2(0, -9.807 / 100000);
     public static timeScale: number = 0.1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
@@ -87,7 +87,6 @@ export class Physics {
         let incidentCollider!: PolygonCollider;
         let referenceCollider!: PolygonCollider;
         let leastPenetrationNormal!: Vector2;
-        let leastDistance: number = Infinity;
 
         for (let i = 0; i < A.faces.length; i++) {
             const aP = A.project(A.faces[i].normal);
@@ -102,17 +101,6 @@ export class Physics {
                 leastPenetrationNormal = A.faces[i].normal.normalized;
                 referenceCollider = A;
                 incidentCollider = B;
-                leastDistance = A.faces[i].normal.normalized.add(referenceCollider.position).distance(incidentCollider.position);
-            } else if (overlap === leastPenetration && A.faces[i].normal.normalized.equal(leastPenetrationNormal.flipped)) {
-                const distance = A.faces[i].normal.normalized.add(referenceCollider.position).distance(incidentCollider.position);
-
-                if (distance < leastDistance) {
-                    leastDistance = distance;
-                    leastPenetration = overlap;
-                    leastPenetrationNormal = A.faces[i].normal.normalized;
-                    referenceCollider = A;
-                    incidentCollider = B;
-                }
             }
         }
 
@@ -129,20 +117,10 @@ export class Physics {
                 leastPenetrationNormal = B.faces[i].normal.normalized;
                 referenceCollider = B;
                 incidentCollider = A;
-                leastDistance = B.faces[i].normal.normalized.add(referenceCollider.position).distance(incidentCollider.position);
-            } else if (overlap === leastPenetration && B.faces[i].normal.normalized.equal(leastPenetrationNormal.flipped)) {
-                const distance = B.faces[i].normal.normalized.add(referenceCollider.position).distance(incidentCollider.position);
-
-                if (distance < leastDistance) {
-                    leastDistance = distance;
-                    leastPenetration = overlap;
-                    leastPenetrationNormal = B.faces[i].normal.normalized;
-                    referenceCollider = B;
-                    incidentCollider = A;
-                }
             }
         }
 
+        if (A.position.add(leastPenetrationNormal).distance(B.position) < A.position.add(leastPenetrationNormal.flipped).distance(B.position)) leastPenetrationNormal.flip();
 
 
         const contacts: Vector2[] = [];

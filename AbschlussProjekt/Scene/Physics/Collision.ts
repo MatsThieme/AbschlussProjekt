@@ -38,19 +38,11 @@ export class Collision {
         const ra = contact.clone.sub(this.A.position);
         const rb = contact.clone.sub(this.B.position);
 
-        //const rv = rb2.velocity.clone.add(Vector2.cross1(rb2.angularVelocity, rb)).sub(rb1.velocity).sub(Vector2.cross1(rb1.angularVelocity, ra));
+        const rv = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra)).sub(rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb)));
 
-        //const velocityAlongNormal = Vector2.dot(rv, this.normal);
+        const velocityAlongNormal = Vector2.dot(rv, this.normal);
 
-        let velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
-
-        //if (velocityAlongNormal > 0) {
-        //    this.normal.flip();
-        //    velocityAlongNormal = velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
-        //    return;
-        //}
-
-
+        //let velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
 
         if (velocityAlongNormal > 0) return; //
 
@@ -61,7 +53,7 @@ export class Collision {
 
         const project = this.normal.clone.setLength(this.penetrationDepth / 2);
 
-        console.log(rbA.velocity.magnitude < Physics.gravity.magnitude * 10, rbB.velocity.magnitude < Physics.gravity.magnitude * 10);
+        //console.log(rbA.velocity.magnitude < Physics.gravity.magnitude * 10, rbB.velocity.magnitude < Physics.gravity.magnitude * 10);
 
 
         return {

@@ -85,9 +85,9 @@ export class Scene {
             const collisionPromises: Promise<Collision[]>[] = [];
 
             for (const gO1 of this.gameObjects.values()) {
-                if (!gO1.getComponent<Collider>(ComponentType.Collider)) continue;
+                if (!gO1.collider || gO1.parent) continue;
                 for (const gO2 of this.gameObjects.values()) {
-                    if (!gO2.getComponent<Collider>(ComponentType.Collider)) continue;
+                    if (!gO2.collider || gO2.parent) continue;
                     const idPair = JSON.stringify([gO1.id, gO2.id].sort((a, b) => a - b));
                     if (gO1.id !== gO2.id && gO1.active && gO2.active && idPairs.indexOf(idPair) === -1) {
                         collisionPromises.push(Physics.collision(gO1, gO2));
@@ -120,7 +120,7 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
+        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
 
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));

@@ -21,12 +21,13 @@ export class UI {
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.scene = scene;
     }
-    public addMenu(name: string, cb?: (menu: UIMenu, scene: Scene) => any): UIMenu {
+    public addMenu(name: string, ...cb: ((menu: UIMenu, scene: Scene) => any)[]): UIMenu {
         if (this.menus.has(name)) return <UIMenu>this.menus.get(name);
 
         const menu = new UIMenu(this.input, this.scene);
         this.menus.set(name, menu);
-        if (cb) cb(menu, this.scene);
+
+        if (cb) cb.forEach(cb => cb(menu, this.scene));
 
         return menu;
     }

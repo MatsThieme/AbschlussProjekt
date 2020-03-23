@@ -12,7 +12,7 @@ export class UIMenu {
     public active: boolean;
     public pauseScene: boolean;
     public drawPriority: number;
-    private uiElements: UIElement[];
+    private uiElements: Map<number, UIElement>;
     public aabb: AABB;
     private input: Input;
     private canvas: OffscreenCanvas;
@@ -25,7 +25,7 @@ export class UIMenu {
         this.active = false;
         this.pauseScene = true;
         this.drawPriority = 0;
-        this.uiElements = [];
+        this.uiElements = new Map();
         this.aabb = new AABB(new Vector2(1920, 1080), new Vector2(0, 0));
         this.input = input;
         this.scene = scene;
@@ -35,12 +35,15 @@ export class UIMenu {
 
         this.font = new UIFont(this);
     }
-    public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, cb?: (uiElement: T, scene: Scene) => any): T {
+    public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, ...cb: ((uiElement: T, scene: Scene) => any)[]): T {
         const e = new type(this, this.input);
-        this.uiElements.push(e);
-        if (cb) cb(e, this.scene);
+        this.uiElements.set(e.id, e);
+        if (cb) cb.forEach(cb => cb(e, this.scene));
         e.start();
         return e;
+    }
+    public removeUIElement(id: number): void {
+        this.uiElements.delete(id);
     }
     public get currentFrame(): UIFrame {
         return this.frame;
@@ -52,7 +55,7 @@ export class UIMenu {
         if (this.background) this.context.drawImage(this.background.canvasImageSource, 0, 0, this.background.size.x, this.background.size.y);
         else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        for (const uiElement of this.uiElements) {
+        for (const uiElement of [...this.uiElements.values()]) {
             uiElement.update(gameTime);
 
             const { sprite, aabb } = uiElement.currentFrame;

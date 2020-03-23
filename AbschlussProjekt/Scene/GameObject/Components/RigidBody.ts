@@ -13,6 +13,8 @@ import { PolygonCollider } from './PolygonCollider.js';
 import { Texture } from './Texture.js';
 
 export class RigidBody extends Component {
+    private static nextID: number = 0;
+    private id: number;
     private _mass: number;
     private _inertia: number;
     public velocity: Vector2;
@@ -29,6 +31,8 @@ export class RigidBody extends Component {
         this.torque = 0;
         this.force = new Vector2();
         this._inertia = this.computeInertia();
+
+        this.id = RigidBody.nextID++;
     }
     public get mass(): number {
         return this.useAutoMass ? this.autoMass : this._mass;
@@ -53,7 +57,7 @@ export class RigidBody extends Component {
         return this._inertia;
     }
     private computeInertia(): number {
-        const collider = this.gameObject.getComponents<CircleCollider | PolygonCollider>(ComponentType.Collider);
+        const collider = <(CircleCollider | PolygonCollider)[]>this.gameObject.collider;
         if (collider.length === 0) return 0;
 
         let inertia = 0;
@@ -78,10 +82,12 @@ export class RigidBody extends Component {
     }
     public updateInertia(): void {
         this._inertia = this.computeInertia();
+        console.log(this.invInertia);
+        debugger;
     }
     public applyImpulse(impulse: Vector2, at: Vector2): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
-        this.angularVelocity -= this.invInertia * Vector2.cross(at, impulse);
+        this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
@@ -95,11 +101,11 @@ export class RigidBody extends Component {
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
-                if (collision.A.gameObject.id === this.gameObject.id) {
+                if (collision.A.gameObject.rigidbody.id === this.id) {
                     solvedCollisions.push(collision.solved.A);
                     if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
-                } else if (collision.B.gameObject.id === this.gameObject.id) {
+                } else if (collision.B.gameObject.rigidbody.id === this.id) {
                     solvedCollisions.push(collision.solved.B);
                     if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
@@ -114,48 +120,50 @@ export class RigidBody extends Component {
             //this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
 
             //this.gameObject.transform.relativePosition.add(Vector2.average(...solvedCollisions.map(c => c.project)));
+
             this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
-            for (const c of contactPoints) {
-                this.gameObject.scene.newGameObject('contact', gameObject => {
-                    gameObject.addComponent(Texture, texture => {
-                        texture.sprite = new Sprite('spriteTest1.png');
-                        texture.size = new Vector2(0.1, 0.1);
-                    });
+            //for (const c of contactPoints) {
+            //    this.gameObject.scene.newGameObject('contact', gameObject => {
+            //        gameObject.addComponent(Texture, texture => {
+            //            texture.sprite = new Sprite('spriteTest1.png');
+            //            texture.size = new Vector2(0.1, 0.1);
+            //        });
 
-                    gameObject.transform.relativePosition = c;
-                    gameObject.addComponent(Destroy);
-                });
-            }
+            //        gameObject.transform.relativePosition = c;
+            //        gameObject.addComponent(Destroy);
+            //    });
+            //}
 
-            for (const n of normals) {
-                this.gameObject.scene.newGameObject('contact', gameObject => {
-                    gameObject.addComponent(Texture, texture => {
-                        texture.sprite = new Sprite((context, canvas) => {
-                            canvas.width = canvas.height = 50;
+            //for (const n of normals) {
+            //    this.gameObject.scene.newGameObject('contact', gameObject => {
+            //        gameObject.addComponent(Texture, texture => {
+            //            texture.sprite = new Sprite((context, canvas) => {
+            //                canvas.width = canvas.height = 50;
 
-                            context.arc(canvas.width / 2, 8, 8, 0, Math.PI * 2);
-                            context.fillStyle = context.strokeStyle = '#f00';
-                            context.fill();
+            //                context.arc(canvas.width / 2, 8, 8, 0, Math.PI * 2);
+            //                context.fillStyle = context.strokeStyle = '#f00';
+            //                context.fill();
 
-                            context.beginPath();
+            //                context.beginPath();
 
-                            context.moveTo(canvas.width / 2, 8);
-                            context.lineTo(canvas.width / 2, canvas.height);
-                            context.stroke();
-                        });
+            //                context.moveTo(canvas.width / 2, 8);
+            //                context.lineTo(canvas.width / 2, canvas.height);
+            //                context.stroke();
+            //            });
 
-                        texture.size = new Vector2(0.5, 0.5);
-                    });
+            //            texture.size = new Vector2(0.5, 0.5);
+            //        });
 
-                    gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
-                    gameObject.addComponent(Destroy);
-                });
-            }
+            //        gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
+            //        gameObject.addComponent(Destroy);
+            //    });
+            //}
         }
 
 
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
+        this.velocity.add(Physics.gravity.clone.scale(gameTime.deltaTime * Physics.timeScale));
         this.force = Vector2.zero;
 
         this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime * Physics.timeScale;

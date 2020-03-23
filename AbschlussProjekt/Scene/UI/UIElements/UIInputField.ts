@@ -40,13 +40,13 @@ export abstract class UIInputField extends UIElement {
 
             if (this.label !== this.domElement.value) {
                 if (this.type === UIElementType.NumberInputField && typeof this.value === 'number') {
-                    if (this.domElement.value.length > 0) this.value = parseFloat(this.domElement.value) || 0;
+                    this.value = parseFloat(this.domElement.value) || 0;
 
                     if (this.value > this.max) this.value = this.max;
 
                     this.domElement.value = this.label = this.value.toString();
                 } else if (this.type === UIElementType.TextInputField && typeof this.value === 'string') {
-                    if (this.domElement.value.length > 0) this.value = this.domElement.value;
+                    this.value = this.domElement.value;
 
                     if (this.value.length > this.max) this.value = this.value.substr(0, this.max);
 
