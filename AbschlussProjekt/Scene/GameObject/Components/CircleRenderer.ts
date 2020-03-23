@@ -20,11 +20,11 @@ export class CircleRenderer extends Component {
 
         this.circleCollider = <CircleCollider>this.gameObject.getComponent<CircleCollider>(ComponentType.CircleCollider);
 
-        this.canvas = new OffscreenCanvas(this.circleCollider.scaledRadius * 2 * 100, this.circleCollider.scaledRadius * 2 * 100);
+        this.canvas = new OffscreenCanvas(this.circleCollider.radius * 2 * 100, this.circleCollider.radius * 2 * 100);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.sprite = new Sprite(this.canvas);
 
-        this.size = new Vector2(this.circleCollider.scaledRadius * 2, this.circleCollider.scaledRadius * 2);
+        this.size = new Vector2(this.circleCollider.radius * 2, this.circleCollider.radius * 2);
         this._position = new Vector2();
 
         setTimeout(() => {
@@ -36,8 +36,8 @@ export class CircleRenderer extends Component {
 
             const topLeft = new Vector2(this.circleCollider.position.x - this.circleCollider.radius, this.circleCollider.position.y + this.circleCollider.radius);
 
-            this.size = new Vector2(this.circleCollider.scaledRadius * 2, this.circleCollider.scaledRadius * 2);
-            this._position = new Vector2(topLeft.x, topLeft.y - this.circleCollider.scaledRadius * 2).sub(this.gameObject.transform.position).sub(this.circleCollider.align);
+            this.size = new Vector2(this.circleCollider.radius * 2, this.circleCollider.radius * 2);
+            this._position = new Vector2(topLeft.x, topLeft.y - this.circleCollider.radius * 2).sub(this.gameObject.transform.position).sub(this.circleCollider.align);
 
 
             this.context.arc(this.canvas.width / 2, this.canvas.height / 2, this.canvas.height / 2, 0, Math.PI * 2);

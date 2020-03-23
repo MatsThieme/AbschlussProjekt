@@ -61,7 +61,7 @@ export class Camera extends Component {
             }
         }
 
-        this.context.rotate(-this.gameObject.transform.rotation.radian);
+        //this.context.rotate(-this.gameObject.transform.rotation.radian);
     }
     public AABBInCamera(rect: AABB): boolean {
         return rect.screenSpaceIntersects(this.AABB);

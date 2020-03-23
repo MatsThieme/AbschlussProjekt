@@ -16,6 +16,9 @@ function PhysicsWorkerPolygonCollision(data: { A: { x: number, y: number }[], B:
     const AFaces = A.map((v, i) => new Face(A[i % A.length], A[(i + 1) % A.length]));
     const BFaces = B.map((v, i) => new Face(B[i % B.length], B[(i + 1) % B.length]));
 
+    const APos = vecAvg(...A);
+    const BPos = vecAvg(...B);
+
     let leastPenetration: number = Infinity;
     let referenceIndex!: number;
     let referenceCollider!: string;
@@ -54,7 +57,13 @@ function PhysicsWorkerPolygonCollision(data: { A: { x: number, y: number }[], B:
         }
     }
 
-    const leastPenetrationNormal = referenceCollider === 'A' ? AFaces[referenceIndex].normal : BFaces[referenceIndex].normal;
+    let leastPenetrationNormal = referenceCollider === 'A' ? AFaces[referenceIndex].normal : BFaces[referenceIndex].normal;
+
+    const APosN = { x: APos.x + leastPenetrationNormal.x, y: APos.y + leastPenetrationNormal.y };
+    const APosNF = { x: APos.x - leastPenetrationNormal.x, y: APos.y - leastPenetrationNormal.y };
+
+    if ((BPos.x - APosN.x) ** 2 + (BPos.y - APosN.y) ** 2 > (BPos.x - APosNF.x) ** 2 + (BPos.y - APosNF.y) ** 2) leastPenetrationNormal = { x: -leastPenetrationNormal.x, y: -leastPenetrationNormal.y };
+
 
     const contacts: { x: number, y: number }[] = [];
 
@@ -68,8 +77,21 @@ function PhysicsWorkerPolygonCollision(data: { A: { x: number, y: number }[], B:
     return { contacts, penetrationDepth: leastPenetration, normal: leastPenetrationNormal };
 }
 
+function vecAvg(...vecs: { x: number, y: number }[]) {
+    const ret = { x: 0, y: 0 };
 
-function project(axis: { x: number, y: number }, vertices: { x: number, y: number }[]): { min:number, max :number} {
+    for (const vec of vecs) {
+        ret.x += vec.x;
+        ret.y += vec.y;
+    }
+
+    ret.x /= vecs.length;
+    ret.y /= vecs.length;
+
+    return ret;
+}
+
+function project(axis: { x: number, y: number }, vertices: { x: number, y: number }[]): { min: number, max: number } {
     let min = Infinity;
     let max = -Infinity;
 

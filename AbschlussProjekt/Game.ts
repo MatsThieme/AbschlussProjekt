@@ -1,9 +1,11 @@
 import { FontLoader } from './FontLoader.js';
 import { asyncTimeout } from './Helpers.js';
+import { Move } from './Scene/GameObject/Behaviours/Move.js';
+import { CircleCollider } from './Scene/GameObject/Components/CircleCollider.js';
+import { CircleRenderer } from './Scene/GameObject/Components/CircleRenderer.js';
 import { FloorPrefab } from './Scene/Prefabs/GameObjects/FloorPrefab.js';
 import { LeftPrefab } from './Scene/Prefabs/GameObjects/LeftPrefab.js';
 import { PlayerPrefab } from './Scene/Prefabs/GameObjects/PlayerPrefab.js';
-import { PolygonPrefab } from './Scene/Prefabs/GameObjects/PolygonPrefab.js';
 import { RightPrefab } from './Scene/Prefabs/GameObjects/RightPrefab.js';
 import { TopPrefab } from './Scene/Prefabs/GameObjects/TopPrefab.js';
 import { xAxisprefab } from './Scene/Prefabs/GameObjects/xAxisPrefab.js';
@@ -14,6 +16,7 @@ import { MainMenuPrefab } from './Scene/Prefabs/UI/MainMenu/MainMenuPrefab.js';
 import { Scene } from './Scene/Scene.js';
 import { Settings } from './Scene/Settings.js';
 import { Vector2 } from './Scene/Vector2.js';
+import { Line } from './Scene/Line.js';
 
 class Game {
     private scene: Scene;
@@ -39,11 +42,34 @@ class Game {
             camera.size = new Vector2(16, 9);
         });
 
-        for (let i = 0; i < 1; i++)
-            scene.newGameObject('Polygon', PolygonPrefab);
+
+        //scene.newGameObject('Polygon', PolygonPrefab);
+
+        for (let i = -3; i < 2; i++)
+            for (let j = -2; j <= 2; j++)
+                scene.newGameObject('Circle', gameObject => {
+                    gameObject.addComponent(CircleCollider, circleCollider => {
+                        circleCollider.radius = 0.5;
+                    });
+
+                    gameObject.transform.relativePosition = new Vector2(j, i + 1);
+                    gameObject.rigidbody.useAutoMass = true;
+                    gameObject.addComponent(CircleRenderer);
+                });
+
+        scene.newGameObject('Circle', gameObject => {
+            gameObject.addComponent(CircleCollider, circleCollider => {
+                circleCollider.radius = 0.5;
+            });
+
+            gameObject.transform.relativePosition = new Vector2(0, -3.5);
+            gameObject.rigidbody.useAutoMass = true;
+            gameObject.addComponent(CircleRenderer);
+            gameObject.addComponent(Move);
+        });
 
         // movable polygon
-        scene.newGameObject('Player', PlayerPrefab);
+        //scene.newGameObject('Player', PlayerPrefab);
 
 
         // display x and y axis
@@ -60,6 +86,7 @@ class Game {
         scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
 
 
+
         await asyncTimeout(100);
     }
 }
@@ -73,6 +100,7 @@ new Game();
 // collision response rotation
 // polygon circle collision, circle circle collision
 // line intersection: aufeinanderliegende linien
+// menu aabb and clicks
 
 // to do:
 // friction
@@ -84,3 +112,8 @@ new Game();
 // to test:
 // child collider
 // circle collisions
+
+
+// optional optimisations:
+// replace line intersection with face clipping in collisionPolygon
+// collisions in worker thread

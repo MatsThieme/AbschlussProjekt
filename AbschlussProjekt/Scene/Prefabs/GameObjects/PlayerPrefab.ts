@@ -10,7 +10,7 @@ export function PlayerPrefab(gameObject: GameObject): void {
     gameObject.addComponent(PolygonCollider, polygonCollider => {
         polygonCollider.vertices = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0), new Vector2(0.5, -0.5)];
         polygonCollider.material = new PhysicsMaterial(1, 1, 1);
-        polygonCollider.density = 10;
+        //polygonCollider.density = 10;
     });
 
     gameObject.transform.relativePosition = new Vector2(0, 0);

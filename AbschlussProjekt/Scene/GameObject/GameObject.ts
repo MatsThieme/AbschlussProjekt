@@ -52,11 +52,13 @@ export class GameObject {
             (component.type === ComponentType.RigidBody && this.getComponents(ComponentType.RigidBody).length === 0) ||
             (component.type === ComponentType.Transform && this.getComponents(ComponentType.Transform).length === 0) ||
             (component.type === ComponentType.Camera && this.getComponents(ComponentType.Camera).length === 0) ||
-            (component.type === ComponentType.AudioListener && this.getComponents(ComponentType.AudioListener).length === 0) ||
+            (component.type === ComponentType.AudioListener && !this.scene.hasAudioListener) ||
             (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
             this.components.push(component);
 
         if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) && !this.rigidbody) this.addComponent(RigidBody);
+
+        if (component.type === ComponentType.AudioListener) this.scene.hasAudioListener = true;
 
         if (cb) cb(component);
 

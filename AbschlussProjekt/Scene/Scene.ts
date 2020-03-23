@@ -27,6 +27,7 @@ export class Scene {
     public framedata: Framedata;
     public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
     private loadingScreenInterval?: number;
+    public hasAudioListener: boolean;
     public constructor() {
         this.domElement = document.createElement('canvas');
         this.domElement.style.position = 'absolute';
@@ -40,6 +41,7 @@ export class Scene {
         this.input = new Input(this);
         this.ui = new UI(this.input, new AABB(new Vector2(1920, 1080), new Vector2()), this);
         this.framedata = new Framedata();
+        this.hasAudioListener = false;
 
         this.stop();
     }
@@ -120,7 +122,9 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', navigator.hardwareConcurrency);
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', navigator.hardwareConcurrency);
 
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));

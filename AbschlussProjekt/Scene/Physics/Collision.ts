@@ -50,9 +50,7 @@ export class Collision {
 
             if (contactVel > 0) continue;
 
-            const raCrossN = Vector2.cross(ra, this.normal);
-            const rbCrossN = Vector2.cross(rb, this.normal);
-            const invMassSum = rbA.invMass + rbB.invMass + raCrossN ** 2 * rbA.invInertia + rbCrossN ** 2 * rbB.invInertia;
+            const invMassSum = rbA.invMass + rbB.invMass + Vector2.cross(ra, this.normal) ** 2 * rbA.invInertia + Vector2.cross(rb, this.normal) ** 2 * rbB.invInertia;
 
             let j = -(1 + this.e) * contactVel;
             j /= invMassSum;

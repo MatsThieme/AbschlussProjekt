@@ -40,9 +40,6 @@
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Scene\Physics\PhysicsWorker.ts">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Scene\UI\UIElements\UIElement.ts">
       <SubType>Code</SubType>
     </Content>
@@ -163,10 +160,13 @@
     <TypeScriptCompile Include="Scene\Physics\AABB.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scene\Physics\CircleCollisionWorker.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Physics\PhysicsWorkerPolygonCollision.ts">
+    <TypeScriptCompile Include="Scene\Physics\PolygonCircleCollisionWorker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Physics\PolygonCollisionWorker.ts">

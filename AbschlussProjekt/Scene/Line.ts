@@ -29,15 +29,32 @@ export class Line {
         if (abc != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) return q.clone.add(s.clone.scale(u));
         else return;
     }
+    public intersectsCircle(position: Vector2, radius: number): Vector2[] {
+        const t = position.clone.sub(this.a).scale(this.s.normalized).sum;
+
+        const E = this.s.normalized.scale(t).add(this.a);
+
+        const LEC = E.distance(position);
+
+        if (LEC < radius) {
+            const dt = Math.sqrt(radius ** 2 - LEC ** 2)
+            console.log(this.s.normalized, t, E, LEC, dt);
+
+            return [this.s.normalized.scale((t - dt)).add(this.a), this.s.normalized.scale((t + dt)).add(this.a)];
+        } else if (LEC == radius) return [E];
+
+        return [];
+    }
     public distanceToPoint(point: Vector2): number {
-        const w = this.a;
-        const v = this.b;
+        if (this.s.magnitude === 0) return point.distance(this.a);
 
-        const l2 = w.clone.sub(v).magnitudeSquared;
-        if (l2 == 0) return point.distance(v)
+        return point.distance(this.closestPoint(point));
+    }
+    public closestPoint(point: Vector2): Vector2 {
+        const distance = Vector2.dot(point.clone.sub(this.a), this.s) / this.s.magnitude;
 
-        const t = Math.max(0, Math.min(1, Vector2.dot(point.clone.sub(v), w.clone.sub(v)) / l2));
-        const projection = w.clone.sub(v).scale(t).add(v);
-        return point.distance(projection);
+        if (distance < 0) return this.a;
+        else if (distance > 1) return this.b;
+        else return this.s.clone.scale(distance).add(this.a);
     }
 }

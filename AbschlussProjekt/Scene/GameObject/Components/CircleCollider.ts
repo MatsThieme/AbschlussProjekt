@@ -15,23 +15,20 @@ export class CircleCollider extends Collider {
         super(gameObject, ComponentType.CircleCollider, relativePosition, material, density, alignH, alignV);
         this._radius = radius;
         this._area = Math.PI * this.radius ** 2;
-        this._aabb = new AABB(new Vector2(this.scaledRadius * 2, this.scaledRadius * 2), this.position);
+        this._aabb = new AABB(new Vector2(this.radius * 2, this.radius * 2), this.position);
         this.gameObject.rigidbody.updateInertia();
     }
     public get radius(): number {
-        return this._radius;
+        return this._radius * this.gameObject.transform.scale.sum / 2;
     }
     public set radius(val: number) {
         this._radius = val;
         this._area = Math.PI * this.radius ** 2;
-        this._aabb = new AABB(new Vector2(this.scaledRadius * 2, this.scaledRadius * 2), this.position);
+        this._aabb = new AABB(new Vector2(this.radius * 2, this.radius * 2), this.position);
         this.gameObject.rigidbody.updateInertia();
     }
-    public get scaledRadius(): number {
-        return this.radius * this.gameObject.transform.scale.sum / 2;
-    }
     public async update(gameTime: GameTime): Promise<void> {
-        this._aabb = new AABB(new Vector2(this.scaledRadius * 2, this.scaledRadius * 2), this.position);
+        this._aabb = new AABB(new Vector2(this.radius * 2, this.radius * 2), this.position.add(new Vector2(-this.radius, this.radius)));
     }
     public intersects(other: CircleCollider): boolean {
         return other.position.sub(this.position).magnitudeSquared < (this.radius + other.radius) ** 2;

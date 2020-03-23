@@ -10,6 +10,7 @@ import { GameObject } from '../GameObject/GameObject.js';
 import { UIFrame } from '../UI/UIFrame.js';
 import { Vector2 } from '../Vector2.js';
 import { Frame } from './Frame.js';
+import { CircleCollider } from '../GameObject/Components/CircleCollider.js';
 
 export class CameraManager {
     private context: CanvasRenderingContext2D;
@@ -40,7 +41,6 @@ export class CameraManager {
         frames = frames.filter(f => f).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);
 
         this.cameras.forEach(camera => camera.update(<Frame[]>frames));
-
 
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 

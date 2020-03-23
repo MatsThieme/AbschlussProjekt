@@ -127,7 +127,12 @@ export class RigidBody extends Component {
             //for (const c of contactPoints) {
             //    this.gameObject.scene.newGameObject('contact', gameObject => {
             //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = new Sprite('spriteTest1.png');
+            //            texture.sprite = new Sprite((context, canvas) => {
+            //                canvas.width = canvas.height = 10;
+            //                context.fillStyle = '#f00';
+            //                context.fillRect(0, 0, 10, 10);
+            //            });
+
             //            texture.size = new Vector2(0.1, 0.1);
             //        });
 
@@ -163,7 +168,7 @@ export class RigidBody extends Component {
         }
 
 
-        this.force.add(Physics.gravity);
+        //this.force.add(Physics.gravity);
 
 
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
