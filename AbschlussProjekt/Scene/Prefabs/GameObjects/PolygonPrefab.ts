@@ -6,8 +6,8 @@ import { Vector2 } from '../../Vector2.js';
 
 export function PolygonPrefab(gameObject: GameObject): void {
     gameObject.addComponent(PolygonCollider, polygonCollider => {
-        polygonCollider.vertices = [new Vector2(-2, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
-        polygonCollider.material = new PhysicsMaterial(0, 1, 1);
+        polygonCollider.vertices = [new Vector2(-1, 0.2), new Vector2(1.5, 1), new Vector2(1, 1.1), new Vector2(0.5, 1), new Vector2(1, 0)];
+        polygonCollider.material = new PhysicsMaterial(1, 1, 1);
         polygonCollider.density = 10;
     });
 

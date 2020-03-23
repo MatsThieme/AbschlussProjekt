@@ -20,10 +20,10 @@ export class Collision {
         this.penetrationDepth = penetrationDepth;
         this.contactPoints = contactPoints;
 
-        this.e = Math.min(this.A.material.bounciness, this.B.material.bounciness);
+        this.e = (this.A.material.bounciness + this.B.material.bounciness) / 2;
 
-        this.sf = Math.sqrt(this.A.material.staticFriction ** 2 + this.B.material.staticFriction ** 2);
-        this.df = Math.sqrt(this.A.material.dynamicFriction ** 2 + this.B.material.dynamicFriction ** 2);
+        this.sf = (this.A.material.staticFriction + this.B.material.staticFriction) / 2;
+        this.df = (this.A.material.dynamicFriction + this.B.material.dynamicFriction) / 2;
 
         this.solved = this.solve();
     }
@@ -34,51 +34,84 @@ export class Collision {
 
         if (rbA.mass === 0 && rbB.mass === 0 || !this.normal || !this.contactPoints || !this.penetrationDepth) return;
 
-        const contact = Vector2.average(...this.contactPoints);
-        const ra = contact.clone.sub(this.A.position);
-        const rb = contact.clone.sub(this.B.position);
+        const impulsesA: { impulse: Vector2, at: Vector2 }[] = [];
+        const impulsesB: { impulse: Vector2, at: Vector2 }[] = [];
 
-        const rv = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra)).sub(rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb)));
+        //debugger;
 
-        const velocityAlongNormal = Vector2.dot(rv, this.normal);
-
-        //let velocityAlongNormal = Vector2.dot(rbA.velocity.clone.sub(rbB.velocity), this.normal);
-
-        if (velocityAlongNormal > 0) return; //
+        for (let i = 0; i < this.contactPoints.length; ++i) {
+            const ra: Vector2 = this.A.position.sub(this.contactPoints[i]);
+            const rb: Vector2 = this.B.position.sub(this.contactPoints[i]);
 
 
-        const j = (-(this.e + 1) * velocityAlongNormal) / (Vector2.dot(this.normal, this.normal) * (rbA.invMass + rbB.invMass + (Vector2.dot(ra, this.normal) ** 2 / rbA.invInertia) + (Vector2.dot(rb, this.normal) ** 2 / rbB.invInertia)));//+ (Vector2.cross(ra, this.normal) ** 2 / rbA.invInertia) + (Vector2.cross(rb, this.normal) ** 2 / rbB.invInertia)
+            let rv: Vector2 = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb)).sub(rbA.velocity).sub(Vector2.cross1(rbA.angularVelocity, ra));
 
-        const impulse = this.normal.clone.setLength(j);
+            const contactVel = Vector2.dot(rv, this.normal);
+
+            if (contactVel > 0) continue;
+
+            const raCrossN = Vector2.cross(ra, this.normal);
+            const rbCrossN = Vector2.cross(rb, this.normal);
+            const invMassSum = rbA.invMass + rbB.invMass + raCrossN ** 2 * rbA.invInertia + rbCrossN ** 2 * rbB.invInertia;
+
+            let j = -(1 + this.e) * contactVel;
+            j /= invMassSum;
+            j /= this.contactPoints.length;
+
+            const impulse = this.normal.normalized.scale(j);
+
+
+            impulsesA.push({ impulse: impulse.flipped.scale(rbB.mass === 0 ? 2 : 1), at: ra });
+            impulsesB.push({ impulse: impulse.clone.scale(rbA.mass === 0 ? 2 : 1), at: rb });
+
+
+            rv = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb)).sub(rbA.velocity).sub(Vector2.cross1(rbA.angularVelocity, ra));
+
+            const t = rv.clone;
+            const xyz = -Vector2.dot(rv, this.normal);
+            t.add(this.normal.clone.scale(xyz));
+            t.normalize();
+
+            let jt = -Vector2.dot(rv, t);
+            jt /= invMassSum;
+            jt /= this.contactPoints.length;
+
+            if (jt === 0) continue;
+
+            let tangentImpulse;
+            if (Math.abs(jt) < j * this.sf) tangentImpulse = t.scale(jt);
+            else tangentImpulse = t.scale(-this.df * j);
+
+
+            impulsesA.push({ impulse: tangentImpulse.flipped.scale(rbB.mass === 0 ? 2 : 1), at: ra });
+            impulsesB.push({ impulse: tangentImpulse.clone.scale(rbA.mass === 0 ? 2 : 1), at: rb });
+        }
+
 
         const project = this.normal.clone.setLength(this.penetrationDepth / 2);
-
-        //console.log(rbA.velocity.magnitude < Physics.gravity.magnitude * 10, rbB.velocity.magnitude < Physics.gravity.magnitude * 10);
-
 
         return {
             collision: this,
             A: {
-                impulse: /*rbA.velocity.magnitude < Physics.gravity.magnitude ? rbA.velocity.flipped : */impulse,
-                project: rbB.mass === 0 ? project.clone.scale(2) : project
+                impulses: impulsesA,
+                project: (rbB.mass === 0 ? project.clone.scale(2) : project).flipped
             },
             B: {
-                impulse: /*rbB.velocity.magnitude < Physics.gravity.magnitude ? rbB.velocity.flipped : */impulse.flipped,
-                project: rbA.mass === 0 ? project.flipped.scale(2) : project.flipped
+                impulses: impulsesB,
+                project: rbA.mass === 0 ? project.clone.scale(2) : project
             }
         };
     }
 }
 
-
 declare interface Solved {
     readonly collision: Collision;
     readonly A: {
-        impulse: Vector2;
+        impulses: { impulse: Vector2, at: Vector2 }[];
         project: Vector2;
     };
     readonly B: {
-        impulse: Vector2;
+        impulses: { impulse: Vector2, at: Vector2 }[];
         project: Vector2;
     };
 }

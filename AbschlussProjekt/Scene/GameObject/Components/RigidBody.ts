@@ -22,6 +22,8 @@ export class RigidBody extends Component {
     public torque: number;
     public force: Vector2;
     public useAutoMass: boolean;
+    public freezePosition: boolean;
+    public freezeRotation: boolean;
     public constructor(gameObject: GameObject, mass: number = 0, useAutoMass: boolean = false) {
         super(gameObject, ComponentType.RigidBody);
         this._mass = mass;
@@ -31,6 +33,8 @@ export class RigidBody extends Component {
         this.torque = 0;
         this.force = new Vector2();
         this._inertia = this.computeInertia();
+        this.freezePosition = false;
+        this.freezeRotation = false;
 
         this.id = RigidBody.nextID++;
     }
@@ -82,8 +86,6 @@ export class RigidBody extends Component {
     }
     public updateInertia(): void {
         this._inertia = this.computeInertia();
-        console.log(this.invInertia);
-        debugger;
     }
     public applyImpulse(impulse: Vector2, at: Vector2): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
@@ -91,8 +93,6 @@ export class RigidBody extends Component {
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
-
-        //this.force.add(Physics.gravity);
 
 
         const solvedCollisions = [];
@@ -114,14 +114,15 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
-
-            this.applyImpulse(Vector2.average(...solvedCollisions.map(c => c.impulse)), Vector2.average(...contactPoints));
+            for (const _c of solvedCollisions)
+                for (const c of _c.impulses)
+                    this.applyImpulse(c.impulse, c.at);
 
             //this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
 
             //this.gameObject.transform.relativePosition.add(Vector2.average(...solvedCollisions.map(c => c.project)));
 
-            this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
+            //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
             //for (const c of contactPoints) {
             //    this.gameObject.scene.newGameObject('contact', gameObject => {
@@ -162,15 +163,17 @@ export class RigidBody extends Component {
         }
 
 
+        this.force.add(Physics.gravity);
+
+
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));
-        this.velocity.add(Physics.gravity.clone.scale(gameTime.deltaTime * Physics.timeScale));
         this.force = Vector2.zero;
 
         this.angularVelocity += this.torque * this.invInertia * gameTime.deltaTime * Physics.timeScale;
         this.torque = 0;
 
 
-        this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
-        this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
+        if (!this.freezePosition) this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
+        if (!this.freezeRotation) this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
     }
 }

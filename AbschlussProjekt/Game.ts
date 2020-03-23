@@ -39,8 +39,8 @@ class Game {
             camera.size = new Vector2(16, 9);
         });
 
-
-        scene.newGameObject('Polygon', PolygonPrefab);
+        for (let i = 0; i < 1; i++)
+            scene.newGameObject('Polygon', PolygonPrefab);
 
         // movable polygon
         scene.newGameObject('Player', PlayerPrefab);

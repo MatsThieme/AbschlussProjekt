@@ -10,8 +10,8 @@ import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { Settings } from '../Settings.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, -9.807 / 100000);
-    public static timeScale: number = 0.1;
+    public static gravity: Vector2 = new Vector2(0, -0.00001);
+    public static timeScale: number = 1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
@@ -120,7 +120,7 @@ export class Physics {
             }
         }
 
-        if (A.position.add(leastPenetrationNormal).distance(B.position) < A.position.add(leastPenetrationNormal.flipped).distance(B.position)) leastPenetrationNormal.flip();
+        if (B.position.compareDistances(A.position.clone.add(leastPenetrationNormal), A.position.clone.add(leastPenetrationNormal.flipped)) === 1) leastPenetrationNormal.flip(); // always point from A to B
 
 
         const contacts: Vector2[] = [];
