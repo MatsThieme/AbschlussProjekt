@@ -64,19 +64,19 @@ export class Physics {
     public static async collisionCircle(A: CircleCollider, B: CircleCollider): Promise<Collision> {
         if (!A.intersects(B)) return new Collision(A, B);
 
-        //const AB = B.position.sub(A.position);
-        //const penetrationDepth = AB.magnitude != 0 ? A.radius + B.radius - AB.magnitude : Math.max(A.radius, B.radius) ;
-        //const normal = AB.magnitude != 0 ? AB.normalized : new Vector2(1, 0);
+        const AB = B.position.sub(A.position);
+        const penetrationDepth = AB.magnitude != 0 ? A.radius + B.radius - AB.magnitude : Math.max(A.radius, B.radius) ;
+        const normal = AB.magnitude != 0 ? AB.normalized : new Vector2(1, 0);
 
-        //const contacts = [normal.clone.setLength(A.radius - penetrationDepth / 2 * (A.radius / B.radius)).add(A.position)];
-        //return new Collision(A, B, normal, penetrationDepth, contacts);
+        const contacts = [normal.clone.setLength(A.radius - penetrationDepth / 2 * (A.radius / B.radius)).add(A.position)];
+        return new Collision(A, B, normal, penetrationDepth, contacts);
 
-        try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } });
-            return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
-        } catch {
-            return new Collision(A, B);
-        }
+        //try {
+        //    const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } });
+        //    return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
+        //} catch {
+        //    return new Collision(A, B);
+        //}
     }
     public static async collisionPolygon(A: PolygonCollider, B: PolygonCollider): Promise<Collision> {
         //let leastPenetration: number = Infinity;
@@ -141,26 +141,26 @@ export class Physics {
         }
     }
     public static async collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Promise<Collision> {
-        //const contacts: Vector2[] = [];
+        const contacts: Vector2[] = [];
 
-        //for (const face of polygonCollider.faces) {
-        //    contacts.push(...face.line.intersectsCircle(circleCollider.position, circleCollider.radius));
-        //}
-
-        //if (contacts.length === 0) return new Collision(circleCollider, polygonCollider);
-
-        //const normal = polygonCollider.position.sub(circleCollider.position).normalize();
-
-        //const penetrationDepth = circleCollider.radius - Vector2.average(...contacts).distance(circleCollider.position);
-
-
-        //return new Collision(circleCollider, polygonCollider, normal, penetrationDepth, contacts);
-
-        try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } });
-            return new Collision(polygonCollider, circleCollider, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
-        } catch {
-            return new Collision(polygonCollider, circleCollider);
+        for (const face of polygonCollider.faces) {
+            contacts.push(...face.line.intersectsCircle(circleCollider.position, circleCollider.radius));
         }
+
+        if (contacts.length === 0) return new Collision(circleCollider, polygonCollider);
+
+        const normal = polygonCollider.position.sub(circleCollider.position).normalize();
+
+        const penetrationDepth = circleCollider.radius - Vector2.average(...contacts).distance(circleCollider.position);
+
+
+        return new Collision(circleCollider, polygonCollider, normal, penetrationDepth, contacts);
+
+        //try {
+        //    const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } });
+        //    return new Collision(polygonCollider, circleCollider, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
+        //} catch {
+        //    return new Collision(polygonCollider, circleCollider);
+        //}
     }
 }

@@ -96,14 +96,11 @@ if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: nu
 new Game();
 
 //to fix:
-// polygon collision (normal direction)
-// collision response rotation
-// polygon circle collision, circle circle collision
-// line intersection: aufeinanderliegende linien
+// game freezes in worker collision detection circle vs circle and circle vs polygon 
+// collision response impulse strength over dist
 // menu aabb and clicks
 
 // to do:
-// friction
 // use child object collider in collision calculations
 // frame align
 // canvas rotation in camera component
@@ -116,4 +113,3 @@ new Game();
 
 // optional optimisations:
 // replace line intersection with face clipping in collisionPolygon
-// collisions in worker thread

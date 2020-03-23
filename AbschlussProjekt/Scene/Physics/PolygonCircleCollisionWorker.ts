@@ -16,7 +16,6 @@ function PolygonCircleCollisionWorker(data: { A: { x: number, y: number }[], B: 
 
     const APos = vecAvg_(...A);
 
-
     const contacts: { x: number, y: number }[] = [];
 
     for (let i = 0; i < A.length; i++) {
@@ -25,15 +24,9 @@ function PolygonCircleCollisionWorker(data: { A: { x: number, y: number }[], B: 
 
     if (contacts.length === 0) return;
 
-    let normal = { x: APos.x - B.position.x, y: APos.y - B.position.y };
-
-    //const APosN = { x: APos.x + normal.x, y: APos.y + normal.y };
-    //const APosNF = { x: APos.x - normal.x, y: APos.y - normal.y };
-    //if ((B.position.x - APosN.x) ** 2 + (B.position.y - APosN.y) ** 2 > (B.position.x - APosNF.x) ** 2 + (B.position.y - APosNF.y) ** 2)
-        normal = { x: -normal.x, y: -normal.y };
+    const normal = { x: -(APos.x - B.position.x), y: -(APos.y - B.position.y) };
 
     const penetrationDepth = B.radius - distance(vecAvg_(...contacts), B.position);
-
 
     return { contacts, penetrationDepth, normal };
 }

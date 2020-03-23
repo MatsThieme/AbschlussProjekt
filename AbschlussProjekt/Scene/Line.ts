@@ -38,7 +38,6 @@ export class Line {
 
         if (LEC < radius) {
             const dt = Math.sqrt(radius ** 2 - LEC ** 2)
-            console.log(this.s.normalized, t, E, LEC, dt);
 
             return [this.s.normalized.scale((t - dt)).add(this.a), this.s.normalized.scale((t + dt)).add(this.a)];
         } else if (LEC == radius) return [E];

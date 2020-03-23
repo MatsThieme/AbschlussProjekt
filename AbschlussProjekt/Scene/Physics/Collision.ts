@@ -37,7 +37,6 @@ export class Collision {
         const impulsesA: { impulse: Vector2, at: Vector2 }[] = [];
         const impulsesB: { impulse: Vector2, at: Vector2 }[] = [];
 
-        //debugger;
 
         for (let i = 0; i < this.contactPoints.length; ++i) {
             const ra: Vector2 = this.A.position.sub(this.contactPoints[i]);
