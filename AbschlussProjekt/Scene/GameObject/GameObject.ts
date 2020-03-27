@@ -67,6 +67,10 @@ export class GameObject {
 
         return component;
     }
+    public removeComponent<T extends Component>(component: T | number): void {
+        const i = this.components.findIndex(v => v.componentId === (typeof component === 'number' ? component : component.componentId));
+        if (i !== -1) this.components.splice(i, 1);
+    }
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {

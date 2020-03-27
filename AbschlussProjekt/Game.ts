@@ -89,9 +89,13 @@ class Game {
         console.log(new Line(new Vector2(0.5, 0), new Vector2(0.5, 1)).intersectsCircle(new Vector2(0.5, 0.5), 0.5));
 
 
-
-
+        //const x = scene.newGameObject('Player', PlayerPrefab, gO => {
+        //    gO.transform.relativePosition.x = 0.5;
+        //});
+        //x.rigidbody.destroy();
+        //x.parent = 
         scene.newGameObject('Player', PlayerPrefab);
+
         scene.newGameObject('Polygon', PolygonPrefab);
 
 
@@ -118,16 +122,14 @@ new Game();
 //to fix:
 // collision response impulse strength over dist
 // menu aabb and clicks
+// child collider
+
 
 // to do:
 // frame align
 // canvas rotation in camera component
 
 
-// to test:
-// child collider
-// circle collisions
-
-
 // optional optimisations:
 // replace line intersection with face clipping in collisionPolygon
+// continuous collision
