@@ -29,17 +29,13 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
             }
 
             window.removeEventListener('mousedown', end);
-            window.removeEventListener('mousemove', end);
             window.removeEventListener('mouseup', end);
             window.removeEventListener('keypress', end);
             window.removeEventListener('keyup', end);
-            window.removeEventListener('mouseover', end);
             window.removeEventListener('touchstart', end);
-            window.removeEventListener('touchmove', end);
         }
 
         window.addEventListener('mousedown', end);
-
         window.addEventListener('mouseup', end);
         window.addEventListener('keypress', end);
         window.addEventListener('touchstart', end);
@@ -49,7 +45,7 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
 
 export function awaitPromises<T>(...promises: Promise<T>[]): Promise<T[]> {
     return new Promise((resolve, reject) => {
-        if (promises.length === 0) return resolve();
+        if (promises.length === 0) return resolve([]);
         const ret: T[] = [];
         promises.forEach(p => p.then((t: T) => ret.push(t) === promises.length ? resolve(ret) : undefined));
     });

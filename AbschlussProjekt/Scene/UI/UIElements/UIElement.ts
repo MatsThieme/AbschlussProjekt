@@ -33,6 +33,7 @@ export abstract class UIElement {
     public readonly type: UIElementType;
     public color: string;
     public stroke: boolean;
+    public textShadow: number;
     public abstract get currentFrame(): UIFrame;
     protected abstract draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
     public constructor(menu: UIMenu, input: Input, type: UIElementType) {
@@ -52,6 +53,7 @@ export abstract class UIElement {
         this.lastPaddingScalar = -1;
         this.color = '#333';
         this.stroke = type !== UIElementType.Text;
+        this.textShadow = 0;
 
         this.id = UIElement.nextID++;
     }

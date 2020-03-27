@@ -54,8 +54,8 @@ export class UIDropdown extends UIElement {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
 
-        context.strokeStyle = this.color;
-        context.fillStyle = this.color;
+        context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
+
         context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
         context.textAlign = 'center';
         context.textBaseline = 'middle';
@@ -69,7 +69,15 @@ export class UIDropdown extends UIElement {
 
             if (this.stroke) context.strokeRect(context.lineWidth / 2 + btnPos.x, context.lineWidth / 2 + btnPos.y, buttonSize.x - context.lineWidth, buttonSize.y - (i === this._values.length && !this.extendUpward || this.extendUpward && i === 0 ? context.lineWidth : 0));
 
+            if (this.textShadow !== 0) {
+                context.shadowBlur = context.lineWidth * 1.5 * this.textShadow;
+                context.shadowOffsetX = context.lineWidth * this.textShadow;
+                context.shadowOffsetY = -context.lineWidth * this.textShadow;
+            }
+
             context.fillText(i === 0 ? this.value : this.values[i - 1], buttonSize.x / 2, buttonSize.y / 2 + btnPos.y);
+
+            context.shadowBlur = context.shadowOffsetX = context.shadowOffsetY = 0;
         }
     }
     public get currentFrame(): UIFrame {

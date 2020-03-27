@@ -10,7 +10,7 @@ import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { Settings } from '../Settings.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, -0.00001);
+    public static gravity: Vector2 = new Vector2(0, -0.01);
     public static timeScale: number = 1;
     private static ignoreCollisions: number[][] = [];
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
@@ -59,24 +59,32 @@ export class Physics {
 
         }
 
-        return promises.length === 0 ? [] : (await awaitPromises(...promises)).filter(c => c.normal);
+        let aP;
+
+        try {
+            aP = await awaitPromises(...promises);
+        } catch{
+            console.log('auch zu lahm');
+        }
+
+        return promises.length === 0 ? [] : (aP || []).filter(c => c.normal);
     }
     public static async collisionCircle(A: CircleCollider, B: CircleCollider): Promise<Collision> {
         if (!A.intersects(B)) return new Collision(A, B);
 
-        const AB = B.position.sub(A.position);
-        const penetrationDepth = AB.magnitude != 0 ? A.radius + B.radius - AB.magnitude : Math.max(A.radius, B.radius) ;
-        const normal = AB.magnitude != 0 ? AB.normalized : new Vector2(1, 0);
+        //const AB = B.position.sub(A.position);
+        //const penetrationDepth = AB.magnitude != 0 ? A.radius + B.radius - AB.magnitude : Math.max(A.radius, B.radius);
+        //const normal = AB.magnitude != 0 ? AB.normalized : new Vector2(1, 0);
 
-        const contacts = [normal.clone.setLength(A.radius - penetrationDepth / 2 * (A.radius / B.radius)).add(A.position)];
-        return new Collision(A, B, normal, penetrationDepth, contacts);
+        //const contacts = [normal.clone.setLength(A.radius - penetrationDepth / 2 * (A.radius / B.radius)).add(A.position)];
+        //return new Collision(A, B, normal, penetrationDepth, contacts);
 
-        //try {
-        //    const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } });
-        //    return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
-        //} catch {
-        //    return new Collision(A, B);
-        //}
+        try {
+            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'c', data: { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } } });
+            return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
+        } catch {
+            return new Collision(A, B);
+        }
     }
     public static async collisionPolygon(A: PolygonCollider, B: PolygonCollider): Promise<Collision> {
         //let leastPenetration: number = Infinity;
@@ -116,9 +124,6 @@ export class Physics {
         //    }
         //}
 
-        //if (B.position.compareDistances(A.position.clone.add(leastPenetrationNormal), A.position.clone.add(leastPenetrationNormal.flipped)) === 1) leastPenetrationNormal.flip(); // always point from A to B
-
-
         //const contacts: Vector2[] = [];
 
         //for (const faceA of A.faces) {
@@ -134,33 +139,33 @@ export class Physics {
 
         // collision calculations in worker thread
         try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', { A: A.vertices, B: B.vertices });
+            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'p', data: { A: A.vertices, B: B.vertices } });
             return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
         } catch {
             return new Collision(A, B);
         }
     }
     public static async collisionPolygonCircle(polygonCollider: PolygonCollider, circleCollider: CircleCollider): Promise<Collision> {
-        const contacts: Vector2[] = [];
+        //const contacts: Vector2[] = [];
 
-        for (const face of polygonCollider.faces) {
-            contacts.push(...face.line.intersectsCircle(circleCollider.position, circleCollider.radius));
-        }
-
-        if (contacts.length === 0) return new Collision(circleCollider, polygonCollider);
-
-        const normal = polygonCollider.position.sub(circleCollider.position).normalize();
-
-        const penetrationDepth = circleCollider.radius - Vector2.average(...contacts).distance(circleCollider.position);
-
-
-        return new Collision(circleCollider, polygonCollider, normal, penetrationDepth, contacts);
-
-        //try {
-        //    const { contacts, penetrationDepth, normal } = await AsyncWorker.work(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } });
-        //    return new Collision(polygonCollider, circleCollider, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
-        //} catch {
-        //    return new Collision(polygonCollider, circleCollider);
+        //for (const face of polygonCollider.faces) {
+        //    contacts.push(...face.line.intersectsCircle(circleCollider.position, circleCollider.radius));
         //}
+
+        //if (contacts.length === 0) return new Collision(circleCollider, polygonCollider);
+
+        //const normal = polygonCollider.position.sub(circleCollider.position).normalize();
+
+        //const penetrationDepth = circleCollider.radius - Vector2.average(...contacts).distance(circleCollider.position);
+
+
+        //return new Collision(circleCollider, polygonCollider, normal, penetrationDepth, contacts);
+
+        try {
+            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'pc', data: { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } } });
+            return new Collision(polygonCollider, circleCollider, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
+        } catch {
+            return new Collision(polygonCollider, circleCollider);
+        }
     }
 }

@@ -31,21 +31,21 @@ export function MainMenuPrefab(menu: UIMenu): void {
         button.fontSize = UIFontSize.Large;
     });
 
-    menu.addUIElement(UICheckbox, checkbox => {
-        checkbox.label = 'check';
-        checkbox.cbOnInput = c => console.log(c.checked);
-        checkbox.aabb = new AABB(new Vector2(50, 50), new Vector2(450, 100));
-    });
+    //menu.addUIElement(UICheckbox, checkbox => {
+    //    checkbox.label = 'check';
+    //    checkbox.cbOnInput = c => console.log(c.checked);
+    //    checkbox.aabb = new AABB(new Vector2(50, 50), new Vector2(450, 100));
+    //});
 
-    menu.addUIElement(UIDropdown, dropdown => {
-        dropdown.aabb = new AABB(new Vector2(200, 150), new Vector2(0, 100));
-        dropdown.values = ['first', 'second', 'third'];
-        dropdown.cbOnInput = d => console.log(d.value);
-        dropdown.fitText(1.2);
-    });
+    //menu.addUIElement(UIDropdown, dropdown => {
+    //    dropdown.aabb = new AABB(new Vector2(200, 150), new Vector2(0, 100));
+    //    dropdown.values = ['first', 'second', 'third'];
+    //    dropdown.cbOnInput = d => console.log(d.value);
+    //    dropdown.fitText(1.2);
+    //});
 
-    menu.addUIElement(UINumberInputField, textInputField => {
-        textInputField.aabb = new AABB(new Vector2(100, 50), new Vector2(250, 100));
-        textInputField.cbOnInput = t => console.log(t.value);
-    });
+    //menu.addUIElement(UINumberInputField, textInputField => {
+    //    textInputField.aabb = new AABB(new Vector2(100, 50), new Vector2(250, 100));
+    //    textInputField.cbOnInput = t => console.log(t.value);
+    //});
 }

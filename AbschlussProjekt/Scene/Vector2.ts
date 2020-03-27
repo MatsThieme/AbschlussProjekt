@@ -153,8 +153,7 @@ export class Vector2 {
         return this;
     }
     public flip(): Vector2 {
-        this.x = -this.x;
-        this.y = -this.y;
+        this.scale(-1);
         return this;
     }
     public get flipped(): Vector2 {
@@ -163,7 +162,10 @@ export class Vector2 {
     public equal(other: Vector2): boolean {
         return this.x === other.x && this.y === other.y;
     }
-    public compareDistances(p1: Vector2, p2: Vector2): -1 | 1 {
-        return (this.x - p1.x) ** 2 + (this.y - p1.y) ** 2 < (this.x - p2.x) ** 2 + (this.y - p2.y) ** 2 ? -1 : 1;
+    public lowestDist(p1: Vector2, p2: Vector2): -1 | 0 | 1 {
+        const first = (this.x - p1.x) ** 2 + (this.y - p1.y) ** 2;
+        const second = (this.x - p2.x) ** 2 + (this.y - p2.y) ** 2;
+
+        return first === second ? 0 : first < second ? -1 : 1;
     }
 }

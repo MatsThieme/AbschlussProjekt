@@ -12,6 +12,18 @@ import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
 import { Texture } from './Texture.js';
 
+const sprite = new Sprite((context, canvas) => {
+    canvas.width = canvas.height = 50;
+
+    context.arc(canvas.width / 2, 5, 5, 0, Math.PI * 2);
+    context.fillStyle = context.strokeStyle = '#f00';
+    context.fill();
+
+    context.moveTo(canvas.width / 2, 5);
+    context.lineTo(canvas.width / 2, canvas.height);
+    context.stroke();
+});
+
 export class RigidBody extends Component {
     private static nextID: number = 0;
     private id: number;
@@ -87,9 +99,9 @@ export class RigidBody extends Component {
     public updateInertia(): void {
         this._inertia = this.computeInertia();
     }
-    public applyImpulse(impulse: Vector2, at: Vector2): void {
+    public applyImpulse(impulse: Vector2, at: Vector2 = Vector2.zero): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
-        this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
+        //this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
@@ -141,30 +153,18 @@ export class RigidBody extends Component {
             //    });
             //}
 
-            //for (const n of normals) {
-            //    this.gameObject.scene.newGameObject('contact', gameObject => {
-            //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = new Sprite((context, canvas) => {
-            //                canvas.width = canvas.height = 50;
+            for (const n of normals) {
+                this.gameObject.scene.newGameObject('contact', gameObject => {
+                    gameObject.addComponent(Texture, texture => {
+                        texture.sprite = sprite;
 
-            //                context.arc(canvas.width / 2, 8, 8, 0, Math.PI * 2);
-            //                context.fillStyle = context.strokeStyle = '#f00';
-            //                context.fill();
+                        texture.size = new Vector2(0.5, 0.5);
+                    });
 
-            //                context.beginPath();
-
-            //                context.moveTo(canvas.width / 2, 8);
-            //                context.lineTo(canvas.width / 2, canvas.height);
-            //                context.stroke();
-            //            });
-
-            //            texture.size = new Vector2(0.5, 0.5);
-            //        });
-
-            //        gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
-            //        gameObject.addComponent(Destroy);
-            //    });
-            //}
+                    gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
+                    gameObject.addComponent(Destroy);
+                });
+            }
         }
 
 
@@ -178,7 +178,7 @@ export class RigidBody extends Component {
         this.torque = 0;
 
 
-        if (!this.freezePosition) this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime * Physics.timeScale));
-        if (!this.freezeRotation) this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime * Physics.timeScale;
+        if (!this.freezePosition) this.gameObject.transform.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime / 1000 * Physics.timeScale));
+        if (!this.freezeRotation) this.gameObject.transform.relativeRotation.radian += this.angularVelocity * gameTime.deltaTime / 1000 * Physics.timeScale;
     }
 }

@@ -66,8 +66,8 @@ export abstract class UIInputField extends UIElement {
 
         if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, canvas.width, canvas.height);
 
-        context.strokeStyle = this.color;
-        context.fillStyle = this.color;
+        context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
+
         context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
         if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
 
@@ -75,6 +75,14 @@ export abstract class UIInputField extends UIElement {
         context.textBaseline = 'middle';
 
         context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
+
+
+
+        if (this.textShadow !== 0) {
+            context.shadowBlur = context.lineWidth * 1.5 * this.textShadow;
+            context.shadowOffsetX = context.lineWidth * this.textShadow;
+            context.shadowOffsetY = -context.lineWidth * this.textShadow;
+        }
 
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 

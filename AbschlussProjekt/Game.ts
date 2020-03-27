@@ -17,6 +17,14 @@ import { Scene } from './Scene/Scene.js';
 import { Settings } from './Scene/Settings.js';
 import { Vector2 } from './Scene/Vector2.js';
 import { Line } from './Scene/Line.js';
+import { PolygonCollider } from './Scene/GameObject/Components/PolygonCollider.js';
+import { PolygonRenderer } from './Scene/GameObject/Components/PolygonRenderer.js';
+import { PolygonPrefab } from './Scene/Prefabs/GameObjects/PolygonPrefab.js';
+import { Component } from './Scene/GameObject/Components/Component.js';
+import { ComponentType } from './Scene/GameObject/Components/ComponentType.js';
+import { Physics } from './Scene/Physics/Physics.js';
+import { GameObject } from './Scene/GameObject/GameObject.js';
+import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
 
 class Game {
     private scene: Scene;
@@ -43,33 +51,98 @@ class Game {
         });
 
 
-        //scene.newGameObject('Polygon', PolygonPrefab);
 
-        for (let i = -3; i < 2; i++)
-            for (let j = -2; j <= 2; j++)
-                scene.newGameObject('Circle', gameObject => {
-                    gameObject.addComponent(CircleCollider, circleCollider => {
-                        circleCollider.radius = 0.5;
-                    });
+        //for (let i = -3; i < 2; i++)
+        //    for (let j = -3; j <= 3; j++)
+        //        scene.newGameObject('Circle', gameObject => {
+        //            gameObject.addComponent(CircleCollider, circleCollider => {
+        //                circleCollider.radius = 0.5;
+        //            });
 
-                    gameObject.transform.relativePosition = new Vector2(j, i + 1);
-                    gameObject.rigidbody.useAutoMass = true;
-                    gameObject.addComponent(CircleRenderer);
-                });
+        //            gameObject.transform.relativePosition = new Vector2(j, i + 1);
+        //            gameObject.rigidbody.useAutoMass = true;
+        //            gameObject.addComponent(CircleRenderer);
+        //        });
 
-        scene.newGameObject('Circle', gameObject => {
-            gameObject.addComponent(CircleCollider, circleCollider => {
-                circleCollider.radius = 0.5;
-            });
+        //scene.newGameObject('Circle', gameObject => {
+        //    gameObject.addComponent(CircleCollider, circleCollider => {
+        //        circleCollider.radius = 0.5;
+        //    });
 
-            gameObject.transform.relativePosition = new Vector2(0, -3.5);
-            gameObject.rigidbody.useAutoMass = true;
-            gameObject.addComponent(CircleRenderer);
-            gameObject.addComponent(Move);
+        //    gameObject.transform.relativePosition = new Vector2(-3.5, -3.5);
+        //    gameObject.rigidbody.useAutoMass = true;
+        //    gameObject.addComponent(CircleRenderer);
+        //});
+
+        //scene.newGameObject('Poly', gameObject => {
+        //    gameObject.addComponent(PolygonCollider);
+
+        //    gameObject.transform.relativePosition = new Vector2(0, -3.5);
+        //    gameObject.rigidbody.useAutoMass = true;
+        //    gameObject.addComponent(PolygonRenderer);
+        //});
+
+
+
+
+
+
+
+
+
+
+        const A1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
+            gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(1, 1, 0.5);
+        });
+        const A2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
+            gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(1, 1, 0.5);
         });
 
-        // movable polygon
-        //scene.newGameObject('Player', PlayerPrefab);
+        //const B1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
+        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 0, 1);
+        //});
+        //const B2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
+        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 0, 1);
+        //});
+
+        //const C1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
+        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 1, 1);
+        //});
+        //const C2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
+        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 1, 1);
+        //});
+
+        //Physics.ignoreCollision(A1, B1);
+        //Physics.ignoreCollision(A1, B2);
+        //Physics.ignoreCollision(A1, C1);
+        //Physics.ignoreCollision(A1, C2);
+
+        //Physics.ignoreCollision(A2, B1);
+        //Physics.ignoreCollision(A2, B2);
+        //Physics.ignoreCollision(A2, C1);
+        //Physics.ignoreCollision(A2, C2);
+
+
+        //Physics.ignoreCollision(B1, A1);
+        //Physics.ignoreCollision(B1, A2);
+        //Physics.ignoreCollision(B1, C1);
+        //Physics.ignoreCollision(B1, C2);
+
+        //Physics.ignoreCollision(B2, A1);
+        //Physics.ignoreCollision(B2, A2);
+        //Physics.ignoreCollision(B2, C1);
+        //Physics.ignoreCollision(B2, C2);
+
+
+        //Physics.ignoreCollision(C1, A1);
+        //Physics.ignoreCollision(C1, A2);
+        //Physics.ignoreCollision(C1, B1);
+        //Physics.ignoreCollision(C1, B2);
+
+        //Physics.ignoreCollision(C2, A1);
+        //Physics.ignoreCollision(C2, A2);
+        //Physics.ignoreCollision(C2, B1);
+        //Physics.ignoreCollision(C2, B2);
 
 
         // display x and y axis
@@ -87,7 +160,7 @@ class Game {
 
 
 
-        await asyncTimeout(100);
+        //await asyncTimeout(100);
     }
 }
 
@@ -96,7 +169,6 @@ if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: nu
 new Game();
 
 //to fix:
-// game freezes in worker collision detection circle vs circle and circle vs polygon 
 // collision response impulse strength over dist
 // menu aabb and clicks
 

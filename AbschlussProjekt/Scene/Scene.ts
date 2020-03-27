@@ -98,8 +98,15 @@ export class Scene {
                 }
             }
 
+            let aP;
 
-            const collisions: Collision[] = (await awaitPromises(...collisionPromises)).reduce((t, c) => { t.push(...c); return t; }, <Collision[]>[]); // wait for all collision calculations
+            try {
+                aP = await awaitPromises(...collisionPromises);
+            } catch{
+                console.log('zu langsam');
+            }
+
+            const collisions: Collision[] = (aP || []).reduce((t, c) => { t.push(...c); return t; }, <Collision[]>[]); // wait for all collision calculations
 
 
             const rigidbodies = this.getAllGameObjects().map(gO => gO.rigidbody);
@@ -122,9 +129,12 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', 2);
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', 2);
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', 2);
+        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
+        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', navigator.hardwareConcurrency);
+        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', navigator.hardwareConcurrency);
+
+        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CollisionWorker.js', 1);
+
 
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));

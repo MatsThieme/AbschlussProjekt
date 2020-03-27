@@ -10,18 +10,20 @@ export class Angle {
         if (degree) this.degree = degree;
     }
     public get radian(): number {
+        if (!this._radian) this._radian = this._degree * Math.PI / 180;
         return this._radian;
     }
     public set radian(val: number) {
         this._radian = this.normalizeRadian(val);
-        this._degree = this.radian * 180 / Math.PI;
+        this._degree = 0;
     }
     public get degree(): number {
+        if (!this._degree) this._degree = this._radian * 180 / Math.PI;
         return this._degree;
     }
     public set degree(val: number) {
         this._degree = this.normalizeDegree(val);
-        this._radian = this.degree * Math.PI / 180;
+        this._radian = 0;
     }
     private normalizeRadian(radian: number): number {
         radian %= Math.PI * 2;
