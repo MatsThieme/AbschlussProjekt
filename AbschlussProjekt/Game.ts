@@ -50,19 +50,22 @@ class Game {
             camera.size = new Vector2(16, 9);
         });
 
+        //const width = 1;
+        //const height = 1;
 
-
-        //for (let i = -3; i < 2; i++)
-        //    for (let j = -3; j <= 3; j++)
+        //for (let i = Math.round(-width / 2); i < Math.round(width / 2); i++)
+        //    for (let j = Math.round(-height / 2); j < Math.round(height / 2); j++)
         //        scene.newGameObject('Circle', gameObject => {
         //            gameObject.addComponent(CircleCollider, circleCollider => {
         //                circleCollider.radius = 0.5;
         //            });
 
-        //            gameObject.transform.relativePosition = new Vector2(j, i + 1);
+        //            gameObject.transform.relativePosition = new Vector2(i / 4, (j + 1) / 4);
         //            gameObject.rigidbody.useAutoMass = true;
         //            gameObject.addComponent(CircleRenderer);
         //        });
+
+
 
         //scene.newGameObject('Circle', gameObject => {
         //    gameObject.addComponent(CircleCollider, circleCollider => {
@@ -72,6 +75,7 @@ class Game {
         //    gameObject.transform.relativePosition = new Vector2(-3.5, -3.5);
         //    gameObject.rigidbody.useAutoMass = true;
         //    gameObject.addComponent(CircleRenderer);
+        //    gameObject.addComponent(Move);
         //});
 
         //scene.newGameObject('Poly', gameObject => {
@@ -82,67 +86,13 @@ class Game {
         //    gameObject.addComponent(PolygonRenderer);
         //});
 
+        console.log(new Line(new Vector2(0.5, 0), new Vector2(0.5, 1)).intersectsCircle(new Vector2(0.5, 0.5), 0.5));
 
 
 
 
-
-
-
-
-
-        const A1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
-            gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(1, 1, 0.5);
-        });
-        const A2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
-            gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(1, 1, 0.5);
-        });
-
-        //const B1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
-        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 0, 1);
-        //});
-        //const B2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
-        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 0, 1);
-        //});
-
-        //const C1 = scene.newGameObject('Player', PlayerPrefab, gameObject => {
-        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 1, 1);
-        //});
-        //const C2 = scene.newGameObject('Polygon', PolygonPrefab, gameObject => {
-        //    gameObject.getComponent<any>(ComponentType.PolygonCollider).material = new PhysicsMaterial(0, 1, 1);
-        //});
-
-        //Physics.ignoreCollision(A1, B1);
-        //Physics.ignoreCollision(A1, B2);
-        //Physics.ignoreCollision(A1, C1);
-        //Physics.ignoreCollision(A1, C2);
-
-        //Physics.ignoreCollision(A2, B1);
-        //Physics.ignoreCollision(A2, B2);
-        //Physics.ignoreCollision(A2, C1);
-        //Physics.ignoreCollision(A2, C2);
-
-
-        //Physics.ignoreCollision(B1, A1);
-        //Physics.ignoreCollision(B1, A2);
-        //Physics.ignoreCollision(B1, C1);
-        //Physics.ignoreCollision(B1, C2);
-
-        //Physics.ignoreCollision(B2, A1);
-        //Physics.ignoreCollision(B2, A2);
-        //Physics.ignoreCollision(B2, C1);
-        //Physics.ignoreCollision(B2, C2);
-
-
-        //Physics.ignoreCollision(C1, A1);
-        //Physics.ignoreCollision(C1, A2);
-        //Physics.ignoreCollision(C1, B1);
-        //Physics.ignoreCollision(C1, B2);
-
-        //Physics.ignoreCollision(C2, A1);
-        //Physics.ignoreCollision(C2, A2);
-        //Physics.ignoreCollision(C2, B1);
-        //Physics.ignoreCollision(C2, B2);
+        scene.newGameObject('Player', PlayerPrefab);
+        scene.newGameObject('Polygon', PolygonPrefab);
 
 
         // display x and y axis
@@ -159,12 +109,9 @@ class Game {
         scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
 
 
-
         //await asyncTimeout(100);
     }
 }
-
-if (!window.OffscreenCanvas) (<any>window.OffscreenCanvas) = function (width: number, height: number) { const canvas = document.createElement('canvas'); canvas.width = width, canvas.height = height; return canvas; } // polyfill OffscreenCanvas
 
 new Game();
 
@@ -173,7 +120,6 @@ new Game();
 // menu aabb and clicks
 
 // to do:
-// use child object collider in collision calculations
 // frame align
 // canvas rotation in camera component
 

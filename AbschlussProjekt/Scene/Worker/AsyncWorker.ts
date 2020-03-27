@@ -1,69 +1,73 @@
 export class AsyncWorker {
-    public static maxWorkers: number = navigator.hardwareConcurrency;
-    private static workers: Map<string, Worker[]> = new Map();
-    private static queue: { url: string, data: any, resolve: (value?: any) => void, reject: (value?: any) => void }[] = [];
-    private static async work(): Promise<any> {
-        const { url, data, resolve, reject } = AsyncWorker.queue.splice(0, 1)[0];
-        const worker: Worker | undefined = await AsyncWorker.getWorker(url);
+    private url: string;
+    public maxWorkers: number;
+    private workers: Worker[];
+    private queue: { data: any, resolve: (value?: any) => void, reject: (value?: any) => void }[];
+    public constructor(url: string, maxWorkers: number) {
+        this.url = url;
+        this.maxWorkers = maxWorkers;
+        this.workers = [];
+        this.queue = [];
+    }
+    private async work(): Promise<void> {
+        const worker = await this.getWorker();
+        if (!worker || worker.onmessage || worker.onerror) return;
 
-        if (!worker || worker.onmessage !== worker.onerror) {
-            AsyncWorker.queue.unshift({ url, data, resolve, reject });
-            return;
-        }
+        const { data, resolve, reject } = this.queue.splice(0, 1)[0];
+
 
         worker.isBusy = true;
+
         worker.onerror = reject;
-        worker.onmessage = e => {
-            resolve(e.data);
+        worker.onmessage = async e => {
             worker.onmessage = worker.onerror = null;
+            resolve(e.data);
             worker.isBusy = false;
 
-            if (AsyncWorker.queue.length > 0) AsyncWorker.work();
+            if (this.queue.length >= this.maxWorkers && this.workers.length < this.maxWorkers) this.workers.push((await this.createWorker(1))[0]);
+
+            for (let i = 0; i < Math.min(this.queue.length, this.workers.length); i++)
+                this.work();
         };
 
         worker.postMessage(data);
     }
-    public static task(url: string, data: any): Promise<any> {
+    public task<T>(data: any): Promise<T> {
         return new Promise((resolve, reject) => {
-            AsyncWorker.queue.push({ url, data, resolve, reject });
-            AsyncWorker.work();
-            console.log(AsyncWorker.queue.length);
+            this.queue.push({ data, resolve, reject });
+            this.work();
         });
     }
-    private static async getWorker(url: string): Promise<Worker | undefined> {
-        let worker: Worker | undefined = AsyncWorker.workers.get(url)?.filter(worker => !worker.isBusy)[0];
+    private async getWorker(): Promise<Worker | void> {
+        const w = this.workers.filter(w => !w.isBusy);
 
-        if (!worker && ((AsyncWorker.workers.get(url)?.length || 0) < AsyncWorker.maxWorkers)) worker = (await AsyncWorker.createWorker(url, 1))[0];
+        if (w.length > 0) return w[~~(w.length * Math.random())];
 
-        if (!worker) console.error('no worker available');
+        if ((this.workers.length || 0) < this.maxWorkers) return (await this.createWorker(1))[0];
 
-        return worker;
+        console.error('all workers are busy!');
     }
-    public static removeWorker(url: string, count: number): void {
-        const workers = AsyncWorker.workers.get(url);
-        if (workers) {
-            const length = workers.length
-            workers.sort((a, b) => (<any>a.isBusy) - (<any>b.isBusy)).splice(0, Math.min(count, length)).forEach(w => w.postMessage('close'));
-            AsyncWorker.workers.set(url, workers);
-        }
+    public removeWorker(count: number): void {
+        this.workers.sort((a, b) => (<any>a.isBusy) - (<any>b.isBusy)).splice(0, Math.min(count, this.workers.length)).forEach(w => w.postMessage('close'));
     }
-    public static createWorker(url: string, count: number): Promise<Worker[]> {
+    public createWorker(count: number): Promise<Worker[]> {
+        console.log('creating worker');
         return new Promise((resolve, reject) => {
             const w: Worker[] = [];
 
             let complete = 0;
             for (let i = 0; i < count; i++) {
-                w[i] = <any>new Worker(url);
+                w[i] = <any>new Worker(this.url);
                 w[i].isBusy = false;
-                AsyncWorker.warmup(w[i]).then(() => {
+                this.warmup(w[i]).then(() => {
                     if (++complete === count) resolve(w);
                 });
             }
 
-            AsyncWorker.workers.set(url, [...(AsyncWorker.workers.get(url) || []), ...w]);
+            this.workers.push(...w);
         });
     }
-    private static warmup(worker: Worker): Promise<void> {
+    private warmup(worker: Worker): Promise<void> {
         return new Promise((resolve, reject) => {
             worker.postMessage(undefined);
             worker.onmessage = () => {
@@ -75,6 +79,7 @@ export class AsyncWorker {
 }
 
 (<any>window).AsyncWorker = AsyncWorker;
+
 
 /** @internal */
 declare interface Worker extends EventTarget, AbstractWorker {

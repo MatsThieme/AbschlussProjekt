@@ -45,7 +45,6 @@
     </Content>
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
-    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="FontLoader.ts">

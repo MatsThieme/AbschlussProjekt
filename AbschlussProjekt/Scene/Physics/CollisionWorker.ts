@@ -1,6 +1,12 @@
 self.addEventListener('message', (e: MessageEvent) => {
     if (!e.data) return postMessage(0);
+
     if (e.data === 'close') return close();
+
+    if (!(<any>self).used) {
+        (<any>self).used = true;
+        console.log('first use');
+    }
 
     if (e.data.name === 'p') {
         return postMessage(PhysicsWorkerPolygonCollision(e.data.data));
@@ -169,25 +175,52 @@ function distance(v1: { x: number, y: number }, v2: { x: number, y: number }) {
     return Math.sqrt((v1.x - v2.x) ** 2 + (v1.y - v2.y) ** 2);
 }
 
-function lineIntersectsCircle(a: { x: number, y: number }, b: { x: number, y: number }, position: { x: number, y: number }, radius: number): { x: number, y: number }[] {
-    let s = { x: b.x - a.x, y: b.y - a.y };
-    let smag = Math.sqrt(s.x ** 2 + s.y ** 2);
-    s = { x: s.x / smag, y: s.y / smag };
+//function lineIntersectsCircle(a: { x: number, y: number }, b: { x: number, y: number }, position: { x: number, y: number }, radius: number): { x: number, y: number }[] {
+//    let s = { x: b.x - a.x, y: b.y - a.y };
+//    let smag = Math.sqrt(s.x ** 2 + s.y ** 2);
+//    s = { x: s.x / smag, y: s.y / smag };
 
-    const t = (position.x - a.x) * s.x + (position.y - a.y) * s.y;
+//    const t = (position.x - a.x) * s.x + (position.y - a.y) * s.y;
 
-    const E = { x: s.x * t + a.x, y: s.y * t + a.y };
+//    const E = { x: s.x * t + a.x, y: s.y * t + a.y };
 
-    const LEC = distance(position, E);
+//    const LEC = distance(position, E);
 
-    if (LEC < radius) {
-        const dt = Math.sqrt(radius ** 2 - LEC ** 2)
+//    if (LEC < radius) {
+//        const dt = Math.sqrt(radius ** 2 - LEC ** 2)
 
-        return [{ x: s.x * (t - dt) + a.x, y: s.y * (t - dt) + a.y }, { x: s.x * (t + dt) + a.x, y: s.y * (t + dt) + a.y }];
-    } else if (LEC == radius) return [E];
+//        return [{ x: s.x * (t - dt) + a.x, y: s.y * (t - dt) + a.y }, { x: s.x * (t + dt) + a.x, y: s.y * (t + dt) + a.y }];
+//    } else if (LEC == radius) return [E];
+
+//    return [];
+//}
+
+function lineIntersectsCircle(a_: { x: number, y: number }, b_: { x: number, y: number }, position: { x: number, y: number }, radius: number): { x: number, y: number }[] {
+    const d = { x: b_.x - a_.x, y: b_.y - a_.y };
+    const f = { x: a_.x - position.x, y: a_.y - position.y };
+
+    const a = d.x * d.x + d.y * d.y;
+    const b = 2 * (f.x * d.x + f.y * d.y);
+    const c = (f.x * f.x + f.y * f.y) - radius ** 2;
+
+    let discriminant = b * b - 4 * a * c;
+    if (discriminant >= 0) {
+        discriminant = Math.sqrt(discriminant);
+        const t1 = (-b - discriminant) / (2 * a);
+        const t2 = (-b + discriminant) / (2 * a);
+
+        const ret = [];
+
+
+        if (t1 >= 0 && t1 <= 1) ret.push({ x: d.x * t1 + a_.x, y: d.y * t1 + a_.y });
+        if (t2 >= 0 && t2 <= 1) ret.push({ x: d.x * t2 + a_.x, y: d.y * t2 + a_.y });
+
+        return ret;
+    }
 
     return [];
 }
+
 
 function vecAvg(...vecs: { x: number, y: number }[]) {
     const ret = { x: 0, y: 0 };

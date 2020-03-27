@@ -22,6 +22,7 @@ export class GameObject {
     public scene: Scene;
     public parent: GameObject | undefined;
     public drawPriority: number;
+    public hasCollider?: boolean;
     public constructor(name: string, scene: Scene) {
         this.id = GameObject.nextID++;
         this._name = `${name} (${this.id})`;
@@ -57,6 +58,8 @@ export class GameObject {
             this.components.push(component);
 
         if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) && !this.rigidbody) this.addComponent(RigidBody);
+
+        if (component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) this.hasCollider = true;
 
         if (component.type === ComponentType.AudioListener) this.scene.hasAudioListener = true;
 

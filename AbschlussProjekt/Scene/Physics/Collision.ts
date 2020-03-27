@@ -41,11 +41,20 @@ export class Collision {
         const impulsesB: { impulse: Vector2, at: Vector2 }[] = [];
 
 
+        // project out of collision
+        const project = this.normal.clone.setLength(this.penetrationDepth / 2);
+        //if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
+        //if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
 
 
         const contact = Vector2.average(...this.contactPoints);
         const ra: Vector2 = this.A.position.clone.sub(contact);
         const rb: Vector2 = this.B.position.clone.sub(contact);
+
+
+
+
+
 
 
         const vpA = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra));
@@ -57,31 +66,169 @@ export class Collision {
         if (Vector2.dot(rv, this.normal) > 0) return;
 
 
-        const j = (-(1 + this.e) * Vector2.dot(rv, this.normal)) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
-
+        const j = (-(1 + this.e) * Vector2.dot(rv, this.normal)) / (rbA.invMass + rbB.invMass);
         const impulse = this.normal.normalized.scale(j);
 
 
-
-
         const t = rv.clone.sub(this.normal.clone.scale(Vector2.dot(rv, this.normal))).normalize();
-
         const jt = -Vector2.dot(rv, t) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
-        const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
+        const tangentImpulse = /*Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : */t.clone.scale(-j).scale(this.df);
 
 
         rbA.applyImpulse(impulse.flipped, ra);
         rbB.applyImpulse(impulse, rb);
 
-        //rbA.applyImpulse(tangentImpulse.flipped, ra);
-        //rbB.applyImpulse(tangentImpulse, rb);
+        rbA.applyImpulse(tangentImpulse.flipped, ra);
+        rbB.applyImpulse(tangentImpulse, rb);
 
 
-        //rbA.applyImpulse(impulse.flipped, ra);
-        //rbB.applyImpulse(impulse, rb);
 
-        //rbA.applyImpulse(tangentImpulse.flipped, ra);
-        //rbB.applyImpulse(tangentImpulse, rb);
+        return {
+            collision: this,
+            A: {
+                impulses: impulsesA,
+                project: (rbB.mass === 0 ? project.clone.scale(2) : project).flipped
+            },
+            B: {
+                impulses: impulsesB,
+                project: rbA.mass === 0 ? project.clone.scale(2) : project
+            }
+        };
+    }
+}
+
+
+
+
+
+
+
+function calculateVelocity(mass1: number, mass2: number, vel1: Vector2, vel2: Vector2): Vector2 {
+    return Vector2.divide(vel2.clone.scale(2 * mass2).add(vel1.clone.scale(mass1 - mass2)), mass1 + mass2);
+}
+
+//const newVelocityA = calculateVelocity(rbA.mass, rbB.mass, rbA.velocity, rbB.velocity);
+//const newVelocityB = calculateVelocity(rbB.mass, rbA.mass, rbB.velocity, rbA.velocity);
+
+//rbA.velocity = newVelocityA;
+//rbB.velocity = newVelocityB;
+
+//const L1N = rbA.angularVelocity * rbA.inertia + (rbB.velocity.clone.scale(rbB.mass).sub(rbA.velocity.clone.scale(rbA.mass)).scale(ra)).sum * this.df * (1 - this.e);
+//const L2N = rbB.angularVelocity * rbB.inertia + (rbA.velocity.clone.scale(rbA.mass).sub(rbB.velocity.clone.scale(rbB.mass)).scale(rb)).sum * this.df * (1 - this.e);
+
+//rbA.angularVelocity = L1N / rbA.inertia / 10;
+//rbB.angularVelocity = L2N / rbA.inertia / 10;
+
+
+declare interface Solved {
+    readonly collision: Collision;
+    readonly A: {
+        impulses: { impulse: Vector2, at: Vector2 }[];
+        project: Vector2;
+    };
+    readonly B: {
+        impulses: { impulse: Vector2, at: Vector2 }[];
+        project: Vector2;
+    };
+}
+
+
+
+
+
+
+
+
+
+//const vpA = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra));
+//const vpB = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb));
+
+//const rv = vpB.clone.sub(vpA);
+
+
+//if (Vector2.dot(rv, this.normal) > 0) return;
+
+
+//const j = (-(1 + this.e) * Vector2.dot(rv, this.normal)) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+//const impulse = this.normal.normalized.scale(j);
+
+
+//const t = rv.clone.sub(this.normal.clone.scale(Vector2.dot(rv, this.normal))).normalize();
+//const jt = -Vector2.dot(rv, t) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+//const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
+
+
+//rbA.applyImpulse(impulse.flipped, ra);
+//rbB.applyImpulse(impulse, rb);
+
+//rbA.applyImpulse(tangentImpulse.flipped, ra);
+//rbB.applyImpulse(tangentImpulse, rb);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//const contact = Vector2.average(...this.contactPoints);
+//const ra: Vector2 = this.A.position.clone.sub(contact);
+//const rb: Vector2 = this.B.position.clone.sub(contact);
+
+
+//const vpA = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra));
+//const vpB = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb));
+
+//const rv = vpB.clone.sub(vpA);
+
+
+//if (Vector2.dot(rv, this.normal) > 0) return;
+
+
+//const j = (-(1 + this.e) * Vector2.dot(rv, this.normal)) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+//const impulse = this.normal.normalized.scale(j);
+
+
+//const t = rv.clone.sub(this.normal.clone.scale(Vector2.dot(rv, this.normal))).normalize();
+//const jt = -Vector2.dot(rv, t) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+//const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
+
+
+//rbA.applyImpulse(impulse.flipped, ra);
+//rbB.applyImpulse(impulse, rb);
+
+//rbA.applyImpulse(tangentImpulse.flipped, ra);
+//rbB.applyImpulse(tangentImpulse, rb);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -130,51 +277,3 @@ export class Collision {
         //rbB.applyImpulse(tangentImpulse, rb);
 
 
-
-
-        const project = this.normal.clone.setLength(this.penetrationDepth / 2);
-        //if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
-        //if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
-
-
-        return {
-            collision: this,
-            A: {
-                impulses: impulsesA,
-                project: (rbB.mass === 0 ? project.clone.scale(2) : project).flipped
-            },
-            B: {
-                impulses: impulsesB,
-                project: rbA.mass === 0 ? project.clone.scale(2) : project
-            }
-        };
-    }
-}
-
-
-
-
-
-
-
-function calculateVelocity(mass1: number, mass2: number, vel1: Vector2, vel2: Vector2): Vector2 {
-    return Vector2.divide(vel2.clone.scale(2 * mass2).add(vel1.clone.scale(mass1 - mass2)), mass1 + mass2);
-}
-
-
-function calculateAngularVelocity(inertiaA: number, massB: number, velocityB: Vector2, rAP: Vector2): number {
-    return (Vector2.dot(rAP, velocityB) * massB) / (inertiaA + Vector2.dot(rAP, rAP) * massB);
-}
-
-
-declare interface Solved {
-    readonly collision: Collision;
-    readonly A: {
-        impulses: { impulse: Vector2, at: Vector2 }[];
-        project: Vector2;
-    };
-    readonly B: {
-        impulses: { impulse: Vector2, at: Vector2 }[];
-        project: Vector2;
-    };
-}

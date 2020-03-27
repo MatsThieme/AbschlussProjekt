@@ -1,76 +1,59 @@
-import { awaitPromises } from '../../Helpers.js';
 import { CircleCollider } from '../GameObject/Components/CircleCollider.js';
 import { ComponentType } from '../GameObject/Components/ComponentType.js';
 import { PolygonCollider } from '../GameObject/Components/PolygonCollider.js';
 import { GameObject } from '../GameObject/GameObject.js';
+import { Settings } from '../Settings.js';
 import { Vector2 } from '../Vector2.js';
+import { AsyncWorker } from '../Worker/AsyncWorker.js';
 import { AABB } from './AABB.js';
 import { Collision } from './Collision.js';
-import { AsyncWorker } from '../Worker/AsyncWorker.js';
-import { Settings } from '../Settings.js';
 
 export class Physics {
     public static gravity: Vector2 = new Vector2(0, -0.01);
     public static timeScale: number = 1;
-    private static ignoreCollisions: number[][] = [];
+    public static worker: AsyncWorker = new AsyncWorker(Settings.appPath + '/Scene/Physics/CollisionWorker.js', navigator.hardwareConcurrency);
+    private static ignoreCollisions: { [key: number]: 1 | undefined } = {};
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
-        const pair = gameObject1.id > gameObject2.id ? [gameObject1.id, gameObject2.id] : [gameObject2.id, gameObject1.id];
-        if (!collide) {
-            if (this.ignoreCollisions.indexOf(pair) === -1) Physics.ignoreCollisions.push(pair);
-            return;
-        }
-
-        const x = Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(pair));
-        if (x !== -1) Physics.ignoreCollisions.splice(x, 1);
+        const id = gameObject1.id > gameObject2.id ? (gameObject1.id << 16) + gameObject2.id : (gameObject2.id << 16) + gameObject1.id;
+        if (collide) delete Physics.ignoreCollisions[id];
+        else Physics.ignoreCollisions[id] = 1;
     }
-    public static async collision(first: GameObject, second: GameObject): Promise<Collision[]> {
-        if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.findIndex(ids => JSON.stringify(ids) === JSON.stringify(first.id > second.id ? [first.id, second.id] : [second.id, first.id])) !== -1) return [];
+    public static collision(first: GameObject, second: GameObject): Promise<Collision>[] {
+        const start = performance.now();
+
+        if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions[first.id > second.id ? (first.id << 16) + second.id : (second.id << 16) + first.id]) return [];
 
         const promises: Promise<Collision>[] = [];
 
-        for (const collider of first.collider) {
+        const firstCollider = first.collider;
+        const secondCollider = second.collider;
 
+        for (const collider of firstCollider) {
             if (collider.type === ComponentType.CircleCollider) {
-
-                for (const otherCollider of second.collider) {
+                for (const otherCollider of secondCollider) {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
-                    if (otherCollider.type === ComponentType.CircleCollider) {
-                        promises.push(Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider));
-                    } else if (otherCollider.type === ComponentType.PolygonCollider) {
-                        promises.push(Physics.collisionPolygonCircle(<PolygonCollider>otherCollider, <CircleCollider>collider));
-                    }
-
+                    if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider));
+                    else if (otherCollider.type === ComponentType.PolygonCollider) promises.push(Physics.collisionPolygonCircle(<PolygonCollider>otherCollider, <CircleCollider>collider));
                 }
-
             } else if (collider.type === ComponentType.PolygonCollider) {
-
-                for (const otherCollider of second.collider) {
+                for (const otherCollider of secondCollider) {
                     if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
 
-                    if (otherCollider.type === ComponentType.PolygonCollider) {
-                        promises.push(Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider));
-                    } else if (otherCollider.type === ComponentType.CircleCollider) {
-                        promises.push(Physics.collisionPolygonCircle(<PolygonCollider>collider, <CircleCollider>otherCollider));
-                    }
+                    if (otherCollider.type === ComponentType.PolygonCollider) promises.push(Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider));
+                    else if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionPolygonCircle(<PolygonCollider>collider, <CircleCollider>otherCollider));
                 }
-
             }
-
         }
 
-        let aP;
-
-        try {
-            aP = await awaitPromises(...promises);
-        } catch{
-            console.log('auch zu lahm');
+        if (performance.now() - start > 1) {
+            console.log(performance.now() - start);
         }
 
-        return promises.length === 0 ? [] : (aP || []).filter(c => c.normal);
+        return promises;
     }
     public static async collisionCircle(A: CircleCollider, B: CircleCollider): Promise<Collision> {
-        if (!A.intersects(B)) return new Collision(A, B);
+        //if (!A.intersects(B)) return new Collision(A, B);
 
         //const AB = B.position.sub(A.position);
         //const penetrationDepth = AB.magnitude != 0 ? A.radius + B.radius - AB.magnitude : Math.max(A.radius, B.radius);
@@ -80,7 +63,7 @@ export class Physics {
         //return new Collision(A, B, normal, penetrationDepth, contacts);
 
         try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'c', data: { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } } });
+            const { contacts, penetrationDepth, normal } = await Physics.worker.task({ name: 'c', data: { A: { position: A.position, radius: A.radius }, B: { position: B.position, radius: B.radius } } });
             return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
         } catch {
             return new Collision(A, B);
@@ -139,7 +122,7 @@ export class Physics {
 
         // collision calculations in worker thread
         try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'p', data: { A: A.vertices, B: B.vertices } });
+            const { contacts, penetrationDepth, normal } = await Physics.worker.task({ name: 'p', data: { A: A.vertices, B: B.vertices } });
             return new Collision(A, B, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
         } catch {
             return new Collision(A, B);
@@ -162,7 +145,7 @@ export class Physics {
         //return new Collision(circleCollider, polygonCollider, normal, penetrationDepth, contacts);
 
         try {
-            const { contacts, penetrationDepth, normal } = await AsyncWorker.task(Settings.appPath + '/Scene/Physics/CollisionWorker.js', { name: 'pc', data: { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } } });
+            const { contacts, penetrationDepth, normal } = await Physics.worker.task({ name: 'pc', data: { A: polygonCollider.vertices, B: { position: circleCollider.position, radius: circleCollider.radius } } });
             return new Collision(polygonCollider, circleCollider, new Vector2(normal.x, normal.y), penetrationDepth, contacts.map((c: Vector2) => new Vector2(c.x, c.y)));
         } catch {
             return new Collision(polygonCollider, circleCollider);

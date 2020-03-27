@@ -29,21 +29,6 @@ export class Line {
         if (abc != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) return q.clone.add(s.clone.scale(u));
         else return;
     }
-    public intersectsCircle(position: Vector2, radius: number): Vector2[] {
-        const t = position.clone.sub(this.a).scale(this.s.normalized).sum;
-
-        const E = this.s.normalized.scale(t).add(this.a);
-
-        const LEC = E.distance(position);
-
-        if (LEC < radius) {
-            const dt = Math.sqrt(radius ** 2 - LEC ** 2)
-
-            return [this.s.normalized.scale((t - dt)).add(this.a), this.s.normalized.scale((t + dt)).add(this.a)];
-        } else if (LEC == radius) return [E];
-
-        return [];
-    }
     public distanceToPoint(point: Vector2): number {
         if (this.s.magnitude === 0) return point.distance(this.a);
 
@@ -56,4 +41,30 @@ export class Line {
         else if (distance > 1) return this.b;
         else return this.s.clone.scale(distance).add(this.a);
     }
+    public intersectsCircle(position: Vector2, radius: number): Vector2[] {
+        const d = this.b.clone.sub(this.a);
+        const f = this.a.clone.sub(position);
+
+        const a = Vector2.dot(d, d);
+        const b = 2 * Vector2.dot(f, d);
+        const c = Vector2.dot(f, f) - radius ** 2;
+
+        let discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0) {
+            discriminant = Math.sqrt(discriminant);
+            const t1 = (-b - discriminant) / (2 * a);
+            const t2 = (-b + discriminant) / (2 * a);
+
+            const ret = [];
+
+            if (t1 >= 0 && t1 <= 1) ret.push(d.clone.scale(t1).add(this.a));
+            if (t2 >= 0 && t2 <= 1) ret.push(d.clone.scale(t2).add(this.a));
+
+            return ret;
+        }
+
+        return [];
+    }
 }
+
+

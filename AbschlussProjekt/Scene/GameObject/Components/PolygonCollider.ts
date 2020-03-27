@@ -15,6 +15,7 @@ export class PolygonCollider extends Collider {
     protected _area: number;
     public scaledSize: Vector2;
     private _vertices: Vector2[];
+    private _computedVertices: Vector2[];
     public faces: Face[];
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV);
@@ -25,6 +26,7 @@ export class PolygonCollider extends Collider {
         this._area = this.computeArea();
         this._aabb = this.computeAABB();
         this.gameObject.rigidbody.updateInertia();
+        this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
     public set vertices(vertices: Vector2[]) {
         this.scaledSize = this.computeSize(vertices);
@@ -33,6 +35,7 @@ export class PolygonCollider extends Collider {
         this._area = this.computeArea();
         this._aabb = this.computeAABB();
         this.gameObject.rigidbody.updateInertia();
+        this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
     public get vertices(): Vector2[] {
         return this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
@@ -95,7 +98,7 @@ export class PolygonCollider extends Collider {
         let area = 0;
         const vertices = this.vertices;
 
-        for (let i = 1; i < this.vertices.length; i++) {
+        for (let i = 1; i < vertices.length; i++) {
             area += (vertices[i - 1].x + vertices[i].x) * (vertices[i - 1].y - vertices[i].y);
         }
 
@@ -117,6 +120,7 @@ export class PolygonCollider extends Collider {
         this.faces = this.computeFaces(this.vertices);
         this.scaledSize = this.computeSize(this.vertices);
         this._aabb = this.computeAABB();
+        this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
     public findMostAntiParallelFace(vec: Vector2): Face {
         let ret!: Face;

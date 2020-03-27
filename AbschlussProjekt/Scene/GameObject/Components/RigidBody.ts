@@ -101,7 +101,7 @@ export class RigidBody extends Component {
     }
     public applyImpulse(impulse: Vector2, at: Vector2 = Vector2.zero): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
-        //this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
+        this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
         if (this.mass === 0) return;
@@ -126,45 +126,42 @@ export class RigidBody extends Component {
         }
 
         if (solvedCollisions.length > 0) {
-            for (const _c of solvedCollisions)
-                for (const c of _c.impulses)
-                    this.applyImpulse(c.impulse, c.at);
+            //for (const _c of solvedCollisions)
+            //    for (const c of _c.impulses)
+            //        this.applyImpulse(c.impulse, c.at);
 
-            //this.gameObject.transform.relativePosition.add(solvedCollisions[~~(Math.random() * solvedCollisions.length)].project);
-
-            //this.gameObject.transform.relativePosition.add(Vector2.average(...solvedCollisions.map(c => c.project)));
 
             //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
-            //for (const c of contactPoints) {
-            //    this.gameObject.scene.newGameObject('contact', gameObject => {
-            //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = new Sprite((context, canvas) => {
-            //                canvas.width = canvas.height = 10;
-            //                context.fillStyle = '#f00';
-            //                context.fillRect(0, 0, 10, 10);
-            //            });
-
-            //            texture.size = new Vector2(0.1, 0.1);
-            //        });
-
-            //        gameObject.transform.relativePosition = c;
-            //        gameObject.addComponent(Destroy);
-            //    });
-            //}
-
-            for (const n of normals) {
+            for (const c of contactPoints) {
                 this.gameObject.scene.newGameObject('contact', gameObject => {
                     gameObject.addComponent(Texture, texture => {
-                        texture.sprite = sprite;
+                        texture.sprite = new Sprite((context, canvas) => {
+                            canvas.width = canvas.height = 10;
+                            context.fillStyle = '#f00';
+                            context.fillRect(0, 0, 10, 10);
+                        });
 
-                        texture.size = new Vector2(0.5, 0.5);
+                        texture.size = new Vector2(0.1, 0.1);
                     });
 
-                    gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
+                    gameObject.transform.relativePosition = c;
                     gameObject.addComponent(Destroy);
                 });
             }
+
+            //for (const n of normals) {
+            //    this.gameObject.scene.newGameObject('contact', gameObject => {
+            //        gameObject.addComponent(Texture, texture => {
+            //            texture.sprite = sprite;
+
+            //            texture.size = new Vector2(0.5, 0.5);
+            //        });
+
+            //        gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
+            //        gameObject.addComponent(Destroy);
+            //    });
+            //}
         }
 
 

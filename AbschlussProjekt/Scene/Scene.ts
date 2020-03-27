@@ -43,6 +43,7 @@ export class Scene {
         this.framedata = new Framedata();
         this.hasAudioListener = false;
 
+
         this.stop();
     }
     /**
@@ -79,40 +80,53 @@ export class Scene {
         this.framedata.update();
 
         if (!this.ui.pauseScene) {
+            const gameObjects = this.getAllGameObjects();
+
             // update collider
-            this.getAllGameObjects().forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
+            gameObjects.forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
+
 
             // get and solve all collisions
-            const idPairs: string[] = [];
-            const collisionPromises: Promise<Collision[]>[] = [];
+            const idPairs: any = [];
+            const collisionPromises: Promise<Collision>[] = [];
 
-            for (const gO1 of this.gameObjects.values()) {
-                if (!gO1.collider || gO1.parent) continue;
-                for (const gO2 of this.gameObjects.values()) {
-                    if (!gO2.collider || gO2.parent) continue;
-                    const idPair = JSON.stringify([gO1.id, gO2.id].sort((a, b) => a - b));
-                    if (gO1.id !== gO2.id && gO1.active && gO2.active && idPairs.indexOf(idPair) === -1) {
-                        collisionPromises.push(Physics.collision(gO1, gO2));
-                        idPairs.push(idPair);
+
+            const gOs = gameObjects.filter(gO => gO.active && gO.hasCollider && !gO.parent);
+
+
+            let total = 0;
+
+            for (const gO1 of gOs) {
+                for (const gO2 of gOs) {
+                    const id = gO1.id > gO2.id ? (gO1.id << 16) + gO2.id : (gO2.id << 16) + gO1.id;
+
+                    if (gO1.id !== gO2.id && !idPairs[id]) {
+                        const start = performance.now();
+                        const collisions = Physics.collision(gO1, gO2);
+                        total += performance.now() - start;
+                        collisionPromises.push(...collisions);
+                        idPairs[id] = 1;
                     }
                 }
             }
 
-            let aP;
 
-            try {
-                aP = await awaitPromises(...collisionPromises);
-            } catch{
-                console.log('zu langsam');
+
+            //console.log(total);
+
+            const collisions: Collision[] = [];
+
+            //console.time('s');
+
+            for (const c of await awaitPromises(...collisionPromises)) {
+                collisions.push(c);
             }
 
-            const collisions: Collision[] = (aP || []).reduce((t, c) => { t.push(...c); return t; }, <Collision[]>[]); // wait for all collision calculations
+            //console.timeEnd('s');
 
+            gameObjects.forEach(gO => gO.rigidbody.update(this.gameTime, collisions));
 
-            const rigidbodies = this.getAllGameObjects().map(gO => gO.rigidbody);
-
-            rigidbodies.forEach(rb => rb.update(this.gameTime, collisions)); // apply forces and move body
-            await awaitPromises(...this.getAllGameObjects().map(gameObject => gameObject.update(this.gameTime, collisions)));
+            await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
         }
 
         this.ui.update(this.gameTime);
@@ -129,13 +143,6 @@ export class Scene {
         return [...this.gameObjects.values()];
     }
     public async start(): Promise<void> {
-        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCollisionWorker.js', navigator.hardwareConcurrency);
-        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CircleCollisionWorker.js', navigator.hardwareConcurrency);
-        //await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/PolygonCircleCollisionWorker.js', navigator.hardwareConcurrency);
-
-        await AsyncWorker.createWorker(Settings.appPath + '/Scene/Physics/CollisionWorker.js', 1);
-
-
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
         }
