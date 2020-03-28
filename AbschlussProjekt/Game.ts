@@ -86,7 +86,7 @@ class Game {
         //    gameObject.addComponent(PolygonRenderer);
         //});
 
-        console.log(new Line(new Vector2(0.5, 0), new Vector2(0.5, 1)).intersectsCircle(new Vector2(0.5, 0.5), 0.5));
+
 
 
         //const x = scene.newGameObject('Player', PlayerPrefab, gO => {
@@ -104,9 +104,9 @@ class Game {
         scene.newGameObject('yAxis', yAxisprefab);
 
         // bounds
-        scene.newGameObject('left', LeftPrefab);
-        scene.newGameObject('right', RightPrefab);
-        scene.newGameObject('top', TopPrefab);
+        //scene.newGameObject('left', LeftPrefab);
+        //scene.newGameObject('right', RightPrefab);
+        //scene.newGameObject('top', TopPrefab);
         scene.newGameObject('floor', FloorPrefab);
 
         scene.ui.addMenu('Main Menu', MainMenuPrefab);

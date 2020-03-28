@@ -39,7 +39,3 @@ export class TileMap extends Component implements Drawable {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position);
     }
 }
-
-
-// energie
-// e=1/2j*omega**2

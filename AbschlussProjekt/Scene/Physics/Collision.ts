@@ -43,8 +43,8 @@ export class Collision {
 
         // project out of collision
         const project = this.normal.clone.setLength(this.penetrationDepth / 2);
-        //if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
-        //if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
+        if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
+        if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
 
 
         const contact = Vector2.average(...this.contactPoints);
@@ -70,12 +70,17 @@ export class Collision {
         const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
 
 
-        rbA.applyImpulse(impulse.flipped, ra);
-        rbB.applyImpulse(impulse, rb);
+        //rbA.applyImpulse(impulse.flipped, ra);
+        //rbB.applyImpulse(impulse, rb);
 
-        rbA.applyImpulse(tangentImpulse.flipped, ra);
-        rbB.applyImpulse(tangentImpulse, rb);
+        //rbA.applyImpulse(tangentImpulse.flipped, ra);
+        //rbB.applyImpulse(tangentImpulse, rb);
 
+        impulsesA.push({ impulse: impulse.flipped, at: ra });
+        impulsesB.push({ impulse: impulse, at: rb });
+
+        impulsesA.push({ impulse: tangentImpulse.flipped, at: ra });
+        impulsesB.push({ impulse: tangentImpulse, at: rb });
 
         return {
             collision: this,

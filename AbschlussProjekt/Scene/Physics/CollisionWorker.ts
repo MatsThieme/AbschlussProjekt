@@ -175,26 +175,6 @@ function distance(v1: { x: number, y: number }, v2: { x: number, y: number }) {
     return Math.sqrt((v1.x - v2.x) ** 2 + (v1.y - v2.y) ** 2);
 }
 
-//function lineIntersectsCircle(a: { x: number, y: number }, b: { x: number, y: number }, position: { x: number, y: number }, radius: number): { x: number, y: number }[] {
-//    let s = { x: b.x - a.x, y: b.y - a.y };
-//    let smag = Math.sqrt(s.x ** 2 + s.y ** 2);
-//    s = { x: s.x / smag, y: s.y / smag };
-
-//    const t = (position.x - a.x) * s.x + (position.y - a.y) * s.y;
-
-//    const E = { x: s.x * t + a.x, y: s.y * t + a.y };
-
-//    const LEC = distance(position, E);
-
-//    if (LEC < radius) {
-//        const dt = Math.sqrt(radius ** 2 - LEC ** 2)
-
-//        return [{ x: s.x * (t - dt) + a.x, y: s.y * (t - dt) + a.y }, { x: s.x * (t + dt) + a.x, y: s.y * (t + dt) + a.y }];
-//    } else if (LEC == radius) return [E];
-
-//    return [];
-//}
-
 function lineIntersectsCircle(a_: { x: number, y: number }, b_: { x: number, y: number }, position: { x: number, y: number }, radius: number): { x: number, y: number }[] {
     const d = { x: b_.x - a_.x, y: b_.y - a_.y };
     const f = { x: a_.x - position.x, y: a_.y - position.y };
