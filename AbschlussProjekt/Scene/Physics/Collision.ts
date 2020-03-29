@@ -1,9 +1,10 @@
 import { Collider } from '../GameObject/Components/Collider.js';
 import { Vector2 } from '../Vector2.js';
+import { TileMap } from '../GameObject/Components/TileMap.js';
 
 export class Collision {
-    public readonly A: Collider;
-    public readonly B: Collider;
+    public readonly A: Collider | TileMap;
+    public readonly B: Collider | TileMap;
     public readonly normal: Vector2 | undefined;
     public readonly penetrationDepth: number | undefined;
     public readonly contactPoints: Vector2[] | undefined;
@@ -12,7 +13,7 @@ export class Collision {
     public readonly df: number;
     public readonly sf: number;
 
-    public constructor(colliderA: Collider, colliderB: Collider, normal?: Vector2, penetrationDepth?: number, contactPoints?: Vector2[]) {
+    public constructor(colliderA: Collider | TileMap, colliderB: Collider | TileMap, normal?: Vector2, penetrationDepth?: number, contactPoints?: Vector2[]) {
         this.A = colliderA;
         this.B = colliderB;
         this.normal = normal?.normalized;
@@ -47,27 +48,27 @@ export class Collision {
         if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
 
 
-        const contact = Vector2.average(...this.contactPoints);
-        const ra: Vector2 = this.A.position.clone.sub(contact);
-        const rb: Vector2 = this.B.position.clone.sub(contact);
+        //const contact = Vector2.average(...this.contactPoints);
+        //const ra: Vector2 = this.A.position.clone.sub(contact);
+        //const rb: Vector2 = this.B.position.clone.sub(contact);
 
 
-        const vpA = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra));
-        const vpB = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb));
+        //const vpA = rbA.velocity.clone.add(Vector2.cross1(rbA.angularVelocity, ra));
+        //const vpB = rbB.velocity.clone.add(Vector2.cross1(rbB.angularVelocity, rb));
 
-        const rv = vpB.clone.sub(vpA);
-
-
-        if (Vector2.dot(rv, this.normal) > 0) return;
+        //const rv = vpB.clone.sub(vpA);
 
 
-        const j = (-(1 + this.e) * Vector2.dot(rv, this.normal)) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+        //if (Vector2.dot(rv, this.normal) > 0) return;
+
+
+        const j = (-(1 + this.e) * Vector2.dot(rbB.velocity.clone.sub(rbA.velocity), this.normal)) / (rbA.invMass + rbB.invMass/* + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal)*/);
         const impulse = this.normal.normalized.scale(j);
 
 
-        const t = rv.clone.sub(this.normal.clone.scale(Vector2.dot(rv, this.normal))).normalize();
-        const jt = -Vector2.dot(rv, t) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
-        const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
+        //const t = rv.clone.sub(this.normal.clone.scale(Vector2.dot(rv, this.normal))).normalize();
+        //const jt = -Vector2.dot(rv, t) / (rbA.invMass + rbB.invMass + Vector2.dot(Vector2.cross1(rbA.invInertia * Vector2.cross(ra, this.normal), ra).add(Vector2.cross1(rbB.invInertia * Vector2.cross(rb, this.normal), rb)), this.normal));
+        //const tangentImpulse = Math.abs(jt) < j * this.sf ? t.clone.scale(jt) : t.clone.scale(-j).scale(this.df);
 
 
         //rbA.applyImpulse(impulse.flipped, ra);
@@ -76,11 +77,11 @@ export class Collision {
         //rbA.applyImpulse(tangentImpulse.flipped, ra);
         //rbB.applyImpulse(tangentImpulse, rb);
 
-        impulsesA.push({ impulse: impulse.flipped, at: ra });
-        impulsesB.push({ impulse: impulse, at: rb });
+        impulsesA.push({ impulse: impulse.flipped, at: Vector2.zero });
+        impulsesB.push({ impulse: impulse, at: Vector2.zero });
 
-        impulsesA.push({ impulse: tangentImpulse.flipped, at: ra });
-        impulsesB.push({ impulse: tangentImpulse, at: rb });
+        //impulsesA.push({ impulse: tangentImpulse.flipped, at: ra });
+        //impulsesB.push({ impulse: tangentImpulse, at: rb });
 
         return {
             collision: this,

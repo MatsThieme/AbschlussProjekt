@@ -173,6 +173,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Prefabs\GameObjects\RightPrefab.ts" />
+    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\TestTileMapPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Prefabs\GameObjects\TopPrefab.ts" />
     <TypeScriptCompile Include="Scene\Prefabs\GameObjects\FloorPrefab.ts">
       <SubType>Code</SubType>
@@ -218,9 +221,6 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\SpriteAnimation.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Tile.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\UI\UIElements\UIButton.ts">

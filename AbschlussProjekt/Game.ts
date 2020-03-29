@@ -25,6 +25,7 @@ import { ComponentType } from './Scene/GameObject/Components/ComponentType.js';
 import { Physics } from './Scene/Physics/Physics.js';
 import { GameObject } from './Scene/GameObject/GameObject.js';
 import { PhysicsMaterial } from './Scene/Physics/PhysicsMaterial.js';
+import { TestTileMapPrefab } from './Scene/Prefabs/GameObjects/TestTileMapPrefab.js';
 
 class Game {
     private scene: Scene;
@@ -67,16 +68,16 @@ class Game {
 
 
 
-        //scene.newGameObject('Circle', gameObject => {
-        //    gameObject.addComponent(CircleCollider, circleCollider => {
-        //        circleCollider.radius = 0.5;
-        //    });
+        scene.newGameObject('Circle', gameObject => {
+            gameObject.addComponent(CircleCollider, circleCollider => {
+                circleCollider.radius = 0.5;
+            });
 
-        //    gameObject.transform.relativePosition = new Vector2(-3.5, -3.5);
-        //    gameObject.rigidbody.useAutoMass = true;
-        //    gameObject.addComponent(CircleRenderer);
-        //    gameObject.addComponent(Move);
-        //});
+            gameObject.transform.relativePosition = new Vector2(-3.5, -3.5);
+            gameObject.rigidbody.useAutoMass = true;
+            gameObject.addComponent(CircleRenderer);
+            gameObject.addComponent(Move);
+        });
 
         //scene.newGameObject('Poly', gameObject => {
         //    gameObject.addComponent(PolygonCollider);
@@ -94,10 +95,11 @@ class Game {
         //});
         //x.rigidbody.destroy();
         //x.parent = 
-        scene.newGameObject('Player', PlayerPrefab);
+        //scene.newGameObject('Player', PlayerPrefab);
 
-        scene.newGameObject('Polygon', PolygonPrefab);
+        //scene.newGameObject('Polygon', PolygonPrefab);
 
+        scene.newGameObject('TileMap test', TestTileMapPrefab);
 
         // display x and y axis
         scene.newGameObject('xAxis', xAxisprefab);
@@ -107,7 +109,7 @@ class Game {
         //scene.newGameObject('left', LeftPrefab);
         //scene.newGameObject('right', RightPrefab);
         //scene.newGameObject('top', TopPrefab);
-        scene.newGameObject('floor', FloorPrefab);
+        //scene.newGameObject('floor', FloorPrefab);
 
         scene.ui.addMenu('Main Menu', MainMenuPrefab);
         scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
@@ -120,16 +122,23 @@ class Game {
 new Game();
 
 //to fix:
-// collision response impulse strength over dist
+// collision response impulse weaker over larger radius
 // menu aabb and clicks
 // child collider
 
+// to test:
+// tilemap circle polygon collision
 
 // to do:
-// frame align
 // canvas rotation in camera component
 
 
 // optional optimisations:
+// polygon intersection: support points
 // replace line intersection with face clipping in collisionPolygon
+// CircleTilemapCollision find contact points
+
+// optional features:
+// frame align
 // continuous collision
+// joints

@@ -10,7 +10,6 @@ import { GameObject } from '../GameObject/GameObject.js';
 import { UIFrame } from '../UI/UIFrame.js';
 import { Vector2 } from '../Vector2.js';
 import { Frame } from './Frame.js';
-import { CircleCollider } from '../GameObject/Components/CircleCollider.js';
 
 export class CameraManager {
     private context: CanvasRenderingContext2D;
@@ -30,12 +29,12 @@ export class CameraManager {
         let frames: (Frame | undefined)[] = [];
 
         for (const gameObject of gameObjects) {
-            frames.push(...gameObject.getComponents<TileMap>(ComponentType.ParticleSystem).reduce((t: Frame[], c) => { t.push(...(<Frame[]>c.currentFrame)); return t; }, []));
             frames.push(...gameObject.getComponents<PolygonRenderer>(ComponentType.PolygonRenderer).map(pR => pR.currentFrame));
             frames.push(...gameObject.getComponents<CircleRenderer>(ComponentType.CircleRenderer).map(cR => cR.currentFrame));
             frames.push(...gameObject.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).map(aS => aS.currentFrame));
             frames.push(...gameObject.getComponents<Texture>(ComponentType.Texture).map(t => t.currentFrame));
             frames.push(...gameObject.getComponents<ParticleSystem>(ComponentType.ParticleSystem).reduce((t: Frame[], c) => { t.push(...(<Frame[]>c.currentFrame)); return t; }, []));
+            frames.push(...gameObject.getComponents<TileMap>(ComponentType.TileMap).reduce((t: Frame[], c) => { t.push(...(<Frame[]>c.currentFrame)); return t; }, []));
         }
 
         frames = frames.filter(f => f).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);

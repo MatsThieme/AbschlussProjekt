@@ -164,7 +164,7 @@ export class RigidBody extends Component {
         }
 
 
-        this.force.add(Physics.gravity);
+        //this.force.add(Physics.gravity);
 
 
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));

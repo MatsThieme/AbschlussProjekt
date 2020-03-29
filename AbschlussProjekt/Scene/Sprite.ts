@@ -4,7 +4,7 @@ import { Vector2 } from './Vector2.js';
 export class Sprite {
     public canvasImageSource!: HTMLCanvasElement | OffscreenCanvas | HTMLImageElement;
     public size: Vector2;
-    public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => any)) {
+    public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => void)) {
         if (typeof src === 'string') {
             this.canvasImageSource = new Image();
             this.canvasImageSource.src = src.substr(0, 'http://'.length) === 'http://' || src.substr(0, 'https://'.length) === 'https://' ? src : Settings.assetPath + src;

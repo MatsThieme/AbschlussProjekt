@@ -57,9 +57,9 @@ export class GameObject {
             (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
             this.components.push(component);
 
-        if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) && !this.rigidbody) this.addComponent(RigidBody);
+        if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider || component.type === ComponentType.TileMap) && !this.rigidbody) this.addComponent(RigidBody);
 
-        if (component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider) this.hasCollider = true;
+        if (component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider || component.type === ComponentType.TileMap) this.hasCollider = true;
 
         if (component.type === ComponentType.AudioListener) this.scene.hasAudioListener = true;
 
@@ -74,7 +74,7 @@ export class GameObject {
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {
-                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider);
+                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap);
             }
 
             return c instanceof <any>type;
@@ -83,7 +83,7 @@ export class GameObject {
     public getComponent<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
         for (const c of this.components) {
             if (typeof type === 'number') {
-                if (c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider)) return <T>c;
+                if (c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap)) return <T>c;
                 continue;
             }
 
