@@ -145,27 +145,34 @@ function CircleTilemapCollision(data: { A: { position: { x: number, y: number },
     const { A, B } = data;
     const { tileMap, position, tileSize } = B;
 
-    const circleSize = { x: A.radius * 2, y: A.radius * 2 };
 
-    const circleLeftBottom = { x: Math.floor(((A.position.x - B.position.x - A.radius) - B.position.x) / tileSize.x), y: Math.floor(((A.position.y - B.position.y - A.radius) - B.position.y) / tileSize.y) };
-    const circleTopRight = { x: Math.ceil(((A.position.x - B.position.x + A.radius) - B.position.x) / tileSize.x), y: Math.ceil(((A.position.y - B.position.y + A.radius) - B.position.x) / tileSize.y) };
+    const maxX = Math.min(Math.max(Math.ceil(((A.position.x + A.radius) - B.position.x) / tileSize.x), 0), tileMap[0].length);
+    const minX = Math.min(Math.max(Math.floor(((A.position.x - A.radius) - B.position.x) / tileSize.x), 0), tileMap[0].length);
+    const maxY = Math.min(Math.max(Math.ceil(((A.position.y + A.radius) - B.position.y) / tileSize.y), 0), tileMap.length);
+    const minY = Math.min(Math.max(Math.floor(((A.position.y - A.radius) - B.position.y) / tileSize.y), 0), tileMap.length);
+
+    //const maxX = tileMap[0].length;
+    //const minX = 0;
+    //const maxY = tileMap.length;
+    //const minY = 0;
+
 
     let penetrationDepth = -Infinity;
     let normal!: { x: number, y: number };
     let contacts: { x: number, y: number }[] = [];
+    let pos = { x: 0, y: 0 };
 
-    debugger;
+    tileMap.reverse();
 
-    for (let y_ = Math.max(0, circleLeftBottom.y); y_ <= Math.min(tileMap.length, circleTopRight.y); y_++) {
-        for (let x = Math.max(0, circleLeftBottom.x); x <= Math.min(tileMap[0].length, circleTopRight.x); x++) {
-            const y = tileMap.length - y_ - 1;
-
+    for (let y = minY; y < maxY; y++) {
+        for (let x = minX; x < maxX; x++) {
+            if (tileMap[y][x] !== 1) continue;
             const tileBottomLeft = { x: position.x + tileSize.x * x, y: position.y + tileSize.y * y };
 
-            if (AABBIntersection({ position: tileBottomLeft, size: tileSize }, { position: A.position, size: circleSize })) {
-                const tileBottomRight = { x: position.x + tileSize.x * x + tileSize.x, y: position.y + tileSize.y * y };
-                const tileTopLeft = { x: position.x + tileSize.x * x, y: position.y + tileSize.y * y + tileSize.y };
-                const tileTopRight = { x: position.x + tileSize.x * x + tileSize.x, y: position.y + tileSize.y * y + tileSize.y };
+            if (AABBCircleIntersection(A, { position: tileBottomLeft, size: tileSize })) {
+                const tileBottomRight = { x: position.x + tileSize.x * x, y: tileBottomLeft.y };
+                const tileTopLeft = { x: tileBottomLeft.x, y: position.y + tileSize.y * y };
+                const tileTopRight = { x: tileBottomRight.x, y: tileTopLeft.y };
 
 
                 let leastDistPoint;
@@ -189,10 +196,11 @@ function CircleTilemapCollision(data: { A: { position: { x: number, y: number },
                     leastDist = d;
                 }
 
-                if (leastDistPoint) {
-
+                if (leastDistPoint && A.radius - leastDist > penetrationDepth) {
+                    console.log('ecke');
                     penetrationDepth = A.radius - leastDist;
-                    normal = normalizeVec({ x: leastDistPoint.x - A.position.x, y: leastDistPoint.y - A.position.y });
+                    normal = { x: leastDistPoint.x - A.position.x, y: leastDistPoint.y - A.position.y };
+                    pos = { x, y };
 
                     continue;
                 }
@@ -201,22 +209,21 @@ function CircleTilemapCollision(data: { A: { position: { x: number, y: number },
 
                 const diff = { x: A.position.x - tileMid.x, y: A.position.y - tileMid.y };
 
-                const p = Math.abs(diff.x) > Math.abs(diff.y) ? Math.abs(diff.x) : Math.abs(diff.y);
+                const p = A.radius - (Math.abs(diff.x) > Math.abs(diff.y) ? Math.abs(diff.x) : Math.abs(diff.y));
 
-                if (p <= penetrationDepth) continue;
+                if (p < penetrationDepth) continue;
 
                 penetrationDepth = p;
                 normal = { x: Math.abs(diff.x) > Math.abs(diff.y) ? Math.sign(diff.x) : 0, y: Math.abs(diff.x) < Math.abs(diff.y) ? Math.sign(diff.y) : 0 };
-
+                pos = { x, y };
             }
         }
     }
 
+    if (!normal) return;
     debugger;
 
-    if (!normal) return;
-
-    return { contacts, penetrationDepth, normal };
+    return { contacts, penetrationDepth, normal: normalizeVec(normal) };
 }
 
 function PolygonTilemapCollision(data: { A: { x: number, y: number }[], B: { tileMap: (1 | 0)[][], position: { x: number, y: number }, tileSize: { x: number, y: number } } }): { contacts: { x: number, y: number }[], penetrationDepth: number, normal: { x: number, y: number } } | undefined {
@@ -236,41 +243,43 @@ function PolygonTilemapCollision(data: { A: { x: number, y: number }[], B: { til
     const polygonLeftBottom = { x: minX, y: minY };
     const polygonSize = { x: maxX - minX, y: maxY - minY };
 
+
+    maxX = Math.min(Math.max(Math.ceil(maxX / tileSize.x), 0), tileMap[0].length);
+    minX = Math.min(Math.max(Math.floor(minX / tileSize.x), 0), tileMap[0].length);
+    maxY = Math.min(Math.max(Math.ceil(maxY / tileSize.y), 0), tileMap.length);
+    minY = Math.min(Math.max(Math.floor(minY / tileSize.y), 0), tileMap.length);
+
+    maxX = tileMap[0].length;
+    minX = 0;
+    maxY = tileMap.length;
+    minY = 0;
+
+
     let penetrationDepth = -Infinity;
     let normal!: { x: number, y: number };
     let contacts: { x: number, y: number }[] = [];
+    let pos!: { x: number, y: number };
+    const APos = vecAvg(...A);
 
-    for (let y_ = Math.floor(minY); y_ <= Math.min(tileMap.length, Math.ceil(maxY)); y_++) {
-        for (let x = Math.floor(minX); x <= Math.min(tileMap[0].length, Math.ceil(maxX)); x++) {
-            const y = tileMap.length - y_ - 1;
+    tileMap.reverse();
+
+    for (let y = minY; y < maxY; y++) {
+        for (let x = minX; x < maxX; x++) {
             if (tileMap[y][x] === 0) continue;
 
             const tileBottomLeft = { x: position.x + tileSize.x * x, y: position.y + tileSize.y * y };
-
             if (AABBIntersection({ position: tileBottomLeft, size: tileSize }, { position: polygonLeftBottom, size: polygonSize })) {
-                const tileTopRight = { x: position.x + tileSize.x * x + tileSize.x, y: position.y + tileSize.y * y + tileSize.y };
+                const r = AABBPolygonCollision({ position: tileBottomLeft, size: tileSize }, A);
+                debugger;
 
-                const aP1 = project({ x: 0, y: 1 }, A);
-                const bP1 = project({ x: 0, y: 1 }, [tileBottomLeft, tileTopRight]);
+                if (!r) continue;
 
-                const overlap1 = Math.min(aP1.max, bP1.max) - Math.max(aP1.min, bP1.min);
-
-                if (overlap1 < 0) return;
-
-                const aP2 = project({ x: 1, y: 0 }, A);
-                const bP2 = project({ x: 1, y: 0 }, [tileBottomLeft, tileTopRight]);
-
-                const overlap2 = Math.min(aP2.max, bP2.max) - Math.max(aP2.min, bP2.min);
-
-                if (overlap2 < 0) return;
-
-                if (overlap1 < overlap2 && overlap1 < penetrationDepth) {
-                    normal = { x: 0, y: 1 };
-                    penetrationDepth = overlap1;
-                } else if (overlap2 < overlap1 && overlap2 < penetrationDepth) {
-                    normal = { x: 1, y: 0 };
-                    penetrationDepth = overlap2;
-                } else return;
+                if (r.penetrationDepth > penetrationDepth) {
+                    normal = normalizeVec(r.normal);
+                    penetrationDepth = r.penetrationDepth;
+                    contacts = r.contacts;
+                    pos = tileBottomLeft;
+                }
             }
         }
     }
@@ -278,12 +287,30 @@ function PolygonTilemapCollision(data: { A: { x: number, y: number }[], B: { til
     if (!normal) return;
     debugger;
 
+    pos = { x: pos.x + tileSize.x / 2, y: pos.y + tileSize.y / 2 };
+
+
+    if (distance({ x: APos.x + normal.x, y: APos.y + normal.y }, pos) > distance({ x: APos.x - normal.x, y: APos.y - normal.y }, pos)) normal = { x: -normal.x, y: -normal.y };
+
+
     return { contacts, penetrationDepth, normal };
 }
 
 
+function AABBPolygonCollision(A: { position: { x: number, y: number }, size: { x: number, y: number } }, B: { x: number, y: number }[]): { contacts: { x: number, y: number }[], penetrationDepth: number, normal: { x: number, y: number } } | undefined {
+    const vs = [{ x: A.position.x + A.size.x, y: A.position.y + A.size.y }, { x: A.position.x + A.size.x, y: A.position.y }, A.position, { x: A.position.x, y: A.position.y + A.size.y }];
+
+    return PolygonCollision({ A: vs, B });
+}
+
+function AABBCircleIntersection(A: { radius: number, position: { x: number, y: number } }, B: { position: { x: number, y: number }, size: { x: number, y: number } }): boolean {
+    const dx = A.position.x - Math.max(B.position.x, Math.min(A.position.x, B.position.x + B.size.x));
+    const dy = A.position.y - Math.max(B.position.y, Math.min(A.position.y, B.position.y + B.size.y));
+    return (dx ** 2 + dy ** 2) < (A.radius ** 2);
+}
+
 function AABBIntersection(A: { position: { x: number, y: number }, size: { x: number, y: number } }, B: { position: { x: number, y: number }, size: { x: number, y: number } }): boolean {
-    return A.position.x < B.position.x + B.size.x && A.position.x + A.size.x > B.position.x && A.position.y > B.position.y - B.size.y && A.position.y - A.size.y < B.position.y;
+    return A.position.x < B.position.x + B.size.x && A.position.x + A.size.x > B.position.x && A.position.y < B.position.y + B.size.y && A.position.y + A.size.y > B.position.y;
 }
 
 function projectCircle(axis: { x: number, y: number }, circle: { position: { x: number, y: number }, radius: number }, poly: { x: number, y: number }[]): number {

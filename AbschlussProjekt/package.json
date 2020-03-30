@@ -1,10 +1,9 @@
 {
-  "name": "abschluss-projekt",
+  "name": "snowball-engine",
   "version": "0.0.0",
-  "description": "AbschlussProjekt",
-  "main": "server.js",
+  "description": "SnowballEngine",
   "author": {
-    "name": ""
+    "name": "Mats Thieme"
   },
   "scripts": {
     "build": "tsc --build && typedoc",
@@ -13,6 +12,5 @@
   "devDependencies": {
     "typedoc": "^0.16.11",
     "typescript": "^3.8.3"
-  },
-  "dependencies": {}
+  }
 }

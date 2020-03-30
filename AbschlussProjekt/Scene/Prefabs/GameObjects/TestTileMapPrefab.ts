@@ -17,6 +17,6 @@ export function TestTileMapPrefab(gameObject: GameObject) {
 
         tileMap.tileMap = map;
 
-        console.log(tileMap.scaledSize);
+        console.log(tileMap.collisionMap);
     });
 }

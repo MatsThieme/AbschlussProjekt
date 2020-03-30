@@ -1,6 +1,7 @@
 import { Collider } from '../GameObject/Components/Collider.js';
 import { Vector2 } from '../Vector2.js';
 import { TileMap } from '../GameObject/Components/TileMap.js';
+import { ComponentType } from '../GameObject/Components/ComponentType.js';
 
 export class Collision {
     public readonly A: Collider | TileMap;
@@ -26,7 +27,7 @@ export class Collision {
         this.df = (this.A.material.dynamicFriction + this.B.material.dynamicFriction) / 2;
 
 
-        if (this.normal && this.B.position.lowestDist(this.A.position.clone.add(this.normal), this.A.position.clone.add(this.normal.flipped)) === 1) this.normal.flip(); // always point from A to B
+        if (colliderA.type !== ComponentType.TileMap && colliderB.type !== ComponentType.TileMap && this.normal && this.B.position.lowestDist(this.A.position.clone.add(this.normal), this.A.position.clone.add(this.normal.flipped)) === 1) this.normal.flip(); // always point from A to B
 
 
         this.solved = this.solve();

@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "module": "ESNext",
-    "target": "ESNext",
+    "target": "ES2015",
     "lib": [ "ESNext", "DOM" ],
     "sourceMap": false,
     "strict": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules"
