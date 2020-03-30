@@ -3,6 +3,7 @@ import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
 import { Scene } from '../Scene.js';
 import { Sprite } from '../Sprite.js';
+import { Vector2 } from '../Vector2.js';
 import { UIFrame } from './UIFrame.js';
 import { UIMenu } from './UIMenu.js';
 
@@ -13,14 +14,20 @@ export class UI {
     private context: OffscreenCanvasRenderingContext2D;
     public aabb: AABB;
     private scene: Scene;
-    public constructor(input: Input, aabb: AABB, scene: Scene) {
+    public constructor(input: Input, scene: Scene) {
         this.menus = new Map();
         this.input = input;
-        this.aabb = aabb;
+        this.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
         this.canvas = new OffscreenCanvas(this.aabb.size.x, this.aabb.size.y);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.scene = scene;
     }
+
+    /**
+     * 
+     * Add a new menu to the ui.
+     * 
+     */
     public addMenu(name: string, ...cb: ((menu: UIMenu, scene: Scene) => any)[]): UIMenu {
         if (this.menus.has(name)) return <UIMenu>this.menus.get(name);
 
@@ -31,10 +38,18 @@ export class UI {
 
         return menu;
     }
+
+    /**
+     * 
+     * Draw this.menus to canvas.
+     *
+     */
     public update(gameTime: GameTime): void {
-        this.canvas.width = this.aabb.size.x;
-        this.canvas.height = this.aabb.size.y;
-        this.context.clearRect(0, 0, this.aabb.size.x, this.aabb.size.y);
+        this.canvas.width = this.scene.domElement.width;
+        this.canvas.height = this.scene.domElement.height;
+        this.aabb = new AABB(new Vector2(this.canvas.width, this.canvas.height), this.aabb.size);
+
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const menu of this.menus.values()) {
             if (menu.active) {
@@ -44,9 +59,21 @@ export class UI {
             }
         }
     }
+
+    /**
+     * 
+     * Returns the current frame of this.
+     * 
+     */
     public get currentFrame(): UIFrame {
         return new UIFrame(this.aabb, new Sprite(this.canvas));
     }
+
+    /**
+     *
+     * Returns true if a menu has the pauseScene property set to true.
+     * 
+     */
     public get pauseScene(): boolean {
         return [...this.menus.values()].findIndex(m => m.active && m.pauseScene) !== -1;
     }

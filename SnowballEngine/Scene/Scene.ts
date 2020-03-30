@@ -8,13 +8,9 @@ import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
 import { Input } from './Input/Input.js';
-import { AABB } from './Physics/AABB.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
 import { UI } from './UI/UI.js';
-import { Vector2 } from './Vector2.js';
-import { AsyncWorker } from './Worker/AsyncWorker.js';
-import { Settings } from './Settings.js';
 
 export class Scene {
     public readonly domElement: HTMLCanvasElement;
@@ -39,23 +35,28 @@ export class Scene {
         this.cameraManager = new CameraManager(this.domElement);
         this.gameTime = new GameTime();
         this.input = new Input(this);
-        this.ui = new UI(this.input, new AABB(new Vector2(1920, 1080), new Vector2()), this);
+        this.ui = new UI(this.input, this);
         this.framedata = new Framedata();
         this.hasAudioListener = false;
 
 
         this.stop();
     }
+
     /**
      * 
-     * @param name gameObject name
-     * 
-     * @returns GameObject if present in Scene
+     * @returns GameObject if present in Scene.
      * 
      */
     public find(name: string): GameObject | undefined {
         return this.gameObjects.get(name) || this.gameObjects.get([...this.gameObjects.keys()].find(n => (n.match(/(.*) \(\d+\)/) || '')[1] === name) || '');
     }
+
+    /**
+     * 
+     * Create new GameObject with name and execute callbacks.
+     * 
+     */
     public newGameObject(name: string, ...cb: ((gameObject: GameObject) => any)[]): GameObject {
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(gameObject.name, gameObject);
@@ -63,6 +64,12 @@ export class Scene {
 
         return gameObject;
     }
+
+    /**
+     *
+     * Create new Camera.
+     *
+     */
     public newCamera(name: string, cb?: (camera: Camera) => any): GameObject {
         const gameObject = this.newGameObject(name);
 
@@ -71,8 +78,22 @@ export class Scene {
         if (cb) cb(camera);
         return gameObject;
     }
+
+    /**
+     * 
+     * Updates...
+     * gameTime
+     * input
+     * framedata
+     * collider
+     * collisions
+     * rigidbodies
+     * gameObjects
+     * ui
+     * cameraManager
+     * 
+     */
     private async update() {
-        // calculate deltaTime
         this.gameTime.update();
 
         this.input.update();
@@ -82,14 +103,11 @@ export class Scene {
         if (!this.ui.pauseScene) {
             const gameObjects = this.getAllGameObjects();
 
-            // update collider
             gameObjects.forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
 
 
-            // get and solve all collisions
             const idPairs: any = [];
             const collisionPromises: Promise<Collision>[] = [];
-
 
             const gOs = gameObjects.filter(gO => gO.active && gO.hasCollider && !gO.parent);
 
@@ -136,12 +154,19 @@ export class Scene {
 
         if (this.requestAnimationFrameHandle) requestAnimationFrame(this.update.bind(this));
     }
+
     /**
      * Returns all GameObjects in this Scene.
      */
     public getAllGameObjects(): GameObject[] {
         return [...this.gameObjects.values()];
     }
+
+    /**
+     * 
+     * Start scene.
+     * 
+     */
     public async start(): Promise<void> {
         for (const gameObject of this.getAllGameObjects()) {
             await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
@@ -149,6 +174,12 @@ export class Scene {
 
         this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
+
+    /**
+     *
+     * Stop scene.
+     *
+     */
     public stop(): void {
         if (this.requestAnimationFrameHandle) cancelAnimationFrame(this.requestAnimationFrameHandle);
         this.requestAnimationFrameHandle = undefined;
@@ -161,10 +192,22 @@ export class Scene {
             }
         }), 100);
     }
+
+    /**
+     * 
+     * Returns true if scene is running.
+     * 
+     */
     public get isRunning(): boolean {
         return typeof this.requestAnimationFrameHandle === 'number';
     }
-    public destroyGameObject(name: string) {
+
+    /**
+     * 
+     * Remove gameObject from scene.
+     * 
+     */
+    public destroyGameObject(name: string) :void{
         this.gameObjects.delete(name);
     }
 }

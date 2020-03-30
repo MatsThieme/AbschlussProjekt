@@ -11,7 +11,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>973750e5-cffc-4610-8834-f0a5e0b246a4</ProjectGuid>
+    <ProjectGuid>{41ad0ef2-ccd3-47bb-b38c-76c205ba47b5}</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
     <StartupFile>Game.ts</StartupFile>
