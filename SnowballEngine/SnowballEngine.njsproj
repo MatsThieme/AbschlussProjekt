@@ -14,7 +14,8 @@
     <ProjectGuid>{41ad0ef2-ccd3-47bb-b38c-76c205ba47b5}</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>Game.ts</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <StartWebBrowser>True</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -33,7 +34,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Game.ts" />
     <Content Include="Assets\InputMappingAxes.json" />
     <Content Include="Assets\InputMappingButtons.json">
       <SubType>Code</SubType>
