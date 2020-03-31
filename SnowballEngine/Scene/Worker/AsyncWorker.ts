@@ -78,8 +78,6 @@ export class AsyncWorker {
     }
 }
 
-(<any>window).AsyncWorker = AsyncWorker;
-
 
 /** @internal */
 declare interface Worker extends EventTarget, AbstractWorker {
