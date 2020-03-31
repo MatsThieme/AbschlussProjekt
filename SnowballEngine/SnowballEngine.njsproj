@@ -38,9 +38,6 @@
     <Content Include="Assets\InputMappingButtons.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="index.html">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Scene\UI\UIElements\UIElement.ts">
       <SubType>Code</SubType>
     </Content>
