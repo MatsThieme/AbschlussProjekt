@@ -10,6 +10,7 @@ npm i snowball-engine --save
 
 
 <b>Setup</b>
+
 In tsconfig.json add 
 ```JSON
 "se": [ "./node_modules/snowball-engine/dist/Scene" ]
