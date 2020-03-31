@@ -1,4 +1,4 @@
-import { Settings } from './Scene/Settings.js';
+import { Settings } from '../Scene/Settings.js';
 
 export class FontLoader {
     /**

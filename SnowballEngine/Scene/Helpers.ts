@@ -1,4 +1,4 @@
-import { Vector2 } from './Scene/Vector2.js';
+import { Vector2 } from './Vector2.js';
 
 /**
  * 
@@ -8,6 +8,7 @@ import { Vector2 } from './Scene/Vector2.js';
 export const clamp = (min: number, max: number, val: number) => val < min ? min : val > max ? max : val;
 
 /**
+ * 
  * Resolves after ms
  * 
  * @param ms milliseconds to wait before resolve
@@ -16,6 +17,7 @@ export const clamp = (min: number, max: number, val: number) => val < min ? min 
 export const asyncTimeout = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
+ * 
  * Reduces a fraction.
  *
  * @param fraction fraction.x is the numerator, fraction.x the denominator.
@@ -28,6 +30,7 @@ export function reduce(fraction: Vector2): Vector2 {
 }
 
 /**
+ * 
  * Execute code that may only be executed in a user event triggered context.
  * 
  * @param cb Call on user event.

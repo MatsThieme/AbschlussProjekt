@@ -1,4 +1,4 @@
-import { reduce } from '../../../Helpers.js';
+import { reduce } from '../../Helpers.js';
 import { Frame } from '../../Camera/Frame.js';
 import { AABB } from '../../Physics/AABB.js';
 import { Vector2 } from '../../Vector2.js';

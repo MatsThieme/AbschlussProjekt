@@ -8,10 +8,12 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "stripInternal": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "typedocOptions": {
     "mode": "modules",

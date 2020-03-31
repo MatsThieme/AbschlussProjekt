@@ -1,4 +1,4 @@
-import { asyncTimeout } from '../../../Helpers.js';
+import { asyncTimeout } from '../../Helpers.js';
 import { GameTime } from '../../GameTime.js';
 import { AABB } from '../../Physics/AABB.js';
 import { Vector2 } from '../../Vector2.js';

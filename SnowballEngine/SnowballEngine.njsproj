@@ -48,7 +48,7 @@
     <Content Include="package.json" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="FontLoader.ts">
+    <TypeScriptCompile Include="Scene\FontLoader.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\GameObject\Align.ts">
@@ -138,7 +138,7 @@
     <TypeScriptCompile Include="Scene\GameTime.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Helpers.ts">
+    <TypeScriptCompile Include="Scene\Helpers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Input\Input.ts">

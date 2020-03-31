@@ -1,4 +1,4 @@
-import { awaitPromises } from '../../Helpers.js';
+import { awaitPromises } from '../Helpers.js';
 import { Transform } from '../GameObject/Components/Transform.js';
 import { GameTime } from '../GameTime.js';
 import { Collision } from '../Physics/Collision.js';

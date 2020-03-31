@@ -1,4 +1,4 @@
-import { awaitPromises } from '../Helpers.js';
+import { awaitPromises } from './Helpers.js';
 import { CameraManager } from './Camera/CameraManager.js';
 import { Framedata } from './Framedata.js';
 import { Behaviour } from './GameObject/Components/Behaviour.js';

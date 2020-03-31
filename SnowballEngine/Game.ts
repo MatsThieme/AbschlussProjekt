@@ -1,4 +1,4 @@
-import { FontLoader } from './FontLoader.js';
+import { FontLoader } from './Scene/FontLoader.js';
 import { LoadingScreenPrefab } from './Scene/Prefabs/LoadingScreenPrefab.js';
 import { Scene } from './Scene/Scene.js';
 import { Settings } from './Scene/Settings.js';
@@ -21,7 +21,7 @@ class Game {
 
         scene.loadingScreen = LoadingScreenPrefab;
 
-        await FontLoader.load('/Font/JosefinSlab-Regular.ttf', Settings.mainFont);
+        await FontLoader.load('Font/JosefinSlab-Regular.ttf', Settings.mainFont);
 
         scene.newCamera('camera', camera => {
             camera.resolution = new Vector2(1920, 1080);

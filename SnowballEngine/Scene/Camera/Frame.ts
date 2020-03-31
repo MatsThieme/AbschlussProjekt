@@ -1,4 +1,4 @@
-import { clamp } from '../../Helpers.js';
+import { clamp } from '../Helpers.js';
 import { Angle } from '../Angle.js';
 import { Sprite } from '../Sprite.js';
 import { Vector2 } from '../Vector2.js';

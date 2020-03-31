@@ -1,4 +1,4 @@
-import { clamp, triggerOnUserInputEvent } from '../../../Helpers.js';
+import { clamp, triggerOnUserInputEvent } from '../../Helpers.js';
 import { Settings } from '../../Settings.js';
 import { GameObject } from '../GameObject.js';
 import { AudioSource } from './AudioSource.js';
