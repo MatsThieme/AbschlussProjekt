@@ -57,21 +57,6 @@
     <TypeScriptCompile Include="Scene\Angle.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\GameObject\Behaviours\Destroy.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\GameObject\Behaviours\InputTest.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\GameObject\Behaviours\Move.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\GameObject\Behaviours\ReloadPage.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\GameObject\Behaviours\TestBehaviour.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\GameObject\Components\AnimatedSprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -163,34 +148,6 @@
     <TypeScriptCompile Include="Scene\Physics\PhysicsMaterial.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\LeftPrefab.ts" />
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\PlayerPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\PolygonPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\RightPrefab.ts" />
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\TestTileMapPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\TopPrefab.ts" />
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\FloorPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\xAxisPrefab.ts" />
-    <TypeScriptCompile Include="Scene\Prefabs\GameObjects\yAxisPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\LoadingScreenPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\UI\DebugOverlayPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scene\Prefabs\UI\MainMenu\MainMenuPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="Scene\Projection.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -270,17 +227,12 @@
   <ItemGroup>
     <Folder Include="Assets\Font\" />
     <Folder Include="Scene\GameObject\Components\" />
-    <Folder Include="Scene\GameObject\Behaviours\" />
     <Folder Include="Assets\" />
     <Folder Include="Scene\Input\" />
     <Folder Include="Scene\" />
     <Folder Include="Scene\GameObject\" />
     <Folder Include="Scene\Camera\" />
-    <Folder Include="Scene\Prefabs\GameObjects\" />
-    <Folder Include="Scene\Prefabs\UI\" />
-    <Folder Include="Scene\Prefabs\UI\MainMenu\" />
     <Folder Include="Scene\UI\" />
-    <Folder Include="Scene\Prefabs\" />
     <Folder Include="Scene\UI\UIElements\" />
     <Folder Include="Scene\Worker\" />
     <Folder Include="Scene\Physics\" />

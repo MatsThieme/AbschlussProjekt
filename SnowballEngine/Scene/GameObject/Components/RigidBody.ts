@@ -3,26 +3,12 @@ import { Collision } from '../../Physics/Collision.js';
 import { Physics } from '../../Physics/Physics.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
-import { Destroy } from '../Behaviours/Destroy.js';
 import { GameObject } from '../GameObject.js';
 import { CircleCollider } from './CircleCollider.js';
 import { Collider } from './Collider.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
-import { Texture } from './Texture.js';
-
-const sprite = new Sprite((context, canvas) => {
-    canvas.width = canvas.height = 50;
-
-    context.arc(canvas.width / 2, 5, 5, 0, Math.PI * 2);
-    context.fillStyle = context.strokeStyle = '#f00';
-    context.fill();
-
-    context.moveTo(canvas.width / 2, 5);
-    context.lineTo(canvas.width / 2, canvas.height);
-    context.stroke();
-});
 
 export class RigidBody extends Component {
     private static nextID: number = 0;
@@ -132,39 +118,10 @@ export class RigidBody extends Component {
 
             //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
-            //for (const c of contactPoints) {
-            //    this.gameObject.scene.newGameObject('contact', gameObject => {
-            //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = new Sprite((context, canvas) => {
-            //                canvas.width = canvas.height = 10;
-            //                context.fillStyle = '#f00';
-            //                context.fillRect(0, 0, 10, 10);
-            //            });
-
-            //            texture.size = new Vector2(0.1, 0.1);
-            //        });
-
-            //        gameObject.transform.relativePosition = c;
-            //        gameObject.addComponent(Destroy);
-            //    });
-            //}
-
-            //for (const n of normals) {
-            //    this.gameObject.scene.newGameObject('contact', gameObject => {
-            //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = sprite;
-
-            //            texture.size = new Vector2(0.5, 0.5);
-            //        });
-
-            //        gameObject.transform.relativeRotation = Vector2.up.angleTo(Vector2.zero, n);
-            //        gameObject.addComponent(Destroy);
-            //    });
-            //}
         }
 
 
-        //this.force.add(Physics.gravity);
+        this.force.add(Physics.gravity);
 
 
         this.velocity.add(this.force.clone.scale(this.invMass * gameTime.deltaTime * Physics.timeScale));

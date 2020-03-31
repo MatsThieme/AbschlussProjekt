@@ -1,11 +1,12 @@
-import { awaitPromises } from '../Helpers.js';
 import { Transform } from '../GameObject/Components/Transform.js';
 import { GameTime } from '../GameTime.js';
+import { awaitPromises } from '../Helpers.js';
 import { Collision } from '../Physics/Collision.js';
 import { Scene } from '../Scene.js';
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
+import { Camera } from './Components/Camera.js';
 import { Collider } from './Components/Collider.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
@@ -31,21 +32,57 @@ export class GameObject {
         this.scene = scene;
         this.drawPriority = 0;
     }
+
+    /**
+     * 
+     * A Object can be identified by its name.
+     * 
+     */
     public get name(): string {
         return this._name;
     }
+
+    /**
+     *
+     * Set name of this, appends this.id.
+     *
+     */
     public set name(val: string) {
         this._name = `${val} (${this.id})`;
     }
+
+    /**
+     *
+     * Returns transform component of this.
+     *
+     */
     public get transform(): Transform {
         return <Transform>this.getComponent<Transform>(ComponentType.Transform);
     }
+
+    /**
+     *
+     * Returns the only rigidbody present on parents, children and this recursively.
+     *
+     */
     public get rigidbody(): RigidBody {
         return this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody) || this.addComponent(RigidBody);
     }
+
+    /**
+     * 
+     * Returns all collider on parents, children and this recursively.
+     * 
+     */
     public get collider(): Collider[] {
         return [...this.getComponents<Collider>(ComponentType.Collider), ...this.getComponentsInChildren<Collider>(ComponentType.Collider), ...this.getComponentsInParents<Collider>(ComponentType.Collider)];
     }
+
+    /** 
+     *  
+     * @param cb Callbacks are executed after component creation.
+     * 
+     */
     public addComponent<T extends Component>(type: new (gameObject: GameObject) => T, cb?: (component: T) => any): T {
         const component = new type(this);
 
@@ -62,6 +99,8 @@ export class GameObject {
         if (component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider || component.type === ComponentType.TileMap) this.hasCollider = true;
 
         if (component.type === ComponentType.AudioListener) this.scene.hasAudioListener = true;
+
+        if (component.type === ComponentType.Camera) this.scene.cameraManager.mainCameraIndex = this.scene.cameraManager.cameras.push(<any>component) - 1;
 
         if (cb) cb(component);
 

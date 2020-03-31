@@ -1,4 +1,3 @@
-import { awaitPromises } from './Helpers.js';
 import { CameraManager } from './Camera/CameraManager.js';
 import { Framedata } from './Framedata.js';
 import { Behaviour } from './GameObject/Components/Behaviour.js';
@@ -7,6 +6,7 @@ import { Collider } from './GameObject/Components/Collider.js';
 import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
+import { awaitPromises } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
@@ -66,20 +66,6 @@ export class Scene {
     }
 
     /**
-     *
-     * Create new Camera.
-     *
-     */
-    public newCamera(name: string, cb?: (camera: Camera) => any): GameObject {
-        const gameObject = this.newGameObject(name);
-
-        const camera = gameObject.addComponent(Camera);
-        this.cameraManager.cameras.push(camera);
-        if (cb) cb(camera);
-        return gameObject;
-    }
-
-    /**
      * 
      * Updates...
      * gameTime
@@ -112,7 +98,7 @@ export class Scene {
             const gOs = gameObjects.filter(gO => gO.active && gO.hasCollider && !gO.parent);
 
 
-            let total = 0;
+            //let total = 0;
 
             for (const gO1 of gOs) {
                 for (const gO2 of gOs) {
@@ -121,7 +107,7 @@ export class Scene {
                     if (gO1.id !== gO2.id && !idPairs[id]) {
                         const start = performance.now();
                         const collisions = Physics.collision(gO1, gO2);
-                        total += performance.now() - start;
+                        //total += performance.now() - start;
                         collisionPromises.push(...collisions);
                         idPairs[id] = 1;
                     }
@@ -195,7 +181,7 @@ export class Scene {
 
     /**
      * 
-     * Returns true if scene is running.
+     * Returns true if animation loop is running.
      * 
      */
     public get isRunning(): boolean {
@@ -207,7 +193,62 @@ export class Scene {
      * Remove gameObject from scene.
      * 
      */
-    public destroyGameObject(name: string) :void{
+    public destroyGameObject(name: string): void {
         this.gameObjects.delete(name);
     }
 }
+
+
+
+export { Angle } from './Angle.js';
+export { Face } from './Face.js';
+export { FontLoader } from './FontLoader.js';
+export { Framedata } from './Framedata.js';
+export { AlignH, AlignV } from './GameObject/Align.js';
+export { AnimatedSprite } from './GameObject/Components/AnimatedSprite.js';
+export { AudioSource } from './GameObject/Components/AudioSource.js';
+export { CircleCollider } from './GameObject/Components/CircleCollider.js';
+export { CircleRenderer } from './GameObject/Components/CircleRenderer.js';
+export { Component } from './GameObject/Components/Component.js';
+export { ParticleSystem } from './GameObject/Components/ParticleSystem.js';
+export { PolygonCollider } from './GameObject/Components/PolygonCollider.js';
+export { PolygonRenderer } from './GameObject/Components/PolygonRenderer.js';
+export { RigidBody } from './GameObject/Components/RigidBody.js';
+export { Texture } from './GameObject/Components/Texture.js';
+export { TileMap } from './GameObject/Components/TileMap.js';
+export { Transform } from './GameObject/Components/Transform.js';
+export { GameTime } from './GameTime.js';
+export { asyncTimeout, awaitPromises, clamp, reduce, triggerOnUserInputEvent } from './Helpers.js';
+export { Input } from './Input/Input.js';
+export { InputAxis } from './Input/InputAxis.js';
+export { InputButton } from './Input/InputButton.js';
+export { InputGamepad } from './Input/InputGamepad.js';
+export { InputKeyboard } from './Input/InputKeyboard.js';
+export { InputMapping } from './Input/InputMapping.js';
+export { InputMouse } from './Input/InputMouse.js';
+export { InputType } from './Input/InputType.js';
+export { Line } from './Line.js';
+export { Particle } from './Particle.js';
+export { AABB } from './Physics/AABB.js';
+export { Collision } from './Physics/Collision.js';
+export { Physics } from './Physics/Physics.js';
+export { PhysicsMaterial } from './Physics/PhysicsMaterial.js';
+export { Projection } from './Projection.js';
+export { Settings } from './Settings.js';
+export { Sprite } from './Sprite.js';
+export { SpriteAnimation } from './SpriteAnimation.js';
+export { UIButton } from './UI/UIElements/UIButton.js';
+export { UICheckbox } from './UI/UIElements/UICheckbox.js';
+export { UIDropdown } from './UI/UIElements/UIDropdown.js';
+export { UIElement } from './UI/UIElements/UIElement.js';
+export { UIInputField } from './UI/UIElements/UIInputField.js';
+export { UINumberInputField } from './UI/UIElements/UINumberInputField.js';
+export { UIText } from './UI/UIElements/UIText.js';
+export { UITextInputField } from './UI/UIElements/UITextInputField.js';
+export { UIElementType } from './UI/UIElementType.js';
+export { UIFont } from './UI/UIFont.js';
+export { UIFontSize } from './UI/UIFontSize.js';
+export { UIFrame } from './UI/UIFrame.js';
+export { UIMenu } from './UI/UIMenu.js';
+export { Vector2 } from './Vector2.js';
+export { AsyncWorker } from './Worker/AsyncWorker.js';
