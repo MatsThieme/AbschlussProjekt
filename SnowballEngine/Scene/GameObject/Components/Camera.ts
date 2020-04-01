@@ -11,7 +11,7 @@ export class Camera extends Component {
     public size: Vector2;
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
-    public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(), size: Vector2 = new Vector2(16, 9)) {
+    public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1)) {
         super(gameObject, ComponentType.Camera);
         this.resolution = resolution;
         this.size = size;
