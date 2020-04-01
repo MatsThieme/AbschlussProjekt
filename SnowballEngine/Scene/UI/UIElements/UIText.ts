@@ -19,13 +19,12 @@ export class UIText extends UIElement {
 
         context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
 
-        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 750);
         if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
 
         context.textAlign = 'center';
         context.textBaseline = 'middle';
 
-        //context.font = this.menu.font.fit(this.label, this.menu.font.getFont('MainFont', this.fontSize, false), this.aabb.size.clone.scale(0.9));
         context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
 

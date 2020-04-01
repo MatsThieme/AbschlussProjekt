@@ -68,7 +68,7 @@ export abstract class UIInputField extends UIElement {
 
         context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
 
-        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 750);
         if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
 
         context.textAlign = 'center';

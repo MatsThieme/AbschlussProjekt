@@ -56,7 +56,7 @@ export class UIDropdown extends UIElement {
 
         context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
 
-        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 650);
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 750);
         context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
