@@ -15,7 +15,6 @@ export class AsyncWorker {
 
         const { data, resolve, reject } = this.queue.splice(0, 1)[0];
 
-
         worker.isBusy = true;
 
         worker.onerror = reject;

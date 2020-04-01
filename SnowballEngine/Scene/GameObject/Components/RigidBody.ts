@@ -9,6 +9,7 @@ import { Collider } from './Collider.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
+import { Texture } from './Texture.js';
 
 export class RigidBody extends Component {
     private static nextID: number = 0;
@@ -95,17 +96,14 @@ export class RigidBody extends Component {
 
         const solvedCollisions = [];
         const contactPoints = [];
-        const normals: Vector2[] = [];
 
         for (const collision of currentCollisions) {
             if (collision.solved) {
                 if (collision.A.gameObject.rigidbody.id === this.id) {
                     solvedCollisions.push(collision.solved.A);
-                    if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
                 } else if (collision.B.gameObject.rigidbody.id === this.id) {
                     solvedCollisions.push(collision.solved.B);
-                    if (collision.normal) normals.push(collision.normal);
                     if (collision.contactPoints) contactPoints.push(...collision.contactPoints);
                 }
             }
@@ -118,6 +116,22 @@ export class RigidBody extends Component {
 
             //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
 
+            //for (const c of contactPoints) {
+            //    this.gameObject.scene.newGameObject('contact', gameObject => {
+            //        gameObject.addComponent(Texture, texture => {
+            //            texture.sprite = new Sprite((context, canvas) => {
+            //                canvas.width = canvas.height = 10;
+            //                context.fillStyle = '#f00';
+            //                context.fillRect(0, 0, 10, 10);
+            //            });
+
+            //            texture.size = new Vector2(0.1, 0.1);
+            //        });
+
+            //        gameObject.transform.relativePosition = c;
+            //        setTimeout(() => gameObject.destroy(), 1000);
+            //    });
+            //}
         }
 
 

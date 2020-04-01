@@ -253,6 +253,15 @@ export class Vector2 {
     }
 
     /**
+     * 
+     * Returns distance from v1 to v2.
+     * 
+     */
+    public static distance(v1: Vector2, v2: Vector2): number {
+        return Math.sqrt((v1.x - v2.x) ** 2 + (v1.y - v2.y) ** 2);
+    }
+
+    /**
      *
      * Returns a vector perpendicular clockwise to this.
      * 

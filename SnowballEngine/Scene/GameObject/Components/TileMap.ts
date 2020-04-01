@@ -5,28 +5,40 @@ import { PhysicsMaterial } from '../../Physics/PhysicsMaterial.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { GameObject } from '../GameObject.js';
+import { Camera } from './Camera.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
+import { clamp } from '../../Helpers.js';
 
 export class TileMap extends Component {
     public tileSize: Vector2;
     public relativePosition: Vector2;
-    public currentFrame: Frame[];
+    private tileFrames: Frame[];
+    private backgroundFrames: Frame[];
     private _tileMap: (1 | 0)[][];
     public material: PhysicsMaterial;
-    public constructor(gameObject: GameObject, tileSize: Vector2 = new Vector2(1, 1), relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), tileMap: string[][] = []) {
+    public backgroundLayers: { distance: number, sprite: Sprite }[];
+    public backgroundMaxDistance: number;
+    public constructor(gameObject: GameObject, tileSize: Vector2 = new Vector2(1, 1), relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), tileMap: string[][] = [], backgroundLayers: { distance: number, sprite: Sprite }[] = [], backgroundMaxDistance: number = 1000) {
         super(gameObject, ComponentType.TileMap);
 
         this.tileSize = tileSize;
         this.relativePosition = relativePosition;
         this._tileMap = [];
-        this.currentFrame = [];
+        this.tileFrames = [];
+        this.backgroundFrames = [];
         this.tileMap = tileMap;
         this.material = material;
+
+        this.backgroundLayers = backgroundLayers;
+        this.backgroundMaxDistance = backgroundMaxDistance;
+    }
+    public get currentFrame(): Frame[] {
+        return [...this.tileFrames, ...this.backgroundFrames];
     }
     public set tileMap(val: string[][]) {
         this._tileMap = [];
-        this.currentFrame = [];
+        this.tileFrames = [];
         const sprites: Map<string, Sprite> = new Map();
 
         for (let y = 0; y < val.length; y++) {
@@ -40,7 +52,26 @@ export class TileMap extends Component {
 
                 if (!sprites.has(val[y][x])) sprites.set(val[y][x], new Sprite(val[y][x]));
 
-                this.currentFrame.push(new Frame(new Vector2(this.position.x + x, this.position.y + this.tileSize.y * (val.length - y - 1)), this.tileSize, <Sprite>sprites.get(val[y][x]), new Angle(), this.gameObject.drawPriority, 1));
+                this.tileFrames.push(new Frame(new Vector2(this.position.x + x, this.position.y + this.tileSize.y * (val.length - y - 1)), this.tileSize, <Sprite>sprites.get(val[y][x]), new Angle(), this.gameObject.drawPriority, 1));
+            }
+        }
+    }
+    public calculateBackgroundForCamera(camera: Camera) {
+        this.backgroundFrames = [];
+
+        const point = camera.gameObject.transform.position;
+        this.backgroundLayers.sort((a, b) => b.distance - a.distance);
+
+        for (const b of this.backgroundLayers) {
+            const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
+            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x, this.position.y);
+
+            while (position.x + spriteSizeWorld.x < point.x + camera.size.x / 2 && position.x + spriteSizeWorld.x < this.position.x + this.scaledSize.x) {
+                position.x += spriteSizeWorld.x;
+
+                if (position.x + spriteSizeWorld.x > point.x - camera.size.x / 2) {
+                    this.backgroundFrames.push(new Frame(position.clone, spriteSizeWorld, b.sprite, new Angle(), this.gameObject.drawPriority, 1));
+                }
             }
         }
     }

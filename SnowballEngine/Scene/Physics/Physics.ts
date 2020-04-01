@@ -10,9 +10,9 @@ import { AABB } from './AABB.js';
 import { Collision } from './Collision.js';
 
 export class Physics {
-    public static gravity: Vector2 = new Vector2(0, -0.01);
+    public static gravity: Vector2 = new Vector2(0, -0.00981);
     public static timeScale: number = 1;
-    private static worker: AsyncWorker = new AsyncWorker(Settings.appPath + '/Scene/Physics/CollisionWorker.js', navigator.hardwareConcurrency);
+    private static worker: AsyncWorker = new AsyncWorker(Settings.appPath + '/SnowballEngine/Physics/CollisionWorker.js', navigator.hardwareConcurrency);
     private static ignoreCollisions: { [key: number]: 1 | undefined } = {};
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const id = gameObject1.id > gameObject2.id ? (gameObject1.id << 16) + gameObject2.id : (gameObject2.id << 16) + gameObject1.id;
@@ -32,7 +32,7 @@ export class Physics {
         for (const collider of firstCollider) {
             if (collider.type === ComponentType.CircleCollider) {
                 for (const otherCollider of secondCollider) {
-                    //if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
+                    if (!AABB.intersects(collider, otherCollider) && otherCollider.type !== ComponentType.TileMap || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionCircle(<CircleCollider>collider, <CircleCollider>otherCollider));
                     else if (otherCollider.type === ComponentType.PolygonCollider) promises.push(Physics.collisionPolygonCircle(<PolygonCollider>otherCollider, <CircleCollider>collider));
@@ -40,7 +40,7 @@ export class Physics {
                 }
             } else if (collider.type === ComponentType.PolygonCollider) {
                 for (const otherCollider of secondCollider) {
-                    //if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
+                    if (!AABB.intersects(collider, otherCollider) && otherCollider.type !== ComponentType.TileMap || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.PolygonCollider) promises.push(Physics.collisionPolygon(<PolygonCollider>collider, <PolygonCollider>otherCollider));
                     else if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionPolygonCircle(<PolygonCollider>collider, <CircleCollider>otherCollider));
@@ -48,7 +48,7 @@ export class Physics {
                 }
             } else if (collider.type === ComponentType.TileMap) {
                 for (const otherCollider of secondCollider) {
-                    //if (!AABB.intersects(collider, otherCollider) || collider.id === otherCollider.id) continue;
+                    if (!AABB.intersects(collider, otherCollider) && collider.type !== ComponentType.TileMap || collider.id === otherCollider.id) continue;
 
                     if (otherCollider.type === ComponentType.PolygonCollider) promises.push(Physics.collisionPolygonTileMap(<PolygonCollider>otherCollider, <any>collider));
                     else if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionCircleTileMap(<CircleCollider>otherCollider, <any>collider));

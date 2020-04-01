@@ -34,10 +34,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Assets\InputMappingAxes.json" />
-    <Content Include="Assets\InputMappingButtons.json">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Scene\UI\UIElements\UIElement.ts">
       <SubType>Code</SubType>
     </Content>
@@ -228,9 +224,7 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Font\" />
     <Folder Include="Scene\GameObject\Components\" />
-    <Folder Include="Assets\" />
     <Folder Include="Scene\Input\" />
     <Folder Include="Scene\" />
     <Folder Include="Scene\GameObject\" />
