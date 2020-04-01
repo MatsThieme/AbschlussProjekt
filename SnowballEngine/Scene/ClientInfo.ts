@@ -1,4 +1,5 @@
 import { Vector2 } from './Vector2.js';
+import { reduce } from './Helpers.js';
 
 export class ClientInfo {
     public static measureMonitorFrameRate(ms: number): Promise<number> {
@@ -18,12 +19,16 @@ export class ClientInfo {
         });
     }
     public static resolution: Vector2 = new Vector2(innerWidth, innerHeight);
+    public static aspectRatio: Vector2 = reduce(ClientInfo.resolution);
     public static readonly cpuThreads: number = navigator.hardwareConcurrency;
     private static start() {
-        setInterval(() => {
+        window.addEventListener('resize', () => {
             this.resolution.x = innerWidth;
             this.resolution.y = innerHeight;
-        }, 500);
+            
+            this.aspectRatio.x = reduce(ClientInfo.resolution).x;
+            this.aspectRatio.y = reduce(ClientInfo.resolution).y;
+        });
     }
 }
 

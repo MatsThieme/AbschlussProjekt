@@ -1,9 +1,7 @@
 import { Settings } from './Settings.js';
-import { Vector2 } from './Vector2.js';
 
 export class Sprite {
     public canvasImageSource!: HTMLCanvasElement | OffscreenCanvas | HTMLImageElement;
-    public size: Vector2;
     public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => void)) {
         if (typeof src === 'string') {
             this.canvasImageSource = new Image();
@@ -20,7 +18,5 @@ export class Sprite {
 
             this.canvasImageSource = canvas;
         }
-
-        this.size = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
     }
 }
