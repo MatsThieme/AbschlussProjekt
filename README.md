@@ -3,26 +3,9 @@
 2D Game-Engine written in TypeScript.
 
 
-<b>Install</b>
-```
-npm i snowball-engine --save
-```
-
-
-<b>Setup</b>
-
-In tsconfig.json add 
-```JSON
-"se": [ "./node_modules/snowball-engine/dist/Scene" ]
-```
-to paths.
-
 
 <b>Usage</b>
 ```TypeScript
-import { Scene, Camera } from 'se';
-import { prefabCallback } from 'somewhere';
-
 const scene = new Scene();
 
 // add a camera
