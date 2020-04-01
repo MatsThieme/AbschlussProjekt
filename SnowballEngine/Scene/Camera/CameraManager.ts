@@ -8,7 +8,6 @@ import { Texture } from '../GameObject/Components/Texture.js';
 import { TileMap } from '../GameObject/Components/TileMap.js';
 import { GameObject } from '../GameObject/GameObject.js';
 import { UIFrame } from '../UI/UIFrame.js';
-import { Vector2 } from '../Vector2.js';
 import { Frame } from './Frame.js';
 
 export class CameraManager {
@@ -24,7 +23,9 @@ export class CameraManager {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
     }
     public update(gameObjects: GameObject[], ui: UIFrame) {
-        this.mainCamera.resolution = new Vector2(this.context.canvas.width, this.context.canvas.height);
+        this.context.canvas.width = this.mainCamera.resolution.x;
+        this.context.canvas.height = this.mainCamera.resolution.y;
+
 
         let frames: (Frame | undefined)[] = [];
 

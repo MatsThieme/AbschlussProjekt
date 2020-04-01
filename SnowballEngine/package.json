@@ -1,9 +1,10 @@
 {
   "name": "snowball-engine",
-  "version": "0.0.16",
+  "version": "0.0.17",
+  "private": true,
   "description": "SnowballEngine",
-  "main": "./dist/Scene.js",
-  "types": "./dist/Scene.d.ts",
+  "main": "dist/Scene.js",
+  "types": "dist/Scene.d.ts",
   "author": {
     "name": "Mats Thieme"
   },
