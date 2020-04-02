@@ -26,7 +26,7 @@ export class CameraManager {
         this.context.canvas.width = this.mainCamera.resolution.x;
         this.context.canvas.height = this.mainCamera.resolution.y;
 
-        this.context.imageSmoothingQuality = 'high';
+        this.context.imageSmoothingQuality = 'low';
 
         let frames: (Frame | undefined)[] = [];
 

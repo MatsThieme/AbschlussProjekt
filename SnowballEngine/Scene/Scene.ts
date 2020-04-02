@@ -206,6 +206,7 @@ export * from './FontLoader.js';
 export * from './Framedata.js';
 export * from './GameObject/Align.js';
 export * from './GameObject/Components/AnimatedSprite.js';
+export * from './GameObject/Components/AudioListener.js';
 export * from './GameObject/Components/AudioSource.js';
 export * from './GameObject/Components/Behaviour.js';
 export * from './GameObject/Components/Camera.js';

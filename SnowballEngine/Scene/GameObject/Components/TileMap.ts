@@ -64,7 +64,7 @@ export class TileMap extends Component {
 
         for (const b of this.backgroundLayers) {
             const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
-            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x, this.position.y);
+            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x * 2, this.position.y);
 
             while (position.x + spriteSizeWorld.x < point.x + camera.size.x / 2 && position.x + spriteSizeWorld.x < this.position.x + this.scaledSize.x) {
                 position.x += spriteSizeWorld.x;
