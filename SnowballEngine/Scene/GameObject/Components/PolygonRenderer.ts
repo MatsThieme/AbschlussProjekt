@@ -6,7 +6,6 @@ import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
 
-// for debugging
 export class PolygonRenderer extends Component {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
@@ -14,6 +13,11 @@ export class PolygonRenderer extends Component {
     private sprite: Sprite;
     private _position: Vector2;
     private size: Vector2;
+    /**
+     * 
+     * For development.
+     * 
+     */
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.PolygonRenderer);
 
@@ -68,6 +72,6 @@ export class PolygonRenderer extends Component {
         return this._position.clone.add(this.polygonCollider.position).sub(this.polygonCollider.relativePosition);
     }
     public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, this.polygonCollider.position);
+        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, undefined, this.polygonCollider.position);
     }
 }

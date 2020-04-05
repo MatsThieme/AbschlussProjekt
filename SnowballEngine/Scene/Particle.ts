@@ -22,23 +22,53 @@ export class Particle implements Drawable {
         this.particleSystem = particleSystem;
         this.rotation = new Angle(undefined, Math.random() * 360);
     }
+
+    /**
+     *
+     * Returns the size of the 
+     * 
+     */
     public get size(): Vector2 {
         return this.particleSystem.size;
     }
     public get scaledSize(): Vector2 {
         return this.particleSystem.scaledSize;
     }
+
+    /**
+     *
+     * Returns the current frame of this.
+     * 
+     */
     public get currentFrame(): Frame {
-        return new Frame(this.position, this.scaledSize, this.sprite instanceof SpriteAnimation ? this.sprite.currentFrame : this.sprite, new Angle(this.particleSystem.gameObject.transform.rotation.radian + this.rotation.radian), this.particleSystem.gameObject.drawPriority, this.alpha);
+        return new Frame(this.position, this.scaledSize, 'sprites' in this.sprite ? this.sprite.currentFrame : this.sprite, new Angle(this.particleSystem.gameObject.transform.rotation.radian + this.rotation.radian), this.particleSystem.gameObject.drawPriority, this.alpha);
     }
+
+    /**
+     * 
+     * Returns the absolute position of this.
+     * 
+     */
     public get position(): Vector2 {
         return this.particleSystem.position.clone.add(this.relativePosition);
     }
+
+    /**
+     * 
+     * Updates sprite animations and moves this.
+     * 
+     */
     public update(gameTime: GameTime) {
         this.rotation.degree += 360 / 1000 * gameTime.deltaTime * this.particleSystem.rotationSpeed;
         this.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime));
-        if (this.sprite instanceof SpriteAnimation) this.sprite.update(gameTime);
+        if ('sprites' in this.sprite) this.sprite.update(gameTime);
     }
+
+    /**
+     *
+     * Returns the current alpha value of this Particle.
+     * 
+     */
     public get alpha(): number {
         if (performance.now() < this.startTime + this.particleSystem.fadeInDuration && this.particleSystem.fadeInDuration > 0) {
             return (performance.now() - this.startTime) / this.particleSystem.fadeInDuration;

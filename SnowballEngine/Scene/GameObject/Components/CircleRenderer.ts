@@ -7,7 +7,6 @@ import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
 
-// for debugging
 export class CircleRenderer extends Component {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
@@ -15,6 +14,11 @@ export class CircleRenderer extends Component {
     private sprite: Sprite;
     private _position: Vector2;
     private size: Vector2;
+    /**
+    *
+    * For development.
+    *
+    */
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.CircleRenderer);
 
@@ -52,6 +56,6 @@ export class CircleRenderer extends Component {
         return this._position.clone.add(this.circleCollider.position).sub(this.circleCollider.relativePosition);
     }
     public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, this.circleCollider.position);
+        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, undefined, this.circleCollider.position);
     }
 }
