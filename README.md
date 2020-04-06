@@ -18,7 +18,13 @@ scene.addGameObject('camera', gameObject => {
 
 
 // add gameobjects
-scene.addGameObject('example', initialisationCallback);
+scene.addGameObject('example', gameObject => {
+  gameObject.addComponent(Texture, texture => {
+    texture.sprite = new Sprite((context, canvas) => {
+      ...
+    });
+  });
+});
 
 
 document.body.appendChild(scene.domElement);
