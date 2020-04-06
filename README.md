@@ -18,7 +18,7 @@ scene.addGameObject('camera', gameObject => {
 
 
 // add gameobjects
-scene.addGameObject('example', prefabCallback);
+scene.addGameObject('example', initialisationCallback);
 
 
 document.body.appendChild(scene.domElement);
