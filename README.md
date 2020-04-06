@@ -20,9 +20,7 @@ scene.addGameObject('camera', gameObject => {
 // add gameobjects
 scene.addGameObject('example', gameObject => {
   gameObject.addComponent(Texture, texture => {
-    texture.sprite = new Sprite((context, canvas) => {
-      ...
-    });
+    texture.sprite = new Sprite('img/someimage.png');
   });
 });
 
