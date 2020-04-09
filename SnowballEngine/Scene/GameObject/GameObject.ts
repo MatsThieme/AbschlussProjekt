@@ -6,7 +6,6 @@ import { Scene } from '../Scene.js';
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
-import { Camera } from './Components/Camera.js';
 import { Collider } from './Components/Collider.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
@@ -96,7 +95,7 @@ export class GameObject {
             (component.type === ComponentType.Transform && this.getComponents(ComponentType.Transform).length === 0) ||
             (component.type === ComponentType.Camera && this.getComponents(ComponentType.Camera).length === 0) ||
             (component.type === ComponentType.AudioListener && !this.scene.hasAudioListener) ||
-            (component.type === ComponentType.TileMap && this.getComponents(ComponentType.TileMap).length === 0))
+            (component.type === ComponentType.TileMap/* && this.getComponents(ComponentType.TileMap).length === 0*/))
             this.components.push(component);
 
         if ((component.type === ComponentType.CircleCollider || component.type === ComponentType.PolygonCollider || component.type === ComponentType.TileMap) && !this.rigidbody) this.addComponent(RigidBody);
