@@ -10,6 +10,7 @@ import { UIElementType } from '../UIElementType.js';
 import { UIFontSize } from '../UIFontSize.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
+import { interval } from '../../Helpers.js';
 
 export abstract class UIElement {
     private static nextID: number = 0;
@@ -71,10 +72,10 @@ export abstract class UIElement {
         const trigger = this.input.getButton(InputType.Trigger);
         const pointerPosition = new Vector2(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
 
-        this.down = trigger.down && this.aabb.intersectsPoint(pointerPosition);
-        this.click = trigger.click && this.aabb.intersectsPoint(pointerPosition);
+        this.down = trigger.down && this.aabbpx.intersectsPoint(pointerPosition);
+        this.click = trigger.click && this.aabbpx.intersectsPoint(pointerPosition);
 
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         if (!this.sprite) this.draw();
     }
 
@@ -83,7 +84,7 @@ export abstract class UIElement {
      * Adjusts the AABB of this to fit the contents.
      * 
      */
-    public fitText(paddingScalar: number): void {
+    public fitContent(paddingScalar: number): void {
         this.lastPaddingScalar = paddingScalar;
         if (this.type === UIElementType.Dropdown) {
             if ((<any>this).values.length === 0) return;
@@ -95,12 +96,12 @@ export abstract class UIElement {
                 if (m.y > size.y) size.y = m.y;
             }
 
-            this.aabb = new AABB(new Vector2(~~Math.max(size.x * paddingScalar, 1), ~~Math.max(size.y * paddingScalar * ((<any>this).values.length + 1), 1)), this._aabb.position);
+            this.aabb = new AABB(new Vector2(Math.max(size.x * paddingScalar, 1), Math.max(size.y * paddingScalar * ((<any>this).values.length + 1), 1)), this._aabb.position);
         } else {
             if (this.label.length === 0) return;
 
             const m = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
-            this.aabb = new AABB(new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1)), this._aabb.position);
+            this.aabb = new AABB(new Vector2(Math.max(m.x * paddingScalar, 1), Math.max(m.y * paddingScalar, 1)), this._aabb.position);
         }
 
         this.draw();
@@ -112,14 +113,19 @@ export abstract class UIElement {
      * 
      */
     public get aabb(): AABB {
-        const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? - this._aabb.size.x / 2 : - this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? - this._aabb.size.y / 2 : - this._aabb.size.y);
-        const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? this.menu.aabb.size.x / 2 : this.menu.aabb.size.x, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? this.menu.aabb.size.y / 2 : this.menu.aabb.size.y);
+        const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? -this._aabb.size.x / 2 : -this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? -this._aabb.size.y / 2 : -this._aabb.size.y);
+        const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? 50 : 100, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? 50 : 100);
 
-        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign).round());
+        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign));
     }
     public set aabb(val: AABB) {
+        if (val.size.equal(this._aabb.size) && val.position.equal(this._aabb.position)) return;
         this._aabb = val;
         this.draw();
+    }
+
+    private get aabbpx(): AABB {
+        return new AABB(new Vector2(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height)), new Vector2((this.aabb.position.x / 100 * this.menu.aabb.size.x + this.menu.aabb.position.x) / 100 * this.menu.scene.domElement.width, (this.aabb.position.y / 100 * this.menu.aabb.size.y + this.menu.aabb.position.y) / 100 * this.menu.scene.domElement.height));
     }
 
     /**
@@ -132,7 +138,7 @@ export abstract class UIElement {
     }
     public set label(val: string) {
         this._label = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
 
@@ -146,7 +152,7 @@ export abstract class UIElement {
     }
     public set background(val: Sprite | undefined) {
         this._background = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
     public get fontSize(): UIFontSize {
@@ -154,7 +160,7 @@ export abstract class UIElement {
     }
     public set fontSize(val: UIFontSize) {
         this._fontSize = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
 
