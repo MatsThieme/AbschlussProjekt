@@ -9,19 +9,19 @@
 const scene = new Scene();
 
 // add a camera
-scene.addGameObject('camera', gameObject => {
-  gameObject.addComponent(Camera, camera => {
-    camera.resolution = new Vector2(1920, 1080);
-    camera.size = new Vector2(16, 9);
-  });
+scene.newGameObject('camera', gameObject => {
+    gameObject.addComponent(Camera, camera => {
+        camera.resolution = new Vector2(1920, 1080);
+        camera.size = new Vector2(16, 9);
+    });
 });
 
 
 // add gameobjects
-scene.addGameObject('example', gameObject => {
-  gameObject.addComponent(Texture, texture => {
-    texture.sprite = new Sprite('img/someimage.png');
-  });
+scene.newGameObject('example', gameObject => {
+    gameObject.addComponent(Texture, texture => {
+        texture.sprite = new Sprite('img/someimage.png');
+    });
 });
 
 
