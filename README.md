@@ -24,7 +24,7 @@ scene.newGameObject('example', gameObject => {
     });
 });
 
-
+// append canvas to dom
 document.body.appendChild(scene.domElement);
 
 scene.start();
