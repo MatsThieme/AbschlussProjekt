@@ -9,7 +9,7 @@
 const scene = new Scene();
 
 // add a camera
-scene.newGameObject('camera', gameObject => {
+await scene.newGameObject('camera', gameObject => {
     gameObject.addComponent(Camera, camera => {
         camera.resolution = new Vector2(1920, 1080);
         camera.size = new Vector2(16, 9);
@@ -18,7 +18,7 @@ scene.newGameObject('camera', gameObject => {
 
 
 // add gameobjects
-scene.newGameObject('example', gameObject => {
+await scene.newGameObject('example', gameObject => {
     gameObject.addComponent(Texture, texture => {
         texture.sprite = new Sprite('img/someimage.png');
     });
@@ -27,5 +27,5 @@ scene.newGameObject('example', gameObject => {
 // append canvas to dom
 document.body.appendChild(scene.domElement);
 
-scene.start();
+await scene.start();
 ```
