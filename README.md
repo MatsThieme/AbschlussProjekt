@@ -9,7 +9,7 @@
 const scene = new Scene();
 
 // add a camera
-await scene.newGameObject('camera', gameObject => {
+await scene.newGameObject('camera', async gameObject => {
     await gameObject.addComponent(Camera, camera => {
         camera.resolution = new Vector2(1920, 1080);
         camera.size = new Vector2(16, 9);
@@ -18,7 +18,7 @@ await scene.newGameObject('camera', gameObject => {
 
 
 // add gameobjects
-await scene.newGameObject('example', gameObject => {
+await scene.newGameObject('example', async gameObject => {
     await gameObject.addComponent(Texture, async texture => {
         texture.sprite = new Sprite('img/someimage.png');
         await texture.load!;
