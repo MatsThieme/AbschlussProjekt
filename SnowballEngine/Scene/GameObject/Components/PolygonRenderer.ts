@@ -32,7 +32,12 @@ export class PolygonRenderer extends Component {
         this._position = new Vector2();
 
         interval(clear => {
-            if (!this.gameObject.scene.isRunning || this.gameObject.scene.ui.pauseScene) return;
+            this.onDestroy = () => {
+                clear();
+                return true;
+            };
+
+            if (!this?.gameObject?.scene?.isRunning || this.gameObject.scene.ui.pauseScene) return;
             clear();
 
             this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
