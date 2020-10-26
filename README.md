@@ -6,27 +6,29 @@
 
 <b>Usage</b>
 ```TypeScript
-const scene = new Scene();
+class Game {
+    private readonly sceneManager: SceneManager;
+    public constructor() {
+        this.sceneManager = new SceneManager();
+        this.initialize(this.sceneManager);
+    }
+    private async initialize(sceneManager: SceneManager): Promise<void> {
 
-// add a camera
-await scene.newGameObject('camera', async gameObject => {
-    await gameObject.addComponent(Camera, camera => {
-        camera.resolution = new Vector2(1920, 1080);
-        camera.size = new Vector2(16, 9);
-    });
-});
+        // load assets
+        await Assets.load('path/to/asset', AssetType.Image, 'some image');
 
+        // create a scene
+        const scene = sceneManager.create('Main Scene');
 
-// add gameobjects
-await scene.newGameObject('example', async gameObject => {
-    await gameObject.addComponent(Texture, async texture => {
-        texture.sprite = new Sprite('img/someimage.png');
-        await texture.load!;
-    });
-});
+        // add gameobjects to scene
+        await scene.addGameObject('something', gameObject => {
+            // add components to scene
+            gameObject.addComponent(Texture, texture => {
+                texture.sprite = Assets.get('some image');
+            });
+        });
 
-// append canvas to dom
-document.body.appendChild(scene.domElement);
-
-await scene.start();
+        await scene.start();
+    }
+}
 ```
