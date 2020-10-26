@@ -28,6 +28,7 @@ class Game {
             });
         });
 
+        // start scene
         await scene.start();
     }
 }
