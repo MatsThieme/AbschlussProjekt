@@ -44,6 +44,10 @@ class Game {
             menu.active = true;
         });
         
+        // // add timeout to show loadingscreen
+        // await asyncTimeout(1000);
+
+
         // load scene
         sceneManager.load('Loadingscreen');
         
