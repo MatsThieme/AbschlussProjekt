@@ -13,23 +13,47 @@ class Game {
         this.initialize(this.sceneManager);
     }
     private async initialize(sceneManager: SceneManager): Promise<void> {
+        // create a scene
+        const loadingscreen = sceneManager.create('Loadingscreen');
 
+        // add a camera
+        loadingscreen.addGameObject('Camera', gameObject => {
+            gameObject.addComponent(Camera, camera => {
+                camera.resolution = Client.resolution;
+                camera.size = Client.aspectRatio;
+            });
+        });
+        
+        // load scene
+        sceneManager.load('Loadingscreen');
+        
+        
         // load assets
         await Assets.load('path/to/asset', AssetType.Image, 'some image');
+
 
         // create a scene
         const scene = sceneManager.create('Main Scene');
 
         // add gameobjects to scene
-        await scene.addGameObject('something', gameObject => {
+        scene.addGameObject('something', gameObject => {
             // add components to scene
             gameObject.addComponent(Texture, texture => {
                 texture.sprite = Assets.get('some image');
             });
         });
-
-        // start scene
-        await scene.start();
+        
+        // add a camera
+        scene.addGameObject('Camera', gameObject => {
+            gameObject.addComponent(Camera, camera => {
+                camera.resolution = Client.resolution;
+                camera.size = Client.aspectRatio;
+            });
+        });
+        
+        
+        // load scene
+        sceneManager.load('Main Scene');
     }
 }
 ```
