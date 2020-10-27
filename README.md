@@ -24,6 +24,26 @@ class Game {
             });
         });
         
+        // show something to the waiting user
+        loadingscreen.ui.addMenu('Loadingscreen', menu => {
+            menu.addUIElement(UIText, text => {
+                text.localAlignH = AlignH.Center;
+                text.localAlignV = AlignV.Center;
+                text.alignH = AlignH.Center;
+                text.alignV = AlignV.Center;
+
+                let counter = 0;
+                setInterval(() => text.label = 'loading' + '.'.repeat(counter = ++counter % 4), 500);
+
+
+                text.fontSize = UIFontSize.Large;
+
+                text.padding = new Vector2(1, 1);
+            });
+
+            menu.active = true;
+        });
+        
         // load scene
         sceneManager.load('Loadingscreen');
         
