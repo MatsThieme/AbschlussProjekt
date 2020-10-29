@@ -1,3 +1,4 @@
+import { D } from '../Debug.js';
 import { Transform } from '../GameObject/Components/Transform.js';
 import { GameTime } from '../GameTime.js';
 import { Collision } from '../Physics/Collision.js';
@@ -260,9 +261,8 @@ export class GameObject {
                         delete (<any>this)[key];
                 }
             });
-
         } catch (err) {
-            console.log(this);
+            D.error(this);
         }
     }
 }

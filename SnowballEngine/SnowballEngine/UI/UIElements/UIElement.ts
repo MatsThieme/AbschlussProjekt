@@ -32,6 +32,7 @@ export abstract class UIElement {
     private _padding: Vector2;
     private _resizeAABB: boolean;
 
+    public readonly hover: boolean;
     public readonly click: boolean;
     public readonly down: boolean;
 
@@ -41,9 +42,10 @@ export abstract class UIElement {
     public alignV: AlignV;
 
     public onInput?: (uiElement: this) => any;
+    public onHover?: (uiElement: this) => any;
 
     protected sprite?: CanvasImageSource;
-    protected abstract drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
+    protected abstract drawCb(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void;
 
     protected menu: UIMenu;
     protected input: Input;
@@ -56,6 +58,7 @@ export abstract class UIElement {
         this.input = input;
         this.type = type;
 
+        this.hover = false;
         this.click = false;
         this.down = false;
 
@@ -94,7 +97,7 @@ export abstract class UIElement {
      * Update down and click properties.
      * 
      */
-    public update(gameTime: GameTime): void {
+    public async update(gameTime: GameTime): Promise<void> {
         if (!this.active) return;
 
         const trigger = this.input.getButton(InputType.Trigger);
@@ -103,12 +106,13 @@ export abstract class UIElement {
 
         const intersects = this.aabbpx.intersectsPoint(p.v2);
 
-        (<any>this).down = trigger.down && intersects;
+        (<any>this).hover = intersects;
         (<any>this).click = trigger.click && intersects;
+        (<any>this).down = trigger.down && intersects;
 
         if (!this.sprite) this.draw();
 
-        this.draw();
+        //this.draw();
     }
 
     /**
@@ -288,7 +292,7 @@ export abstract class UIElement {
             this._font = font;
         } else {
             this._font = new Asset('', AssetType.Font, 'sans-serif');
-            D.warn('Asset not valid Font, using default "sans-serif" font family', 'UIElement, UIElement. set font');
+            D.warn('Asset not valid Font, using default "sans-serif" font family');
         }
     }
     public get font(): Asset {
@@ -301,7 +305,7 @@ export abstract class UIElement {
      * 
      */
     private get aabbpx(): AABB {
-        return new AABB(new Vector2(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height)).round(), new Vector2((this.aabb.position.x / 100 * this.menu.aabb.size.x + this.menu.aabb.position.x) / 100 * this.menu.scene.domElement.width, (this.aabb.position.y / 100 * this.menu.aabb.size.y + this.menu.aabb.position.y) / 100 * this.menu.scene.domElement.height).round());
+        return new AABB(new Vector2(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * Client.resolution.y)).round(), new Vector2((this.aabb.position.x / 100 * this.menu.aabb.size.x + this.menu.aabb.position.x) / 100 * Client.resolution.x, (this.aabb.position.y / 100 * this.menu.aabb.size.y + this.menu.aabb.position.y) / 100 * Client.resolution.y).round());
     }
 
     /**

@@ -1,4 +1,5 @@
 import { Frame } from '../../Camera/Frame.js';
+import { Canvas } from '../../Canvas.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { GameObject } from '../GameObject.js';
@@ -6,10 +7,9 @@ import { CircleCollider } from './CircleCollider.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
-
 export class CircleRenderer extends Component {
-    private canvas: OffscreenCanvas;
-    private context: OffscreenCanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
     private circleCollider: CircleCollider;
     private _position: Vector2;
     private size: Vector2;
@@ -23,7 +23,7 @@ export class CircleRenderer extends Component {
 
         this.circleCollider = <CircleCollider>this.gameObject.getComponent<CircleCollider>(ComponentType.CircleCollider);
 
-        this.canvas = new OffscreenCanvas(this.circleCollider.radius * 2 * 100, this.circleCollider.radius * 2 * 100);
+        this.canvas = Canvas(this.circleCollider.radius * 2 * 100, this.circleCollider.radius * 2 * 100);
         this.context = this.canvas.getContext('2d')!;
 
         this.size = new Vector2(this.circleCollider.radius * 2, this.circleCollider.radius * 2);

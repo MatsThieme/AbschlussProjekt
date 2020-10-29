@@ -1,3 +1,4 @@
+import { D } from '../Debug.js';
 import { AnimatedSprite } from '../GameObject/Components/AnimatedSprite.js';
 import { Camera } from '../GameObject/Components/Camera.js';
 import { CircleRenderer } from '../GameObject/Components/CircleRenderer.js';
@@ -7,6 +8,7 @@ import { PolygonRenderer } from '../GameObject/Components/PolygonRenderer.js';
 import { Texture } from '../GameObject/Components/Texture.js';
 import { TileMap } from '../GameObject/Components/TileMap.js';
 import { GameObject } from '../GameObject/GameObject.js';
+import { Scene } from '../Scene.js';
 import { UIFrame } from '../UI/UIFrame.js';
 import { Frame } from './Frame.js';
 
@@ -23,10 +25,15 @@ export class CameraManager {
         this.context.imageSmoothingEnabled = true;
         this.cleared = false;
     }
-    public get mainCamera(): Camera {
+    public get mainCamera(): Camera | undefined {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
     }
     public update(gameObjects: GameObject[]) {
+        if (!this.mainCamera) {
+            D.error('No camera to render');
+            return;
+        }
+
         if (this.context.canvas.width !== this.mainCamera.resolution.x) this.context.canvas.width = this.mainCamera.resolution.x;
         if (this.context.canvas.height !== this.mainCamera.resolution.y) this.context.canvas.height = this.mainCamera.resolution.y;
 
@@ -52,6 +59,11 @@ export class CameraManager {
         this.context.drawImage(this.mainCamera.currentFrame, 0, 0);
     }
     public drawUI(ui: UIFrame) {
+        if (!this.mainCamera) {
+            D.error('No camera to render');
+            return;
+        }
+
         if (this.context.canvas.width !== this.mainCamera.resolution.x) this.context.canvas.width = this.mainCamera.resolution.x;
         if (this.context.canvas.height !== this.mainCamera.resolution.y) this.context.canvas.height = this.mainCamera.resolution.y;
 

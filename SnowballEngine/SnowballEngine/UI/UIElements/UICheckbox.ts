@@ -1,4 +1,5 @@
 import { Asset } from '../../Assets/Asset.js';
+import { Client } from '../../Client.js';
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { AABB } from '../../Physics/AABB.js';
@@ -34,8 +35,8 @@ export class UICheckbox extends UIElement {
      * Update checked property.
      * 
      */
-    public update(gameTime: GameTime): void {
-        super.update(gameTime);
+    public async update(gameTime: GameTime): Promise<void> {
+        await super.update(gameTime);
 
         if (this.click) {
             this.checked = !this._checked;
@@ -46,14 +47,14 @@ export class UICheckbox extends UIElement {
             }
         }
     }
-    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         const labelSize = UIFont.measureText(this.label, UIFont.getCSSFontString(<string>this.font.data, this.fontSize));
 
-        canvas.height = Math.min(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height));
-        canvas.width = canvas.height * 1.2 + labelSize.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
+        canvas.height = Math.min(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * Client.resolution.y));
+        canvas.width = canvas.height * 1.2 + labelSize.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x);
 
-        const x = canvas.width / (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width) * 100;
-        const y = canvas.height / (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height) * 100;
+        const x = canvas.width / (this.menu.aabb.size.x / 100 * Client.resolution.x) * 100;
+        const y = canvas.height / (this.menu.aabb.size.y / 100 * Client.resolution.y) * 100;
 
         (<any>this)._aabb = new AABB(new Vector2(x, y), this._aabb.position);
 

@@ -1,4 +1,5 @@
 import { Asset } from '../../Assets/Asset.js';
+import { Client } from '../../Client.js';
 import { GameTime } from '../../GameTime.js';
 import { clamp } from '../../Helpers.js';
 import { Input } from '../../Input/Input.js';
@@ -26,8 +27,8 @@ export abstract class UIInputField extends UIElement {
         this.max = 999;
         this.focused = false;
     }
-    public update(gameTime: GameTime): void {
-        super.update(gameTime);
+    public async update(gameTime: GameTime): Promise<void> {
+        await super.update(gameTime);
 
         if (this.label === '') this.label = this.value.toString();
 
@@ -62,9 +63,9 @@ export abstract class UIInputField extends UIElement {
             }
         } else this.domElement.blur();
     }
-    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
-        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
-        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
+    protected drawCb(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x);
+        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * Client.resolution.y);
         context.save();
 
         if (this.background) context.drawImage(this.background, 0, 0, canvas.width, canvas.height);

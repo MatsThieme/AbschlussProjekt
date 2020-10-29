@@ -1,4 +1,5 @@
 import { Frame } from '../../Camera/Frame.js';
+import { Canvas } from '../../Canvas.js';
 import { interval } from '../../Helpers.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
@@ -8,8 +9,8 @@ import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
 
 export class PolygonRenderer extends Component {
-    private canvas: OffscreenCanvas;
-    private context: OffscreenCanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
     private polygonCollider: PolygonCollider;
     private _position: Vector2;
     private size: Vector2;
@@ -23,7 +24,7 @@ export class PolygonRenderer extends Component {
 
         this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
 
-        this.canvas = new OffscreenCanvas(this.polygonCollider.scaledSize.x * 1000, this.polygonCollider.scaledSize.y * 1000);
+        this.canvas = Canvas(this.polygonCollider.scaledSize.x * 1000, this.polygonCollider.scaledSize.y * 1000);
         this.context = this.canvas.getContext('2d')!;
 
         this.size = this.polygonCollider.scaledSize;

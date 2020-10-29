@@ -1,4 +1,5 @@
 import { Asset } from '../../Assets/Asset.js';
+import { Client } from '../../Client.js';
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { UIElementType } from '../UIElementType.js';
@@ -10,17 +11,17 @@ export class UIButton extends UIElement {
     public constructor(menu: UIMenu, input: Input, font: Asset) {
         super(menu, input, UIElementType.Button, font);
     }
-    public update(gameTime: GameTime): void {
-        super.update(gameTime);
+    public async update(gameTime: GameTime): Promise<void> {
+        await super.update(gameTime);
 
         if (this.click) {
             if (this.onInput) this.onInput(this);
             this.draw();
         }
     }
-    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
-        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
-        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
+    protected drawCb(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x);
+        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * Client.resolution.y);
 
         context.save();
 

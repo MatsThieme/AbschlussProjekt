@@ -63,4 +63,9 @@ export class GameTime {
     public get sinceStart(): number {
         return this.now - this.start;
     }
+
+    public measureGameTime(): () => number {
+        let start = this.now;
+        return () => this.now - start;
+    }
 }

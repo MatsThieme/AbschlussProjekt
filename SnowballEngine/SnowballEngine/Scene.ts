@@ -1,4 +1,6 @@
 import { CameraManager } from './Camera/CameraManager.js';
+import { Canvas } from './Canvas.js';
+import { Client } from './Client.js';
 import { Framedata } from './Framedata.js';
 import { AudioListener } from './GameObject/Components/AudioListener.js';
 import { Behaviour } from './GameObject/Components/Behaviour.js';
@@ -6,10 +8,10 @@ import { Collider } from './GameObject/Components/Collider.js';
 import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
-import { interval } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
+import { SceneManager } from './SceneManager.js';
 import { UI } from './UI/UI.js';
 
 export class Scene {
@@ -21,12 +23,18 @@ export class Scene {
     public readonly ui: UI;
     private requestAnimationFrameHandle?: number;
     public readonly framedata: Framedata;
-    //public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
-    //private loadingScreenActive?: boolean;
     public readonly audioListener?: AudioListener;
+    public readonly sceneManager: SceneManager;
+    /**
+     * 
+     * Callbacks pushed by gameobject.destroy() and executed after update before render.
+     * 
+     */
     private readonly toDestroy: (() => void)[];
-    public constructor() {
-        this.domElement = document.createElement('canvas');
+    public constructor(sceneManager: SceneManager) {
+        this.sceneManager = sceneManager;
+
+        this.domElement = Canvas(Client.resolution.x, Client.resolution.y);
 
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
@@ -35,8 +43,6 @@ export class Scene {
         this.ui = new UI(this.input, this);
         this.framedata = new Framedata();
         this.toDestroy = [];
-
-        (<any>window).Input = this.input;
 
         this.stop();
     }
@@ -193,14 +199,6 @@ export class Scene {
         this.requestAnimationFrameHandle = undefined;
 
         this.domElement.remove();
-
-        //if (!this.loadingScreenActive) {
-        //    this.loadingScreenActive = true;
-        //    interval(clear => {
-        //        if (this.loadingScreen && !this.isRunning) this.loadingScreen(<CanvasRenderingContext2D>(<any>this.cameraManager).context, <HTMLCanvasElement>(<any>this.cameraManager).context.canvas);
-        //        else if (this.isRunning && this.loadingScreenActive) this.loadingScreenActive = <any>clear();
-        //    }, 100);
-        //}
     }
 
     /**
@@ -228,6 +226,10 @@ export class Scene {
      */
     public destroyGameObject(name: string): void {
         this.gameObjects.delete(name);
+    }
+
+    public destroy() {
+
     }
 }
 

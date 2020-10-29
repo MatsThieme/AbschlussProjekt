@@ -1,3 +1,4 @@
+import { Client } from '../../../SnowballEngine/SE.js';
 import { Asset } from '../../Assets/Asset.js';
 import { Input } from '../../Input/Input.js';
 import { UIElementType } from '../UIElementType.js';
@@ -9,9 +10,9 @@ export class UIText extends UIElement {
     public constructor(menu: UIMenu, input: Input, font: Asset) {
         super(menu, input, UIElementType.Text, font);
     }
-    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
-        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
-        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
+    protected drawCb(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * Client.resolution.x);
+        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * Client.resolution.y);
         context.save();
 
         if (this.background) context.drawImage(this.background, 0, 0, canvas.width, canvas.height);

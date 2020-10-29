@@ -1,8 +1,10 @@
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
+import { InputType } from './InputType.js';
 
 export class InputKeyboard {
     private keys: Map<string, InputButton>;
+    private listeners?: Map<string, Map<InputType, (button: InputButton, axis: InputAxis) => any>>;
     public constructor() {
         this.keys = new Map();
 
@@ -33,5 +35,15 @@ export class InputKeyboard {
     }
     public update() {
         [...this.keys.values()].forEach(b => b.update());
+    }
+    public addListener(cb: (button: InputButton, axis: InputAxis) => any, type: InputType = -1, id?: string) {
+        if (!this.listeners) this.listeners = new Map();
+        if (!this.listeners.get(id!)) this.listeners.set(id!, new Map());
+
+        //this.listeners.get(id!)?.set(type!, cb);
+
+    }
+    public removeListener(id: string, type?: InputType) {
+        this.listeners?.delete(id);
     }
 }

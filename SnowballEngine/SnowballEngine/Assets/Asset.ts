@@ -1,3 +1,4 @@
+import { Canvas } from '../Canvas.js';
 import { D } from '../Debug.js';
 import { Vector2 } from '../Vector2.js';
 import { AssetType } from './AssetType.js';
@@ -30,11 +31,11 @@ export class Asset {
      */
     public mirrorImageX(): Asset {
         if (this.type !== AssetType.Image) {
-            D.warn('cant mirror asset', 'Asset, Asset.mirrorImageX');
+            D.warn('cant mirror asset');
             return this;
         }
 
-        const c = new OffscreenCanvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
+        const c = Canvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
         const ctx = c.getContext('2d')!;
         ctx.translate(c.width, 0);
         ctx.scale(-1, 1);
@@ -52,11 +53,11 @@ export class Asset {
      */
     public mirrorImageY(): Asset {
         if (this.type !== AssetType.Image) {
-            D.warn('cant mirror asset', 'Asset, Asset.mirrorImageY');
+            D.warn('cant mirror asset');
             return this;
         }
 
-        const c = new OffscreenCanvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
+        const c = Canvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
         const ctx = c.getContext('2d')!;
         ctx.translate(0, c.height);
         ctx.scale(1, -1);
@@ -68,7 +69,7 @@ export class Asset {
     }
 
     public toCanvas(): Asset {
-        const c = new OffscreenCanvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
+        const c = Canvas((<HTMLImageElement>this.data).width, (<HTMLImageElement>this.data).height);
         const ctx = c.getContext('2d');
         ctx!.imageSmoothingEnabled = false;
         ctx!.drawImage((<HTMLImageElement>this.data), 0, 0);

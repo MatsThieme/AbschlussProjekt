@@ -1,4 +1,7 @@
 import { Asset } from '../Assets/Asset.js';
+import { AssetType } from '../Assets/AssetType.js';
+import { Canvas } from '../Canvas.js';
+import { Client } from '../Client.js';
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
@@ -6,19 +9,13 @@ import { Scene } from '../Scene.js';
 import { Vector2 } from '../Vector2.js';
 import { UIFrame } from './UIFrame.js';
 import { UIMenu } from './UIMenu.js';
-import { AssetType } from '../Assets/AssetType.js';
 
 export class UI {
     public menus: Map<string, UIMenu>;
-    /**
-     * 
-     * Array of functions to execute every frame.
-     * 
-     */
-    public updates: ((gameTime: GameTime) => void | Promise<void>)[];
+    public updateHook?: (gameTime: GameTime, ui: this) => any;
     private input: Input;
-    private canvas: OffscreenCanvas;
-    private context: OffscreenCanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
     private scene: Scene;
     public navigationHistory: string[];
     private lastMenusState: boolean[];
@@ -27,10 +24,9 @@ export class UI {
     public constructor(input: Input, scene: Scene) {
         this.menus = new Map();
         this.input = input;
-        this.canvas = new OffscreenCanvas(scene.domElement.width, scene.domElement.height);
+        this.canvas = Canvas(Client.resolution.x, Client.resolution.y);
         this.context = this.canvas.getContext('2d')!;
         this.scene = scene;
-        this.updates = [];
         this.navigationHistory = [];
         this.lastMenusState = [];
         this.navigationHistoryMaxSize = 10;
@@ -83,19 +79,19 @@ export class UI {
      *
      */
     public async update(gameTime: GameTime): Promise<void> {
-        if (this.canvas.width !== this.scene.domElement.width) this.canvas.width = this.scene.domElement.width;
-        if (this.canvas.height !== this.scene.domElement.height) this.canvas.height = this.scene.domElement.height;
+        if (this.canvas.width !== Client.resolution.x) this.canvas.width = Client.resolution.x;
+        if (this.canvas.height !== Client.resolution.y) this.canvas.height = Client.resolution.y;
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        for (const u of this.updates) {
-            await u(gameTime);
-        }
+        if (this.updateHook) await this.updateHook(gameTime, this);
+
+        await Promise.all([...this.menus.values()].map(m => m.active ? m.update(gameTime) : undefined));
 
         for (const menu of this.menus.values()) {
             if (menu.active) {
-                menu.update(gameTime);
-                if (menu.currentFrame.sprite.width > 0 && menu.currentFrame.sprite.height > 0) this.context.drawImage(menu.currentFrame.sprite, Math.round(menu.aabb.position.x * this.scene.domElement.width / 100), Math.round(menu.aabb.position.y * this.scene.domElement.height / 100), Math.round(menu.aabb.size.x * this.scene.domElement.width / 100), Math.round(menu.aabb.size.y * this.scene.domElement.height / 100));
+                if (menu.currentFrame.sprite.width > 0 && menu.currentFrame.sprite.height > 0)
+                    this.context.drawImage(menu.currentFrame.sprite, Math.round(menu.aabb.position.x * Client.resolution.x / 100), Math.round(menu.aabb.position.y * Client.resolution.y / 100), Math.round(menu.aabb.size.x * Client.resolution.x / 100), Math.round(menu.aabb.size.y * Client.resolution.y / 100));
             }
         }
 
@@ -123,7 +119,7 @@ export class UI {
      * 
      */
     public get currentFrame(): UIFrame {
-        return new UIFrame(new AABB(new Vector2(this.scene.domElement.width, this.scene.domElement.height), new Vector2()), this.canvas);
+        return new UIFrame(new AABB(new Vector2(Client.resolution.x, Client.resolution.y), new Vector2()), this.canvas);
     }
 
     /**

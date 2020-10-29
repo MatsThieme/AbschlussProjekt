@@ -4,6 +4,8 @@ export * from './Assets/Assets.js';
 export * from './Assets/AssetType.js';
 export * from './Camera/CameraManager.js';
 export * from './Client.js';
+export * from './Color.js';
+export * from './Debug.js';
 export * from './Framedata.js';
 export * from './GameObject/Align.js';
 export * from './GameObject/Components/AnimatedSprite.js';

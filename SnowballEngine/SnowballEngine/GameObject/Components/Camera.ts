@@ -1,4 +1,5 @@
 import { Frame } from '../../Camera/Frame.js';
+import { Canvas } from '../../Canvas.js';
 import { AABB } from '../../Physics/AABB.js';
 import { Vector2 } from '../../Vector2.js';
 import { GameObject } from '../GameObject.js';
@@ -8,17 +9,17 @@ import { ComponentType } from './ComponentType.js';
 export class Camera extends Component {
     public resolution: Vector2;
     public size: Vector2;
-    private canvas: OffscreenCanvas;
-    private context: OffscreenCanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
     public constructor(gameObject: GameObject, resolution: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1)) {
         super(gameObject, ComponentType.Camera);
         this.resolution = resolution;
         this.size = size;
-        this.canvas = new OffscreenCanvas(this.resolution.x, this.resolution.y);
+        this.canvas = Canvas(this.resolution.x, this.resolution.y);
         this.context = this.canvas.getContext('2d')!;
         this.context.imageSmoothingEnabled = false;
     }
-    public get currentFrame(): OffscreenCanvas {
+    public get currentFrame(): HTMLCanvasElement {
         return this.canvas;
     }
 

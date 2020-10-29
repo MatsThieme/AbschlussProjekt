@@ -1,5 +1,7 @@
 import { Asset } from '../Assets/Asset.js';
+import { Canvas } from '../Canvas.js';
 import { Client } from '../Client.js';
+import { D } from '../Debug.js';
 import { AlignH, AlignV } from '../GameObject/Align.js';
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
@@ -34,17 +36,32 @@ export class UIMenu {
     private readonly uiElements: Map<number, UIElement>;
     private _aabb: AABB;
     public readonly input: Input;
-    private readonly canvas: OffscreenCanvas;
-    private readonly context: OffscreenCanvasRenderingContext2D;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly context: CanvasRenderingContext2D;
     public background?: Asset;
-    private frame!: UIFrame;
+    private frame: UIFrame;
+    //public get background(): Asset | undefined {
+    //    D.log('jo');
+    //    return undefined;
+    //}
+    //public set background(val: Asset | undefined) {
+    //    D.log(val);
 
+    //}
     public localAlignH: AlignH;
     public localAlignV: AlignV;
     public alignH: AlignH;
     public alignV: AlignV;
 
     private redraw: boolean;
+
+    public updateHook?: (gameTime: GameTime, menu: this) => any;
+    ///*
+    // *
+    // * execute updateHook when this menu is disabled, useful for 
+    // * 
+    // */
+    //public updateDisabled?: boolean;
 
     public readonly scene: Scene;
     public readonly ui: UI;
@@ -63,8 +80,10 @@ export class UIMenu {
         this.alignH = AlignH.Left;
         this.alignV = AlignV.Top;
 
-        this.canvas = new OffscreenCanvas(this.scene.domElement.width, this.scene.domElement.height);
+        this.canvas = Canvas(Client.resolution.x, Client.resolution.y);
         this.context = this.canvas.getContext('2d')!;
+
+        this.frame = new UIFrame(new AABB(this._aabb.size.clone.scale(new Vector2(Client.resolution.x, Client.resolution.y)).scale(0.01), this._aabb.position), this.canvas);
 
         Client.OnResize(() => this.redraw = true);
 
@@ -109,24 +128,23 @@ export class UIMenu {
      * Adjusts canvas size to AABB and draws UIElements to it.
      * 
      */
-    public update(gameTime: GameTime): void {
-        for (const uiElement of [...this.uiElements.values()]) {
-            uiElement.update(gameTime);
-        }
+    public async update(gameTime: GameTime): Promise<void> {
+        if (this.updateHook) await this.updateHook(gameTime, this);
+        await Promise.all([...this.uiElements.values()].map(e => e.update(gameTime)));
 
         if (this.redraw) {
-            this.canvas.width = ~~(this.aabb.size.x / 100 * this.scene.domElement.width);
-            this.canvas.height = ~~(this.aabb.size.y / 100 * this.scene.domElement.height);
+            this.canvas.width = ~~(this.aabb.size.x / 100 * Client.resolution.x);
+            this.canvas.height = ~~(this.aabb.size.y / 100 * Client.resolution.y);
 
-            if (this.background) this.context.drawImage((<CanvasImageSource>this.background.data), 0, 0, this.canvas.width, this.canvas.height);
+            if (this.background) this.context.drawImage(<CanvasImageSource>this.background.data, 0, 0, this.canvas.width, this.canvas.height);
             else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            for (const uiElement of [...this.uiElements.values()]) {
+            for (const uiElement of this.uiElements.values()) {
                 const { sprite, aabb } = uiElement.currentFrame;
-                if (this.background?.imagePXSize && this.background!.imagePXSize.sum !== 0) this.context.drawImage(sprite, Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)));
+                this.context.drawImage(sprite, Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * Client.resolution.x)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * Client.resolution.y)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * Client.resolution.x)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * Client.resolution.y)));
             }
 
-            this.frame = new UIFrame(new AABB(this._aabb.size.clone.scale(new Vector2(this.scene.domElement.width, this.scene.domElement.height)).scale(0.01), this._aabb.position), this.canvas);
+            this.frame = new UIFrame(new AABB(this._aabb.size.clone.scale(new Vector2(Client.resolution.x, Client.resolution.y)).scale(0.01), this._aabb.position), this.canvas);
 
             this.redraw = false;
         }

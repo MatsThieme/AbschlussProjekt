@@ -1,5 +1,7 @@
 import { Asset } from './Assets/Asset.js';
 import { AssetType } from './Assets/AssetType.js';
+import { Canvas } from './Canvas.js';
+import { D } from './Debug.js';
 
 /**
  * 
@@ -51,7 +53,7 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
                 resolve(result);
             }
             catch (error) {
-                console.log(error);
+                D.error(error);
             }
 
             window.removeEventListener('mousedown', end);
@@ -78,11 +80,16 @@ export function interval(cb: (clear: () => void) => void, ms: number): void {
     const i = window.setInterval(() => cb(() => window.clearInterval(i)), ms);
 }
 
-export function createSprite(f: (context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => any, width: number = 100, height: number = 100): Asset {
-    const canvas = new OffscreenCanvas(width, height);
+export function createSprite(f: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any, width: number = 100, height: number = 100): Asset {
+    const canvas = Canvas(width, height);
     const context = canvas.getContext('2d')!;
     context.imageSmoothingEnabled = false;
     f(context, canvas);
 
     return new Asset('', AssetType.Image, canvas);
+}
+
+export function stopwatch(): () => number {
+    let start = performance.now();
+    return () => Math.round(performance.now() - start);
 }

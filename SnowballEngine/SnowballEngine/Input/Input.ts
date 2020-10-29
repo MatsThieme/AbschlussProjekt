@@ -3,13 +3,13 @@ import { AssetType } from '../Assets/AssetType.js';
 import { Scene } from '../Scene.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
+import { InputDevice } from './InputDevice.js';
 import { InputGamepad } from './InputGamepad.js';
 import { InputKeyboard } from './InputKeyboard.js';
 import { InputMapping } from './InputMapping.js';
 import { InputMouse } from './InputMouse.js';
 import { InputTouch } from './InputTouch.js';
 import { InputType } from './InputType.js';
-import { Asset } from '../Assets/Asset.js';
 
 export class Input {
     public readonly touch: InputTouch;
@@ -27,10 +27,12 @@ export class Input {
         this.scene = scene;
 
 
-        if (!Assets.get('InputMappingButtons.json') || !Assets.get('InputMappingAxes.json')) {
+        if (!Assets.get('InputMappingButtons.json'))
             Assets.load('InputMappingButtons.json', AssetType.JSON).then(m => (<any>this).inputMappingButtons = new InputMapping(m)).catch(undefined);
+
+        if (!Assets.get('InputMappingAxes.json'))
             Assets.load('InputMappingAxes.json', AssetType.JSON).then(m => (<any>this).inputMappingAxes = new InputMapping(m)).catch(undefined);
-        }
+
 
         this.inputMappingButtons = new InputMapping(Assets.get('InputMappingButtons.json'));
         this.inputMappingAxes = new InputMapping(Assets.get('InputMappingAxes.json'));
@@ -42,7 +44,7 @@ export class Input {
      * 
      */
     public getButton(t: InputType): InputButton {
-        if (['keyboard', 'mouse', 'gamepad', 'touch'].map(n => this.inputMappingButtons[n][t]).filter(x => x).length === 0) return new InputButton();
+        if (['keyboard', 'mouse', 'gamepad', 'touch'].map(n => this.inputMappingButtons[n][t]).filter(x => x == undefined).length === 0) return new InputButton();
 
         const btns: InputButton[] = [this.keyboard.getButton(<string>this.inputMappingButtons.keyboard[t]), this.touch.getButton(<number>this.inputMappingButtons.touch[t]), this.mouse.getButton(<number>this.inputMappingButtons.mouse[t]), this.gamepad.getButton(<number>this.inputMappingButtons.gamepad[t])].filter(e => e && e.down != undefined).sort((a, b) => (b.down ? b.clicked ? 2 : 1 : 0) - (a.down ? a.clicked ? 2 : 1 : 0));
 
@@ -68,5 +70,31 @@ export class Input {
         this.mouse.update();
         this.keyboard.update();
         this.gamepad.update();
+    }
+
+    /**
+     * 
+     * @param id needed to remove the listener
+     * @param devices 
+     * 
+     */
+    public addListener(cb: (button: InputButton, axis: InputAxis) => any, type?: InputType, id?: string, devices?: InputDevice): void {
+        if (!devices) {
+            this.touch.addListener(cb, type, id);
+            this.mouse.addListener(cb, type, id);
+            this.keyboard.addListener(cb, type, id);
+            this.gamepad.addListener(cb, type, id);
+
+            return;
+        }
+
+        if (devices & InputDevice.Touch) this.touch.addListener(cb, type, id);
+        if (devices & InputDevice.Mouse) this.mouse.addListener(cb, type, id);
+        if (devices & InputDevice.Keyboard) this.keyboard.addListener(cb, type, id);
+        if (devices & InputDevice.Gamepad) this.gamepad.addListener(cb, type, id);
+    }
+
+    public removeListener(id: string, device?: InputDevice) {
+
     }
 }

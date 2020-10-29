@@ -1,6 +1,7 @@
 import { Angle } from './Angle.js';
 import { Asset } from './Assets/Asset.js';
 import { Frame } from './Camera/Frame.js';
+import { D } from './Debug.js';
 import { ParticleSystem } from './GameObject/Components/ParticleSystem.js';
 import { Drawable } from './GameObject/Drawable.js';
 import { GameTime } from './GameTime.js';
@@ -23,7 +24,7 @@ export class Particle implements Drawable {
         this.particleSystem = particleSystem;
         this.rotation = new Angle(undefined, Math.random() * 360);
 
-        if (!this.sprite) console.log(this);
+        if (!this.sprite) D.error(JSON.stringify(this) + '\nsprite missing');
     }
 
     /**
