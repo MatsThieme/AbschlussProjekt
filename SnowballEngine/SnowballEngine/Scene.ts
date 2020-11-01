@@ -8,6 +8,7 @@ import { Collider } from './GameObject/Components/Collider.js';
 import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
+import { clearObject } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
@@ -167,22 +168,16 @@ export class Scene {
      * 
      */
     public async start(): Promise<void> {
-        this.requestAnimationFrameHandle = 0; // set isRunning true
+        this.requestAnimationFrameHandle = 0; // set isStarted true
 
         for (const gameObject of this.getAllGameObjects()) {
             for (const c of gameObject.getComponents<Behaviour>(ComponentType.Behaviour)) {
-                await c.start();
-                (<any>c).__initialized__ = true;
+                if (!c.__initialized__) {
+                    await c.start();
+                    (<any>c).__initialized__ = true;
+                }
             }
         }
-
-        this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
-
-        document.body.appendChild(this.domElement);
-    }
-
-    public resume() {
-        this.requestAnimationFrameHandle = 0; // set isRunning true
 
         this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
 
@@ -222,6 +217,7 @@ export class Scene {
     /**
      * 
      * Remove gameObject from scene.
+     * called by gameObject.destroy()
      * 
      */
     public destroyGameObject(name: string): void {
@@ -229,13 +225,22 @@ export class Scene {
     }
 
     public destroy() {
+        this.stop();
 
+        for (const gameObject of this.gameObjects.values()) {
+            gameObject.destroy();
+        }
+
+        clearObject(this);
     }
 }
 
 /**
  *
+ * to do:
+ * integrate pixi js and matter js
  *
+ * 
  * to fix:
  * ui umrandungen skalierung
  *
@@ -279,7 +284,6 @@ export class Scene {
  * coordinate system, scale, rotation, position
  * polygoncollider aabb topleft???
  * gameObject.active
- * assetloader
  *
  *
  */
