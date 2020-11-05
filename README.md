@@ -33,7 +33,7 @@ class Game {
         }), 'some image');
 
         
-        // timeout to simulate loading loadingscreen
+        // timeout to simulate loading
         await asyncTimeout(2000);
 
 
