@@ -3,6 +3,8 @@
 2D Game-Engine written in TypeScript.
 
 
+<a href="https://github.com/MatsThieme/SnowballEngineTemplate">Project template</a> 
+
 
 <b>Usage</b>
 ```TypeScript
