@@ -2,8 +2,12 @@
 
 2D Game-Engine written in TypeScript.
 
+SnowballEngine is part of my final school project.
 
-
+<a href="https://github.com/MatsThieme/SnowballEngine/tree/dev">dev branch</a>
+<br>
+<a href="https://github.com/MatsThieme/SnowballEngineTemplate">Project template</a> 
+    
 <b>Usage</b>
 ```TypeScript
 const scene = new Scene();
