@@ -8,7 +8,7 @@ import { Collider } from './GameObject/Components/Collider.js';
 import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
-import { clearObject } from './Helpers.js';
+import { clearObject, stopwatch } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
@@ -139,9 +139,12 @@ export class Scene {
             }
         }
 
-
-        this.toDestroy.forEach(d => d());
-        this.toDestroy.splice(0);
+        if (this.toDestroy.length) {
+            const s = stopwatch();
+            this.toDestroy.forEach(d => d());
+            this.toDestroy.splice(0);
+            console.log(s());
+        }
 
 
         this.cameraManager.update(gameObjects);
@@ -240,7 +243,7 @@ export class Scene {
  * to do:
  * integrate pixi js and matter js
  *
- * 
+ *
  * to fix:
  * ui umrandungen skalierung
  *

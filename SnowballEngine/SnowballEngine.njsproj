@@ -101,7 +101,6 @@
     <TypeScriptCompile Include="SnowballEngine\Physics\Physics.ts" />
     <TypeScriptCompile Include="SnowballEngine\Physics\PhysicsMaterial.ts" />
     <TypeScriptCompile Include="SnowballEngine\Physics\Projection.ts" />
-    <TypeScriptCompile Include="SnowballEngine\ProjectSettings.ts" />
     <TypeScriptCompile Include="SnowballEngine\Scene.ts" />
     <TypeScriptCompile Include="SnowballEngine\SceneManager.ts" />
     <TypeScriptCompile Include="SnowballEngine\SE.ts" />

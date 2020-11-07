@@ -96,7 +96,7 @@ export function createSprite(f: (context: CanvasRenderingContext2D, canvas: HTML
  */
 export function stopwatch(): () => number {
     let start = performance.now();
-    return () => Math.round(performance.now() - start);
+    return () => performance.now() - start;
 }
 
 export function clearObject(object: object, setnull: boolean = false) {

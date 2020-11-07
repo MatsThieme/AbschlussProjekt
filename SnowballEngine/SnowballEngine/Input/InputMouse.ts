@@ -1,8 +1,6 @@
-import { ProjectSettings } from '../ProjectSettings.js';
 import { Vector2 } from '../Vector2.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
-import { InputType } from './InputType.js';
 
 export class InputMouse {
     /**
@@ -21,7 +19,7 @@ export class InputMouse {
         domElement.addEventListener('mousedown', this.onMouseDown.bind(this));
         domElement.addEventListener('mouseup', this.onMouseUp.bind(this));
         domElement.addEventListener('mousemove', this.onMouseMove.bind(this));
-        if (!ProjectSettings.allowContextMenu) domElement.addEventListener('contextmenu', e => e.preventDefault());
+        if (!project.settings.allowContextMenu) domElement.addEventListener('contextmenu', e => e.preventDefault());
     }
     private onMouseMove(e: MouseEvent): void {
         e.preventDefault();
