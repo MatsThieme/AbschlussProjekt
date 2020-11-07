@@ -4,9 +4,10 @@
 
 SnowballEngine is part of my final school project.
 
-<a href="https://github.com/MatsThieme/SnowballEngine/tree/dev">dev branch</a>
+[dev branch](https://github.com/MatsThieme/SnowballEngine/tree/dev)
 <br>
-<a href="https://github.com/MatsThieme/SnowballEngineTemplate">Project template</a> 
+[Project Template](https://github.com/MatsThieme/SnowballEngineTemplate)
+
     
 <b>Usage</b>
 ```TypeScript
