@@ -1,16 +1,16 @@
-import { D } from '../Debug.js';
-import { AnimatedSprite } from '../GameObject/Components/AnimatedSprite.js';
-import { Camera } from '../GameObject/Components/Camera.js';
-import { CircleRenderer } from '../GameObject/Components/CircleRenderer.js';
-import { ComponentType } from '../GameObject/Components/ComponentType.js';
-import { ParticleSystem } from '../GameObject/Components/ParticleSystem.js';
-import { PolygonRenderer } from '../GameObject/Components/PolygonRenderer.js';
-import { Texture } from '../GameObject/Components/Texture.js';
-import { TileMap } from '../GameObject/Components/TileMap.js';
-import { GameObject } from '../GameObject/GameObject.js';
-import { Scene } from '../Scene.js';
-import { UIFrame } from '../UI/UIFrame.js';
-import { Frame } from './Frame.js';
+import { D } from '../Debug';
+import { AnimatedSprite } from '../GameObject/Components/AnimatedSprite';
+import { Camera } from '../GameObject/Components/Camera';
+import { CircleRenderer } from '../GameObject/Components/CircleRenderer';
+import { ComponentType } from '../GameObject/Components/ComponentType';
+import { ParticleSystem } from '../GameObject/Components/ParticleSystem';
+import { PolygonRenderer } from '../GameObject/Components/PolygonRenderer';
+import { Texture } from '../GameObject/Components/Texture';
+import { TileMap } from '../GameObject/Components/TileMap';
+import { GameObject } from '../GameObject/GameObject';
+import { Scene } from '../Scene';
+import { UIFrame } from '../UI/UIFrame';
+import { Frame } from './Frame';
 
 export class CameraManager {
     private context: CanvasRenderingContext2D;
@@ -49,7 +49,7 @@ export class CameraManager {
             frames.push(...gameObject.getComponents<TileMap>(ComponentType.TileMap).reduce((t: Frame[], c) => { t.push(...(<Frame[]>c.currentFrame)); return t; }, []));
         }
 
-        frames = frames.filter(f => f).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);
+        frames = frames.filter(Boolean).sort((a, b) => <number>a?.drawPriority - <number>b?.drawPriority);
 
         this.cameras.forEach(camera => camera.update(<Frame[]>frames));
 
