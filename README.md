@@ -1,4 +1,4 @@
-### This repo won't be modified, you can find the current SnowballEngine here:
+### This repo won't be updated, you can find the current SnowballEngine here:
 [Project Template](https://github.com/MatsThieme/SnowballEngineTemplate)
 <br><br>
 
