@@ -1,9 +1,8 @@
-# SnowballEngine
-
 ### This repo won't be modified, you can find the current SnowballEngine here:
 [Project Template](https://github.com/MatsThieme/SnowballEngineTemplate)
-<br><br><br>
+<br><br>
 
+# SnowballEngine
 
 **SnowballEngine is a 2D TypeScript game engine.**
 It manages scenes, game assets, simulates physics, renders assets, provides a simple structure and more
