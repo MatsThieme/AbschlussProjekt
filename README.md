@@ -1,5 +1,9 @@
 # SnowballEngine
 
+### This repo won't be modified, you can find the current SnowballEngine here:
+[Project Template](https://github.com/MatsThieme/SnowballEngineTemplate)
+<br><br><br>
+
 2D Game-Engine written in TypeScript.
 
 SnowballEngine is part of my final school project.
